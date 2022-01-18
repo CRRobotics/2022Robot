@@ -2,13 +2,17 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package org.team639.subsystems;
 
-import frc.robot.Constants;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.kauailabs.navx.frc.AHRS;
+
+import org.team639.lib.Constants;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.SPI;
@@ -17,6 +21,8 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -79,6 +85,21 @@ public class DriveTrain extends SubsystemBase {
    rightMain.set(ControlMode.PercentOutput, rightSpeed); 
  }
 
+//TODO: Fix this and set up all SmartDashboard values correctly
+
+  /**
+   * Sets the voltages of the left and right motors.
+   * @param leftVoltage The voltage to set the left motor.
+   * @param rightVoltage The voltage to set the right motor.
+   */
+  public void setVoltages(double leftVoltage, double rightVoltage)
+  {
+      leftMain.set(ControlMode.Current, leftVoltage);
+      rightMain.set(ControlMode.Current, leftVoltage);
+      SmartDashboard.putNumber("Left Voltage", leftVoltage);
+      SmartDashboard.putNumber("Right Voltage", rightVoltage);
+  }
+
   /**
    * Resets odometry of robot to initial position
    * @param initPose Initial position of robot
@@ -106,6 +127,17 @@ public class DriveTrain extends SubsystemBase {
       //return pose;
       return odometry.getPoseMeters();
   }
+
+  //TODO: Convert ticks to meters per second
+  /**
+   * Returns the current wheel speeds of the robot.
+   *
+   * @return The current wheel speeds.
+   */
+  public DifferentialDriveWheelSpeeds getWheelSpeeds()
+  {
+      return new DifferentialDriveWheelSpeeds(leftMain.getSelectedSensorVelocity(), rightMain.getSelectedSensorVelocity());
+  }
   
   /**
    * Returns the current angle of the robot
@@ -114,5 +146,37 @@ public class DriveTrain extends SubsystemBase {
   public Rotation2d getHeading()
   {
       return Rotation2d.fromDegrees(gyro.getAngle());
+  }
+  /**
+   * Gets the displacement of the left encoder
+   * @return Meters displaced by left side of robot
+   */
+  public double getLeftPostion()
+  {
+      return leftMain.getSelectedSensorPosition(0) * Constants.driveTrainGearRatio * (Units.inchesToMeters(6)*Math.PI);
+  }
+
+  /**
+   * Gets the displacement of the right encoder
+   * @return Meters displaced by right side of robot
+   */
+  public double getRightPostion()
+  {
+      return rightMain.getSelectedSensorPosition(0)  * Constants.driveTrainGearRatio * (Units.inchesToMeters(6)*Math.PI);
+  }
+
+  public PIDController getLeftPIDController()
+  {
+      return leftPIDController;
+  }
+  
+  public PIDController getRightPIDController()
+  {
+      return rightPIDController;
+  }
+  
+  public SimpleMotorFeedforward getFeedForward()
+  {
+      return feedforward;
   }
 }

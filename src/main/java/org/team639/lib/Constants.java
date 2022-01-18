@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot;
+package org.team639.lib;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -28,4 +28,15 @@ public final class Constants
     public static final int rightFollowerID = 3;
 
     public static final double driveMultiplier = 1;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 2;
+    public static final double kMaxSpeedMetersPerSecond = 2;
+
+    //TODO: Find this
+    public static final double driveTrainGearRatio = 18;
+    public static final double ticksPerRevolution = 2048;
+
+
+    //Control Board Constants
+    public static final double kJoystickThreshold = 0.2;
+
 }
