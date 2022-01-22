@@ -46,21 +46,21 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
-  public static DriveTrain driveTrain = new DriveTrain();
+  private final DriveTrain driveTrain = new DriveTrain();
   private static final SendableChooser<DriveLayout> driveMode;
 
   private String trajectoryJSON = "paths/Barrel_RacingTrue.wpilib.json";
 
   public enum DriveLayout {
     Arcade,
-    Arcade1Stick,
+    CheesyDrive,
     Tank
   }
 
   static {
     driveMode = new SendableChooser<>();
     driveMode.setDefaultOption("Arcade Standard", DriveLayout.Arcade);
-    driveMode.addOption("Arcade Single Stick", DriveLayout.Arcade1Stick);
+    driveMode.addOption("CheesyDrive", DriveLayout.CheesyDrive);
     driveMode.addOption("Tank", DriveLayout.Tank);
 
     SmartDashboard.putData("Drive Layout", driveMode);
