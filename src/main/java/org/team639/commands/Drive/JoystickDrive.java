@@ -10,6 +10,7 @@ import org.team639.controlboard.ControllerWrapper;
 import org.team639.lib.Constants;
 import org.team639.subsystems.DriveTrain;
 
+import edu.wpi.first.wpilibj.Controller;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
@@ -17,6 +18,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  */
 public class JoystickDrive extends CommandBase {
   private DriveTrain driveTrain;
+  double mQuickStopAccumulator;
+  public static final double kThrottleDeadband = 0.02;
+
+  private static final double kWheelDeadband = 0.1;
+  private static final double kTurnSensitivity = 0.7;
+  private static final double overrideThreshhold = 0.1;
 
   /** Creates a new JoystickDrive. */
   public JoystickDrive(DriveTrain driveTrain) {
@@ -27,45 +34,47 @@ public class JoystickDrive extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() 
-  {
+  public void initialize() {
     System.out.println("Joystick drive initializing");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute()
-  {
+  public void execute() {
     DriveLayout currMode = RobotContainer.getDriveLayout();
-    switch(currMode)
-    {
+    switch (currMode) {
       case Arcade:
         arcadeDrive(ControllerWrapper.DriverController.getLeftY(), ControllerWrapper.DriverController.getRightX());
-
+      case CheesyDrive:
+        cheezyDrive(ControllerWrapper.DriverController.getLeftY(), ControllerWrapper.DriverController.getRightX(), false);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
   }
+
   /**
    * Arcade drive given a speed and turning magnitude
-   * @param speed Speed in percent
+   * 
+   * @param speed     Speed in percent
    * @param turnValue Magnitude of turning
    */
-  public void arcadeDrive(double speed, double turnValue)
-  {
+  public void arcadeDrive(double speed, double turnValue) {
     speed *= Constants.driveMultiplier;
 
     double turnMultiplier = 1 - speed;
-    if (turnMultiplier < 1d / 3d) turnMultiplier = 1d / 3d;
-    if (turnMultiplier > 2d / 3d) turnMultiplier = 2d / 3d;
+    if (turnMultiplier < 1d / 3d)
+      turnMultiplier = 1d / 3d;
+    if (turnMultiplier > 2d / 3d)
+      turnMultiplier = 2d / 3d;
     turnValue = turnValue * turnMultiplier;
 
     double left = speed + turnValue;
@@ -74,12 +83,69 @@ public class JoystickDrive extends CommandBase {
     driveTrain.setSpeedsPercent(left, right);
   }
 
-  public void cheezyDrive(double throttle, double wheel, boolean isQuickTurn)
-  {
+  public void cheezyDrive(double throttle, double wheel, boolean isQuickTurn) {
+    wheel = handleDeadband(wheel, kWheelDeadband);
+    throttle = -handleDeadband(throttle, kThrottleDeadband);
 
+    double overPower;
+    double angularPower;
+
+    if (this.quickTurnOverride(throttle)) {
+      if (Math.abs(throttle) < 0.2) {
+        double alpha = 0.1;
+        mQuickStopAccumulator = (1 - alpha) * mQuickStopAccumulator + alpha * limit(wheel, 1.0) * 2;
+      }
+      overPower = 1.0;
+      angularPower = wheel;
+    } else {
+      overPower = 0.0;
+      angularPower = Math.abs(throttle) * wheel * kTurnSensitivity - mQuickStopAccumulator;
+      if (mQuickStopAccumulator > 1) {
+        mQuickStopAccumulator -= 1;
+      } else if (mQuickStopAccumulator < -1) {
+        mQuickStopAccumulator += 1;
+      } else {
+        mQuickStopAccumulator = 0.0;
+      }
+    }
+
+    double rightPwm = throttle - angularPower;
+    double leftPwm = throttle + angularPower;
+    if (leftPwm > 1.0) {
+      rightPwm -= overPower * (leftPwm - 1.0);
+      leftPwm = 1.0;
+    } else if (rightPwm > 1.0) {
+      leftPwm -= overPower * (rightPwm - 1.0);
+      rightPwm = 1.0;
+    } else if (leftPwm < -1.0) {
+      rightPwm += overPower * (-1.0 - leftPwm);
+      leftPwm = -1.0;
+    } else if (rightPwm < -1.0) {
+      leftPwm += overPower * (-1.0 - rightPwm);
+      rightPwm = -1.0;
+    }
+    driveTrain.setSpeedsPercent(leftPwm * Constants.driveMultiplier, rightPwm * Constants.driveMultiplier);
+  }
+
+  public double handleDeadband(double val, double deadband) {
+    return (Math.abs(val) > Math.abs(deadband)) ? val : 0.0;
+  }
+
+  public boolean quickTurnOverride(double throttle) {
+    if (throttle < overrideThreshhold)
+      return true;
+    return false;
   }
   // HOW TO IMPLEMENT:
-  //Three values: Throttle, Wheel and Quickturn
-  //For turn in place, you can override the normal drive mode by checking if the throttle is pressed rather than if override button is pressed
-  //Implement by copying cheesy poofs 2016 cheezy drive
+  // Three values: Throttle, Wheel and Quickturn
+  // For turn in place, you can override the normal drive mode by checking if the
+  // throttle is pressed rather than if override button is pressed
+  // Implement by copying cheesy poofs 2016 cheezy drive
+
+  /**
+   * Limits the given input to the given magnitude.
+   */
+  public static double limit(double v, double limit) {
+    return (Math.abs(v) < limit) ? v : limit * (v < 0 ? -1 : 1);
+  }
 }
