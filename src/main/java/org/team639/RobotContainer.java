@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import org.team639.commands.Drive.JoystickDrive;
+import org.team639.lib.AutonMode;
 import org.team639.lib.Constants;
+import org.team639.lib.DriveLayout;
 import org.team639.subsystems.DriveTrain;
 
 import edu.wpi.first.math.controller.RamseteController;
@@ -44,16 +46,15 @@ public class RobotContainer {
   private final JoystickDrive joystickDrive = new JoystickDrive(driveTrain);
 
   private static final SendableChooser<DriveLayout> driveMode;
+  private static final SendableChooser<AutonMode> autoMode;
 
   private String trajectoryJSON = "paths/Barrel_RacingTrue.wpilib.json";
   Trajectory pathweaverRunner = loadConfig(trajectoryJSON);
 
 
-  public enum DriveLayout {
-    Arcade,
-    CheesyDrive,
-    Tank
-  }
+
+
+
 
   static {
     driveMode = new SendableChooser<>();
@@ -62,6 +63,11 @@ public class RobotContainer {
     driveMode.addOption("Tank", DriveLayout.Tank);
 
     SmartDashboard.putData("Drive Layout", driveMode);
+  }
+
+  static 
+  {
+    autoMode = new SendableChooser<>();
   }
 
   /**
