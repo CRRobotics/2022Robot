@@ -48,13 +48,15 @@ public class RobotContainer {
   private String trajectoryJSON = "paths/Barrel_RacingTrue.wpilib.json";
   Trajectory pathweaverRunner = loadConfig(trajectoryJSON);
 
-
+  /**
+   * Enumerator for different drive layouts
+   */
   public enum DriveLayout {
     Arcade,
     CheesyDrive,
     Tank
   }
-
+  
   static {
     driveMode = new SendableChooser<>();
     driveMode.setDefaultOption("Arcade Standard", DriveLayout.Arcade);
@@ -123,10 +125,17 @@ public class RobotContainer {
     return m_autoCommand;
   }
 
+  /**
+   * Sets the default command
+   */
   public void defaultCommands() {
     CommandScheduler.getInstance().setDefaultCommand(driveTrain, joystickDrive);
   }
 
+  /**
+   *Generates a Ramsete command
+   * @return the generated command
+   */
   public RamseteCommand ramseteGenerator() {
     var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
         new SimpleMotorFeedforward(Constants.kS,
