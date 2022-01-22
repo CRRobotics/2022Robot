@@ -9,8 +9,6 @@ import org.team639.RobotContainer.DriveLayout;
 import org.team639.controlboard.ControllerWrapper;
 import org.team639.lib.Constants;
 import org.team639.subsystems.DriveTrain;
-
-import edu.wpi.first.wpilibj.Controller;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
@@ -18,12 +16,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  */
 public class JoystickDrive extends CommandBase {
   private DriveTrain driveTrain;
-  double mQuickStopAccumulator;
-  public static final double kThrottleDeadband = 0.02;
+  private double mQuickStopAccumulator;
 
-  private static final double kWheelDeadband = 0.1;
-  private static final double kTurnSensitivity = 0.7;
-  private static final double overrideThreshhold = 0.1;
 
   /** Creates a new JoystickDrive. */
   public JoystickDrive(DriveTrain driveTrain) {
@@ -43,10 +37,11 @@ public class JoystickDrive extends CommandBase {
   public void execute() {
     DriveLayout currMode = RobotContainer.getDriveLayout();
     switch (currMode) {
-      case Arcade:
-        arcadeDrive(ControllerWrapper.DriverController.getLeftY(), ControllerWrapper.DriverController.getRightX());
+      default:
+        arcadeDrive(handleDeadband(ControllerWrapper.DriverController.getLeftY(), Constants.kJoystickThreshold), handleDeadband(ControllerWrapper.DriverController.getRightX(), Constants.kJoystickThreshold));
       case CheesyDrive:
         cheezyDrive(ControllerWrapper.DriverController.getLeftY(), ControllerWrapper.DriverController.getRightX(), false);
+      
     }
   }
 
@@ -84,8 +79,8 @@ public class JoystickDrive extends CommandBase {
   }
 
   public void cheezyDrive(double throttle, double wheel, boolean isQuickTurn) {
-    wheel = handleDeadband(wheel, kWheelDeadband);
-    throttle = -handleDeadband(throttle, kThrottleDeadband);
+    wheel = handleDeadband(wheel, Constants.kWheelDeadband);
+    throttle = -handleDeadband(throttle, Constants.kThrottleDeadband);
 
     double overPower;
     double angularPower;
@@ -99,7 +94,7 @@ public class JoystickDrive extends CommandBase {
       angularPower = wheel;
     } else {
       overPower = 0.0;
-      angularPower = Math.abs(throttle) * wheel * kTurnSensitivity - mQuickStopAccumulator;
+      angularPower = Math.abs(throttle) * wheel * Constants.kTurnSensitivity - mQuickStopAccumulator;
       if (mQuickStopAccumulator > 1) {
         mQuickStopAccumulator -= 1;
       } else if (mQuickStopAccumulator < -1) {
@@ -132,7 +127,7 @@ public class JoystickDrive extends CommandBase {
   }
 
   public boolean quickTurnOverride(double throttle) {
-    if (throttle < overrideThreshhold)
+    if (throttle < Constants.overrideThreshhold)
       return true;
     return false;
   }

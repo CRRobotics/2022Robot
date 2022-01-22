@@ -6,21 +6,15 @@ package org.team639;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
 
-import org.team639.commands.ExampleCommand;
+import org.team639.commands.Drive.JoystickDrive;
 import org.team639.lib.Constants;
 import org.team639.subsystems.DriveTrain;
-import org.team639.subsystems.ExampleSubsystem;
 
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -30,6 +24,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 
 /**
@@ -42,14 +37,17 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-
+  // Subsystem declaration
   private final DriveTrain driveTrain = new DriveTrain();
+
+  // Command Declaration
+  private final JoystickDrive joystickDrive = new JoystickDrive(driveTrain);
+
   private static final SendableChooser<DriveLayout> driveMode;
 
   private String trajectoryJSON = "paths/Barrel_RacingTrue.wpilib.json";
+  Trajectory pathweaverRunner = loadConfig(trajectoryJSON);
+
 
   public enum DriveLayout {
     Arcade,
@@ -81,6 +79,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+    defaultCommands();
   }
 
   /**
@@ -117,6 +116,18 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+
+    // An ExampleCommand will run in autonomous
+    driveTrain.resetOdometry(pathweaverRunner.getInitialPose());
+    RamseteCommand m_autoCommand = ramseteGenerator();
+    return m_autoCommand;
+  }
+
+  public void defaultCommands() {
+    CommandScheduler.getInstance().setDefaultCommand(driveTrain, joystickDrive);
+  }
+
+  public RamseteCommand ramseteGenerator() {
     var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
         new SimpleMotorFeedforward(Constants.kS,
             Constants.kV,
@@ -130,31 +141,21 @@ public class RobotContainer {
             .setKinematics(driveTrain.getKinematics())
             .addConstraint(autoVoltageConstraint);
 
-    Trajectory meter = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(
-            new Translation2d(1, 0)),
-        new Pose2d(2, 0, new Rotation2d(0)),
-        config);
 
-        RamseteCommand ramseteCommand = new RamseteCommand(
-          meter,
-          driveTrain::getPose,
-          new RamseteController(2.0, 0.7),
-          driveTrain.getFeedForward(),
-          driveTrain.getKinematics(),
-          driveTrain::getWheelSpeeds,
-          driveTrain.getLeftPIDController(),
-          driveTrain.getRightPIDController(),
-          driveTrain::setVoltages,
-          driveTrain
-          
-          );
+    RamseteCommand ramseteCommand = new RamseteCommand(
+        pathweaverRunner,
+        driveTrain::getPose,
+        new RamseteController(2.0, 0.7),
+        driveTrain.getFeedForward(),
+        driveTrain.getKinematics(),
+        driveTrain::getWheelSpeeds,
+        driveTrain.getLeftPIDController(),
+        driveTrain.getRightPIDController(),
+        driveTrain::setVoltages,
+        driveTrain
 
-    Trajectory pathweaverRunner = loadConfig(trajectoryJSON);
-
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    );
+    return ramseteCommand;
   }
 
 }
