@@ -12,14 +12,16 @@ import org.team639.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
- * Controls the robots movements
+ * JoystickDrive command
  */
 public class JoystickDrive extends CommandBase {
   private DriveTrain driveTrain;
   private double mQuickStopAccumulator;
 
 
-  /** Creates a new JoystickDrive. */
+  /** Creates a new JoystickDrive.
+   * @param driveTrain DriveTrain to be used
+   */
   public JoystickDrive(DriveTrain driveTrain) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.driveTrain = driveTrain;
@@ -58,8 +60,7 @@ public class JoystickDrive extends CommandBase {
 
   /**
    * Arcade drive given a speed and turning magnitude
-   * 
-   * @param speed     Speed in percent
+   * @param speed Speed in percent
    * @param turnValue Magnitude of turning
    */
   public void arcadeDrive(double speed, double turnValue) {
@@ -78,6 +79,12 @@ public class JoystickDrive extends CommandBase {
     driveTrain.setSpeedsPercent(left, right);
   }
 
+  /**
+   * performs cheezydrive
+   * @param throttle
+   * @param wheel
+   * @param isQuickTurn never used
+   */
   public void cheezyDrive(double throttle, double wheel, boolean isQuickTurn) {
     wheel = handleDeadband(wheel, Constants.kWheelDeadband);
     throttle = -handleDeadband(throttle, Constants.kThrottleDeadband);
@@ -122,10 +129,21 @@ public class JoystickDrive extends CommandBase {
     driveTrain.setSpeedsPercent(leftPwm * Constants.driveMultiplier, rightPwm * Constants.driveMultiplier);
   }
 
+  /**
+   * returns controller value if it's over deadband value
+   * @param val controller value
+   * @param deadband deadband value
+   * @return
+   */
   public double handleDeadband(double val, double deadband) {
     return (Math.abs(val) > Math.abs(deadband)) ? val : 0.0;
   }
 
+  /**
+   *
+   * @param throttle same as throttle in cheezyDrive
+   * @return
+   */
   public boolean quickTurnOverride(double throttle) {
     if (throttle < Constants.overrideThreshhold)
       return true;
