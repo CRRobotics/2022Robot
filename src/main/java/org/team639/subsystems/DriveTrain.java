@@ -165,16 +165,28 @@ public class DriveTrain extends SubsystemBase {
       return rightMain.getSelectedSensorPosition(0)  * Constants.driveTrainGearRatio * (Units.inchesToMeters(6)*Math.PI);
   }
 
+  /**
+   * Gets PID controller for left side of robot.
+   * @return lefPIDController.
+   */
   public PIDController getLeftPIDController()
   {
       return leftPIDController;
   }
   
+  /**
+   * Gets PID controller for right side of the robot.
+   * @return rightPIDController.
+   */
   public PIDController getRightPIDController()
   {
       return rightPIDController;
   }
   
+  /**
+   * Returns SimpleMotorFeedforward.
+   * @return feeforward.
+   */
   public SimpleMotorFeedforward getFeedForward()
   {
       return feedforward;
