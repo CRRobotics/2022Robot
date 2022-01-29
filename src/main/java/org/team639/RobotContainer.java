@@ -48,6 +48,11 @@ public class RobotContainer {
   private String trajectoryJSON = "paths/Barrel_RacingTrue.wpilib.json";
   Trajectory pathweaverRunner = loadConfig(trajectoryJSON);
 
+
+  //TODO: find a better way to pass values to commands
+  public static double TargetRPM;
+  public static long shootTime;
+
   /**
    * Enumerator for different drive layouts
    */

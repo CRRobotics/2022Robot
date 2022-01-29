@@ -5,58 +5,61 @@
 package org.team639.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Shooter extends SubsystemBase {
 
   //Motor Controllers
-  private CANSparkMax topMotor = new CANSparkMax(1, CANSparkMax.MotorType.kBrushless);
-  private CANSparkMax botMotor = new CANSparkMax(2, CANSparkMax.MotorType.kBrushless);
+  private CANSparkMax leftMotor = new CANSparkMax(1, CANSparkMax.MotorType.kBrushless);
+  private CANSparkMax rightMotor = new CANSparkMax(2, CANSparkMax.MotorType.kBrushless);
 
-  //Time in seconds
-  double timer;
-  double timer1;
+  private RelativeEncoder leftEncoder = leftMotor.getEncoder();
+  private RelativeEncoder rightEncoder = rightMotor.getEncoder();
+
+  public double rightRPM;
+  public double leftRPM;
+
 
   /** Creates a new Shooter. */
   public Shooter() {}
 
   @Override
   public void periodic() {
-    timer += 0.02;
+    rightRPM = rightEncoder.getVelocity()/42;
+    leftRPM = leftEncoder.getVelocity()/42;
 
   }
 
-  //turns the top motor on
-  public void toggleTopOn(double speed){
-    topMotor.set(speed);
+  //turns the left motor on
+  public void toggleleftOn(double speed){
+    leftMotor.set(speed);
   }
 
-  //turns the bottom motor on
-  public void toggleBotOn(double speed){
-    botMotor.set(speed);
+  //turns the right motor on
+  public void togglerightOn(double speed){
+    rightMotor.set(speed);
   }
 
+  //Keeps the left motor at a target rpm
+  public void maintainLeftRPM(double targetRPM){
+    if(leftRPM >= targetRPM){
+      leftMotor.set(0);
+    }
+    else{
+      leftMotor.set(0);
+    }  
+  }
 
-  // //spins the top motor at a specified speed for a specified time
-  // public void spinTopMotorTimed(double speed, double time){
-  //   timer = 0;
-  //   while(timer < time){
-  //     topMotor.set(speed);
-  //   }
-  //   if(timer >= time){
-  //     topMotor.set(0);
-  //   }
-  // }
+  //Keeps the right motor at a target rpm
+  public void maintainRightRPM(double targetRPM){
+    if(rightRPM >= targetRPM){
+      rightMotor.set(0);
+    }
+    else{
+      rightMotor.set(0);
+    }
+  }
 
-  // //spins the bottom motor at a specified speed for a specified time
-  // public void spinBotMotorTimed(double speed, double time){
-  //   timer1 = 0;
-  //   while(timer1 < time){
-  //     botMotor.set(speed);
-  //   }
-  //   if(timer1 >= time){
-  //     botMotor.set(0);
-  //   }
-  // }
 }
