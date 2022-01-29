@@ -124,7 +124,6 @@ public class DriveTrain extends SubsystemBase {
    */
   public Pose2d getPose()
   {
-      //return pose;
       return odometry.getPoseMeters();
   }
 

@@ -5,6 +5,6 @@
 package org.team639.lib;
 
 public enum AutonMode {
-    basic,
-    cool
+    crossLine,
+    weave
 }

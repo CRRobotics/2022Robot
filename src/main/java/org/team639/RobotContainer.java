@@ -15,6 +15,7 @@ import org.team639.subsystems.DriveTrain;
 
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
@@ -48,13 +49,7 @@ public class RobotContainer {
   private static final SendableChooser<DriveLayout> driveMode;
   private static final SendableChooser<AutonMode> autoMode;
 
-  private String trajectoryJSON = "paths/Barrel_RacingTrue.wpilib.json";
-  Trajectory pathweaverRunner = loadConfig(trajectoryJSON);
-
-
-
-
-
+  private Pose2d basePose = new Pose2d();
 
   static {
     driveMode = new SendableChooser<>();
@@ -68,15 +63,25 @@ public class RobotContainer {
   static 
   {
     autoMode = new SendableChooser<>();
+    autoMode.setDefaultOption("AutoCross Line", AutonMode.crossLine);
+
+    SmartDashboard.putData("Auto Mode", autoMode);
   }
 
   /**
    * Returns the current selected drive layout
-   * 
    * @return The chosen drive layout
    */
   public static DriveLayout getDriveLayout() {
     return driveMode.getSelected();
+  }
+
+  /**
+   * Returns the current selected auto layout
+   * @return The chosen auto layout
+   */
+  public static AutonMode getAutonomousMode() {
+    return autoMode.getSelected();
   }
 
   /**
@@ -100,23 +105,6 @@ public class RobotContainer {
   }
 
   /**
-   * Loads a path from pathweaver into a Trajectory object
-   * 
-   * @return the trajectory loaded
-   */
-  public Trajectory loadConfig(String path) {
-    try {
-      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(path);
-      Trajectory pathweaverTest = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-      return pathweaverTest;
-    } catch (IOException ex) {
-      DriverStation.reportError("Unable to open trajectory: " + path, ex.getStackTrace());
-    }
-    System.out.println("Warning: Path not Loaded");
-    return null;
-  }
-
-  /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
@@ -124,9 +112,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
     // An ExampleCommand will run in autonomous
-    driveTrain.resetOdometry(pathweaverRunner.getInitialPose());
-    RamseteCommand m_autoCommand = ramseteGenerator();
-    return m_autoCommand;
+    driveTrain.resetOdometry(basePose);
+    return null;
   }
 
   /**
@@ -136,39 +123,5 @@ public class RobotContainer {
     CommandScheduler.getInstance().setDefaultCommand(driveTrain, joystickDrive);
   }
 
-  /**
-   *Generates a Ramsete command
-   * @return the generated command
-   */
-  public RamseteCommand ramseteGenerator() {
-    var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
-        new SimpleMotorFeedforward(Constants.kS,
-            Constants.kV,
-            Constants.kA),
-        driveTrain.getKinematics(),
-        12);
-
-    // Set a trajectory config, setting constraints and stuff
-    TrajectoryConfig config = new TrajectoryConfig(Constants.kMaxSpeedMetersPerSecond,
-        Constants.kMaxAccelerationMetersPerSecondSquared)
-            .setKinematics(driveTrain.getKinematics())
-            .addConstraint(autoVoltageConstraint);
-
-
-    RamseteCommand ramseteCommand = new RamseteCommand(
-        pathweaverRunner,
-        driveTrain::getPose,
-        new RamseteController(2.0, 0.7),
-        driveTrain.getFeedForward(),
-        driveTrain.getKinematics(),
-        driveTrain::getWheelSpeeds,
-        driveTrain.getLeftPIDController(),
-        driveTrain.getRightPIDController(),
-        driveTrain::setVoltages,
-        driveTrain
-
-    );
-    return ramseteCommand;
-  }
 
 }
