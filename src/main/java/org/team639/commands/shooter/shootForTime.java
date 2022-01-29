@@ -14,7 +14,7 @@ public class shootForTime extends CommandBase {
 
   private Shooter shooter;
   private long startTime;
-  private long shootTime = 100;
+  private long shootTime;
   
   /** Creates a new shootForTime. */
   public shootForTime(Shooter shooter) {
