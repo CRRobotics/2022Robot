@@ -84,8 +84,12 @@ public class TrajectoryWaypoints {
     System.out.println("Warning: Path not Loaded");
     return null;
   }
+
+  //Test of Ramsete. Should move 2 meters forward
+  public RamseteCommand Test = ramseteGenerator(loadConfig(TestPath));
+
+
   //3 ball autonomous that starts from the fender and ends at the fender
   public RamseteCommand FenderToFender = ramseteGenerator(loadConfig(Fender3Ball));
-  public RamseteCommand Test = ramseteGenerator(loadConfig(TestPath));
 
 }
