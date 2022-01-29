@@ -12,7 +12,6 @@ import org.team639.lib.Constants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.SPI;
@@ -96,8 +95,14 @@ public class DriveTrain extends SubsystemBase {
   {
       leftMain.set(ControlMode.Current, leftVoltage);
       rightMain.set(ControlMode.Current, leftVoltage);
-      SmartDashboard.putNumber("Left Voltage", leftVoltage);
-      SmartDashboard.putNumber("Right Voltage", rightVoltage);
+      //SmartDashboard.putNumber("Left Voltage", leftVoltage);
+      //SmartDashboard.putNumber("Right Voltage", rightVoltage);
+  }
+
+  public void setVelocities(double leftVelocity, double rightVelocity)
+  {
+      leftMain.set(ControlMode.Velocity, leftVelocity);
+      rightMain.set(ControlMode.Velocity, leftVelocity);
   }
 
   /**
@@ -124,7 +129,6 @@ public class DriveTrain extends SubsystemBase {
    */
   public Pose2d getPose()
   {
-      //return pose;
       return odometry.getPoseMeters();
   }
 
@@ -165,16 +169,28 @@ public class DriveTrain extends SubsystemBase {
       return rightMain.getSelectedSensorPosition(0)  * Constants.driveTrainGearRatio * (Units.inchesToMeters(6)*Math.PI);
   }
 
+  /**
+   * Gets PID controller for left side of robot.
+   * @return lefPIDController.
+   */
   public PIDController getLeftPIDController()
   {
       return leftPIDController;
   }
   
+  /**
+   * Gets PID controller for right side of the robot.
+   * @return rightPIDController.
+   */
   public PIDController getRightPIDController()
   {
       return rightPIDController;
   }
   
+  /**
+   * Returns SimpleMotorFeedforward.
+   * @return feeforward.
+   */
   public SimpleMotorFeedforward getFeedForward()
   {
       return feedforward;
