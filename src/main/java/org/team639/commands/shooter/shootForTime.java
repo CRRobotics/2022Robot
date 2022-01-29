@@ -5,6 +5,7 @@
 package org.team639.commands.shooter;
 
 import org.team639.RobotContainer;
+import org.team639.lib.Constants;
 import org.team639.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -25,7 +26,7 @@ public class shootForTime extends CommandBase {
   @Override
   public void initialize() {
     startTime = System.currentTimeMillis();
-    shootTime = RobotContainer.shootTime;
+    shootTime = Constants.shootTime;
   }
 
   // Called every time the scheduler runs while the command is scheduled.

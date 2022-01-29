@@ -46,4 +46,8 @@ public final class Constants
     //Control Board Constants
     public static final double kJoystickThreshold = 0.2;
 
+
+    //Shooter Constants
+    public static final long shootTime = 100;
+
 }

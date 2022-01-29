@@ -51,7 +51,6 @@ public class RobotContainer {
 
   //TODO: find a better way to pass values to commands
   public static double TargetRPM;
-  public static long shootTime;
 
   /**
    * Enumerator for different drive layouts

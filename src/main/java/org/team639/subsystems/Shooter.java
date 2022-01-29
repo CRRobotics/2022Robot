@@ -6,6 +6,7 @@ package org.team639.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -23,7 +24,10 @@ public class Shooter extends SubsystemBase {
 
 
   /** Creates a new Shooter. */
-  public Shooter() {}
+  public Shooter() {
+    leftMotor.setIdleMode(IdleMode.kCoast);
+    rightMotor.setIdleMode(IdleMode.kCoast);
+  }
 
   @Override
   public void periodic() {
@@ -48,7 +52,7 @@ public class Shooter extends SubsystemBase {
       leftMotor.set(0);
     }
     else{
-      leftMotor.set(0);
+      leftMotor.set(1);
     }  
   }
 
@@ -58,7 +62,7 @@ public class Shooter extends SubsystemBase {
       rightMotor.set(0);
     }
     else{
-      rightMotor.set(0);
+      rightMotor.set(1);
     }
   }
 
