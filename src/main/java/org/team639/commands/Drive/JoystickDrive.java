@@ -79,6 +79,12 @@ public class JoystickDrive extends CommandBase {
     driveTrain.setSpeedsPercent(left, right);
   }
 
+  /**
+   * Implementation of FRC 254's 'Cheezy Drive'
+   * @param throttle Magnitude of throttle
+   * @param wheel Magnitude of turning
+   * @param isQuickTurn Override in order to turn in place or at slow speeds
+   */
   public void cheezyDrive(double throttle, double wheel, boolean isQuickTurn) {
     wheel = handleDeadband(wheel, Constants.kWheelDeadband);
     throttle = -handleDeadband(throttle, Constants.kThrottleDeadband);

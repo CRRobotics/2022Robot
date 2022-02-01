@@ -12,6 +12,8 @@ import org.team639.lib.Constants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.SPI;
@@ -27,7 +29,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveTrain extends SubsystemBase {
 
-  //Gyroscope and initial pose
+//Gyroscope and initial pose
   AHRS gyro = new AHRS(SPI.Port.kMXP);
   private Pose2d startPosition = new Pose2d(new Translation2d(0, 0), getHeading());
 
@@ -52,7 +54,11 @@ public class DriveTrain extends SubsystemBase {
   public DriveTrain() 
   {
     resetOdometry(startPosition);
+    motorConfig();
+  }
 
+  public void motorConfig()
+  {
     leftMain.configFactoryDefault();
     leftFollower.configFactoryDefault();
     rightMain.configFactoryDefault();
@@ -66,11 +72,29 @@ public class DriveTrain extends SubsystemBase {
     rightMain.setNeutralMode(NeutralMode.Brake);
     rightFollower.setNeutralMode(NeutralMode.Brake);
 
+    leftMain.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      Constants.statorCurrentLimiter,                Constants.statorCurrentThreshHold,                0.5));
+    leftMain.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      Constants.supplyCurrentLimiter,                Constants.supplyCurrentThreshHold,                0.5));
+    rightMain.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      Constants.statorCurrentLimiter,                Constants.statorCurrentThreshHold,                0.5));
+    rightMain.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      Constants.supplyCurrentLimiter,                Constants.supplyCurrentThreshHold,                0.5));
+
+    leftFollower.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      Constants.statorCurrentLimiter,                Constants.statorCurrentThreshHold,                0.5));
+    leftFollower.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      Constants.supplyCurrentLimiter,                Constants.supplyCurrentThreshHold,                0.5));
+    rightFollower.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      Constants.statorCurrentLimiter,                Constants.statorCurrentThreshHold,                0.5));
+    rightFollower.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      Constants.supplyCurrentLimiter,                Constants.supplyCurrentThreshHold,                0.5));
+
+    leftMain.configOpenloopRamp(Constants.kDriveRampSeconds);
+    rightMain.configOpenloopRamp(Constants.kDriveRampSeconds);
+    leftFollower.configOpenloopRamp(Constants.kDriveRampSeconds);
+    rightFollower.configOpenloopRamp(Constants.kDriveRampSeconds);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Gyro Angle", getHeading().getDegrees());
+    SmartDashboard.putNumber("Right Encoder Position", getRightPostion());
+    SmartDashboard.putNumber("Right Encoder Position", getLeftPostion());
+
   }
 
   /** 
@@ -95,8 +119,6 @@ public class DriveTrain extends SubsystemBase {
   {
       leftMain.set(ControlMode.Current, leftVoltage);
       rightMain.set(ControlMode.Current, leftVoltage);
-      //SmartDashboard.putNumber("Left Voltage", leftVoltage);
-      //SmartDashboard.putNumber("Right Voltage", rightVoltage);
   }
 
   public void setVelocities(double leftVelocity, double rightVelocity)
