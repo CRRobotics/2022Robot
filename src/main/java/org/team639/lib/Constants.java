@@ -41,6 +41,10 @@ public final class Constants
     public static final double driveTrainGearRatio = 18;
     public static final double ticksPerRevolution = 2048;
 
+    public static final double autoRotateP = .0001;
+    public static final double autoRotateI = 0.0;
+    public static final double autoRotateD = 0.0;
+
     //Curvature Drive Constants
     public static final double kWheelDeadband = 0.1;
     public static final double kTurnSensitivity = 1;
