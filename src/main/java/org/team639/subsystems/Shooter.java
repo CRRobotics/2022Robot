@@ -7,7 +7,7 @@ package org.team639.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
-
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Shooter extends SubsystemBase {
@@ -21,6 +21,12 @@ public class Shooter extends SubsystemBase {
 
   public double rightRPM;
   public double leftRPM;
+
+  private long setpoint;
+
+  private PIDController leftPID = new PIDController(0.0001, 0.001, 0);
+  private PIDController rightPID = new PIDController(0.0001, 0.001, 0);
+  
 
 
   /** Creates a new Shooter. */
@@ -48,22 +54,12 @@ public class Shooter extends SubsystemBase {
 
   //Keeps the left motor at a target rpm
   public void maintainLeftRPM(double targetRPM){
-    if(leftRPM >= targetRPM){
-      leftMotor.set(0);
-    }
-    else{
-      leftMotor.set(1);
-    }  
+    rightMotor.set(rightPID.calculate(rightEncoder.getPosition(), setpoint));
   }
 
   //Keeps the right motor at a target rpm
   public void maintainRightRPM(double targetRPM){
-    if(rightRPM >= targetRPM){
-      rightMotor.set(0);
-    }
-    else{
-      rightMotor.set(1);
-    }
+    leftMotor.set(leftPID.calculate(leftEncoder.getPosition(), setpoint));
   }
 
 }

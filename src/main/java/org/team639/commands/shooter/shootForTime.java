@@ -4,7 +4,6 @@
 
 package org.team639.commands.shooter;
 
-import org.team639.RobotContainer;
 import org.team639.lib.Constants;
 import org.team639.subsystems.Shooter;
 
@@ -33,8 +32,8 @@ public class shootForTime extends CommandBase {
   @Override
   public void execute() {
     if(System.currentTimeMillis() - startTime < shootTime){
-      shooter.maintainLeftRPM(RobotContainer.TargetRPM);
-      shooter.maintainRightRPM(RobotContainer.TargetRPM);
+      shooter.maintainLeftRPM(Constants.TargetRPM);
+      shooter.maintainRightRPM(Constants.TargetRPM);
     }
     else{
       shooter.toggleleftOn(0);

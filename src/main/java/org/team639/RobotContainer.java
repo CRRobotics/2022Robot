@@ -49,9 +49,6 @@ public class RobotContainer {
   Trajectory pathweaverRunner = loadConfig(trajectoryJSON);
 
 
-  //TODO: find a better way to pass values to commands
-  public static double TargetRPM;
-
   /**
    * Enumerator for different drive layouts
    */

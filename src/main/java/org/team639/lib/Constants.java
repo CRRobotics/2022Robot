@@ -49,5 +49,6 @@ public final class Constants
 
     //Shooter Constants
     public static final long shootTime = 100;
+    public static double TargetRPM;
 
 }
