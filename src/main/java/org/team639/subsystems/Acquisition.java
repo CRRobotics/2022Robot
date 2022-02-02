@@ -17,6 +17,7 @@ public class Acquisition extends SubsystemBase {
     public static boolean acquisitionDown = false;
 
     public Acquisition() {
+        //makes new acquisition
         acquisitionMotor.configFactoryDefault();
         acquisitionMotor.setNeutralMode(NeutralMode.Coast);
     }

@@ -1,4 +1,4 @@
-package org.team639.commands.Drive;
+package org.team639.commands.Acquisition;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import org.team639.controlboard.ControllerWrapper;
@@ -6,8 +6,10 @@ import org.team639.lib.Constants;
 import org.team639.subsystems.Acquisition;
 
 public class AcquisitionCommand extends CommandBase {
+    Acquisition acquisition;
     public AcquisitionCommand() {
-
+        this.acquisition = acquisition;
+        addRequirements(acquisition);
     }
 
     @Override
