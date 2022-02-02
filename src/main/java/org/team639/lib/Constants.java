@@ -47,4 +47,7 @@ public final class Constants
     //Control Board Constants
     public static final double kJoystickThreshold = 0.2;
 
+    //Acquisition constants
+    public static final double acquisitionMotorSpeed = 0.5;
+
 }
