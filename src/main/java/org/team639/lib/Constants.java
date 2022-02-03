@@ -33,9 +33,7 @@ public final class Constants
     public static final double kDriveRampSeconds = 0.3;
 
     public static final double supplyCurrentLimiter = 30;
-    public static final double statorCurrentLimiter = 30;
     public static final double supplyCurrentThreshHold = 35;
-    public static final double statorCurrentThreshHold = 35; 
 
     //TODO: Find this
     public static final double driveTrainGearRatio = 18;

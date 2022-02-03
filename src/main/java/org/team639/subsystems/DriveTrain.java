@@ -72,14 +72,10 @@ public class DriveTrain extends SubsystemBase {
     rightMain.setNeutralMode(NeutralMode.Brake);
     rightFollower.setNeutralMode(NeutralMode.Brake);
 
-    leftMain.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      Constants.statorCurrentLimiter,                Constants.statorCurrentThreshHold,                0.5));
     leftMain.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      Constants.supplyCurrentLimiter,                Constants.supplyCurrentThreshHold,                0.5));
-    rightMain.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      Constants.statorCurrentLimiter,                Constants.statorCurrentThreshHold,                0.5));
     rightMain.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      Constants.supplyCurrentLimiter,                Constants.supplyCurrentThreshHold,                0.5));
 
-    leftFollower.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      Constants.statorCurrentLimiter,                Constants.statorCurrentThreshHold,                0.5));
     leftFollower.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      Constants.supplyCurrentLimiter,                Constants.supplyCurrentThreshHold,                0.5));
-    rightFollower.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      Constants.statorCurrentLimiter,                Constants.statorCurrentThreshHold,                0.5));
     rightFollower.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      Constants.supplyCurrentLimiter,                Constants.supplyCurrentThreshHold,                0.5));
 
     leftMain.configOpenloopRamp(Constants.kDriveRampSeconds);

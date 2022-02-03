@@ -106,7 +106,7 @@ public class RobotContainer {
   }
 
   /**
-   * Sets the default command
+   * Sets the default commands
    */
   public void defaultCommands() {
     CommandScheduler.getInstance().setDefaultCommand(driveTrain, joystickDrive);
