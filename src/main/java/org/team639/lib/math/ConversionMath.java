@@ -5,18 +5,41 @@
 package org.team639.lib.math;
 
 import org.team639.lib.Constants;
+import org.team639.lib.GearMode;
+import org.team639.subsystems.DriveTrain;
+
 
 /**
  * Conversion of drive constants
  */
 public class ConversionMath {
     /**
+     * Returns the gear ratio based on current mode
+     * @param mode Current gear mode
+     * @return Ratio to be returned
+     */
+    public static double getGearRatio(GearMode mode)
+    { 
+        switch(mode)
+        {
+            default:
+                return Constants.highGearRatio;
+            case high:
+                return Constants.highGearRatio;
+            case low:
+                return Constants.lowGearRatio;
+        }
+    }
+
+
+    /**
      * Converts encoder ticks of falcon 5 hundos to meters
      * @param ticks Ticks to be converted
      */
     public static double ticksToMeters(double ticks)
-    {
-        double rotation = (ticks / Constants.ticksPerRevolution) / Constants.driveTrainGearRatio; 
+    {   
+        double rotation = (ticks / Constants.ticksPerRevolution) / getGearRatio(DriveTrain.currGear); 
+
         return rotation * Constants.wheelCircumference;
     }
 
@@ -27,6 +50,6 @@ public class ConversionMath {
     public static double metersToTicks(double meters)
     {
         double rotations = meters / Constants.wheelCircumference;
-        return rotations * Constants.driveTrainGearRatio * Constants.ticksPerRevolution;
+        return rotations * getGearRatio(DriveTrain.currGear)* Constants.ticksPerRevolution;
     }
 }

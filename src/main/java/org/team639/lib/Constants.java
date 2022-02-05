@@ -43,7 +43,9 @@ public final class Constants
     public static final double supplyCurrentThreshHold = 35;
 
     //TODO: Find this
-    public static final double driveTrainGearRatio = 18;
+    public static final double lowGearRatio = 18;
+    public static final double highGearRatio = 18;
+
     public static final double ticksPerRevolution = 2048;
 
     public static final double autoRotateP = .00015;
@@ -60,9 +62,6 @@ public final class Constants
     public static final double kTurnSensitivity = 1;
     public static final double kThrottleDeadband = 0.02;
     public static final double overrideThreshhold = 0.1;
-    
-
-
 
     //Control Board Constants
     public static final double kJoystickThreshold = 0.2;
