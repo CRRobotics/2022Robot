@@ -48,11 +48,11 @@ public final class Constants
     public static final double kTurnSensitivity = 1;
     public static final double kThrottleDeadband = 0.02;
     public static final double overrideThreshhold = 0.1;
-    
-
-
 
     //Control Board Constants
     public static final double kJoystickThreshold = 0.2;
+
+    //Indexer Constants
+    public static final int indexMotorID = 0;
 
 }

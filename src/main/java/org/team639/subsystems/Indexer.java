@@ -1,24 +1,26 @@
 package org.team639.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
+
 import com.revrobotics.ColorSensorV3;
+import org.team639.lib.Constants;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
 public class Indexer extends SubsystemBase {
-    private CANSparkMax bottomMotor = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushed);
-    private CANSparkMax topMotor = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushed);
-    private ColorSensorV3 topSensor = new ColorSensorV3(I2C.Port.kMXP); //these probably aren't right
+    private VictorSPX indexMotor = new VictorSPX(Constants.indexMotorID);
     private ColorSensorV3 bottomSensor = new ColorSensorV3(I2C.Port.kMXP);
 
-    double stationarySpeed = 0.128;
+    double stationarySpeed = 0.128; 
 
     public Indexer() {
-        bottomMotor.restoreFactoryDefaults();
-        bottomMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        topMotor.restoreFactoryDefaults();
-        topMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        indexMotor.configFactoryDefault();
+        indexMotor.setNeutralMode(NeutralMode.Brake);
+        bottomSensor.configureProximitySensor(ColorSensorV3.ProximitySensorResolution.kProxRes11bit, ColorSensorV3.ProximitySensorMeasurementRate.kProxRate50ms);
+
     }
 
     @Override
@@ -26,8 +28,17 @@ public class Indexer extends SubsystemBase {
 
     }
 
-    public void keepTopBallStationary() {
-        bottomMotor.set(stationarySpeed);
-        topMotor.set(stationarySpeed);
+    /**
+     * Sets speed of motor from -1 to 1
+     * @param speed Speed to be set
+     */
+    public void setIndexMotor(double speed)
+    {
+        indexMotor.set(ControlMode.PercentOutput, speed);
+    }
+
+    public int getProximity()
+    {
+        return bottomSensor.getProximity();
     }
 }
