@@ -19,4 +19,14 @@ public class ConversionMath {
         double rotation = (ticks / Constants.ticksPerRevolution) / Constants.driveTrainGearRatio; 
         return rotation * Constants.wheelCircumference;
     }
+
+    /**
+     * Converts encoder ticks of falcon 5 hundos to meters
+     * @param ticks Ticks to be converted
+     */
+    public static double metersToTicks(double meters)
+    {
+        double rotations = meters / Constants.wheelCircumference;
+        return rotations * Constants.driveTrainGearRatio * Constants.ticksPerRevolution;
+    }
 }

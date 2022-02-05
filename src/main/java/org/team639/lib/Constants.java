@@ -29,7 +29,12 @@ public final class Constants
     public static final int rightMainID = 2;
     public static final int rightFollowerID = 3;
 
-    public static final double driveMultiplier = 1;
+    //TODO: THESE ARE PLACEHOLDERS THAT WILL BREAK EVERYTHING(not really tho)
+    public static final int shifterID = 0;
+    public static final int phCompressorID = 1;
+    public static final int maxCompressor = 110;
+
+    public static final double driveMultiplier = 1; //tune this down a bit....maybe
     public static final double kMaxAccelerationMetersPerSecondSquared = 2;
     public static final double kMaxSpeedMetersPerSecond = 2;
     public static final double kDriveRampSeconds = 0.3;
@@ -41,9 +46,14 @@ public final class Constants
     public static final double driveTrainGearRatio = 18;
     public static final double ticksPerRevolution = 2048;
 
-    public static final double autoRotateP = .0001;
+    public static final double autoRotateP = .00015;
     public static final double autoRotateI = 0.0;
     public static final double autoRotateD = 0.0;
+
+    public static final double autoForwardP = 0.00015;
+    public static final double autoForwardI = 0.0;
+    public static final double autoForwardD = 0.0;
+
 
     //Curvature Drive Constants
     public static final double kWheelDeadband = 0.1;
