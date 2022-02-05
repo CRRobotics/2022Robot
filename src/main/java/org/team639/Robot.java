@@ -4,6 +4,10 @@
 
 package org.team639;
 
+import org.team639.lib.Constants;
+
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,9 +21,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
 
-private Command m_autonomousCommand;
-
+  private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
+
+  Compressor phCompressor = new Compressor(Constants.phCompressorID, PneumaticsModuleType.REVPH);
 
 
   
@@ -29,8 +34,7 @@ private Command m_autonomousCommand;
    */
   @Override
   public void robotInit() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
+    //phCompressor.enableAnalog(0, Constants.maxCompressor);
     m_robotContainer = new RobotContainer();
   }
 
@@ -47,6 +51,7 @@ private Command m_autonomousCommand;
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
+    SmartDashboard.putNumber("Current Pressure", getCompressorPressure());
     CommandScheduler.getInstance().run();
   }
 
@@ -61,8 +66,6 @@ private Command m_autonomousCommand;
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
@@ -74,10 +77,6 @@ private Command m_autonomousCommand;
 
   @Override
   public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -96,4 +95,9 @@ private Command m_autonomousCommand;
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
+
+  public double getCompressorPressure()
+  {
+    return phCompressor.getPressure();
+  }
 }

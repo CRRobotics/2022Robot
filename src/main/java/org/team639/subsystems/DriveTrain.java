@@ -13,18 +13,18 @@ import org.team639.lib.math.ConversionMath;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -48,6 +48,8 @@ public class DriveTrain extends SubsystemBase {
   private TalonFX leftFollower = new TalonFX(Constants.leftFollowerID);
   private TalonFX rightMain = new TalonFX(Constants.rightMainID);
   private TalonFX rightFollower = new TalonFX(Constants.rightFollowerID);
+
+  private Solenoid shifter = new Solenoid(PneumaticsModuleType.REVPH, Constants.shifterID);
 
 
 
@@ -83,6 +85,8 @@ public class DriveTrain extends SubsystemBase {
     rightMain.configOpenloopRamp(Constants.kDriveRampSeconds);
     leftFollower.configOpenloopRamp(Constants.kDriveRampSeconds);
     rightFollower.configOpenloopRamp(Constants.kDriveRampSeconds);
+
+    this.toggleGearHigh();
   }
 
   @Override
@@ -216,5 +220,19 @@ public class DriveTrain extends SubsystemBase {
   public SimpleMotorFeedforward getFeedForward()
   {
       return feedforward;
+  }
+  /**
+   * Sets high gear
+   */
+  public void toggleGearHigh()
+  {
+    shifter.set(true);
+  }
+  /**
+   * Sets low gear
+   */
+  public void toggleGearLow()
+  {
+    shifter.set(false);
   }
 }

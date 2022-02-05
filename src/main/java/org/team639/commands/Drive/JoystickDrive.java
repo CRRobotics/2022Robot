@@ -42,7 +42,6 @@ public class JoystickDrive extends CommandBase {
         arcadeDrive(handleDeadband(ControllerWrapper.DriverController.getLeftY(), Constants.kJoystickThreshold), handleDeadband(ControllerWrapper.DriverController.getRightX(), Constants.kJoystickThreshold));
       case CheesyDrive:
         cheezyDrive(ControllerWrapper.DriverController.getLeftY(), ControllerWrapper.DriverController.getRightX(), false);
-      
     }
   }
 

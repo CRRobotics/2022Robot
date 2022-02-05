@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class ControllerWrapper {
     public static XboxController DriverController = new XboxController(0);
     public static XboxController ControlController = new XboxController(1);
-
+    
     //Driver XBOX Controller
     public static DPadButton DriverDPadUp = new DPadButton(DriverController, 0);
     public static DPadButton DriverDPadRight = new DPadButton(DriverController, 90);
