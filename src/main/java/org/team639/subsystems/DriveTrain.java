@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.kauailabs.navx.frc.AHRS;
 
 import org.team639.lib.Constants;
+import org.team639.lib.math.ConversionMath;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -175,7 +176,8 @@ public class DriveTrain extends SubsystemBase {
    */
   public double getLeftPostion()
   {
-      return leftMain.getSelectedSensorPosition(0) * Constants.driveTrainGearRatio * (Units.inchesToMeters(6)*Math.PI);
+      //return leftMain.getSelectedSensorPosition(0) * Constants.driveTrainGearRatio * (Units.inchesToMeters(6)*Math.PI);
+      return ConversionMath.ticksToMeters(leftMain.getSelectedSensorPosition(0));
   }
 
   /**
@@ -184,7 +186,9 @@ public class DriveTrain extends SubsystemBase {
    */
   public double getRightPostion()
   {
-      return rightMain.getSelectedSensorPosition(0)  * Constants.driveTrainGearRatio * (Units.inchesToMeters(6)*Math.PI);
+      //return rightMain.getSelectedSensorPosition(0)  * Constants.driveTrainGearRatio * (Units.inchesToMeters(6)*Math.PI);
+      return ConversionMath.ticksToMeters(rightMain.getSelectedSensorPosition(0));
+
   }
 
   /**

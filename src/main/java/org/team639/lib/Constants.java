@@ -20,6 +20,8 @@ public final class Constants
     public static final double kV = 0;
     
     public static final double chassisWidth = 0;
+    public static final double wheelDiameter = .1524;
+    public static final double wheelCircumference = 0.4788;
 
     //TODO: Figure out what these are
     public static final int leftMainID = 0;

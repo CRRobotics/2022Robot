@@ -4,12 +4,22 @@
 
 package org.team639.commands.Drive;
 
+import org.team639.subsystems.DriveTrain;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AutoDriveForward extends CommandBase {
+  private DriveTrain driveTrain;
+  
+  private double startLeft;
+  private double startRight;
+  private double targetLeft;
+  private double targetRight;
+
   /** Creates a new AutoDriveForward. */
-  public AutoDriveForward() {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public AutoDriveForward(DriveTrain driveTrain, double distance) {
+    this.driveTrain = driveTrain;
+    addRequirements(driveTrain);
   }
 
   // Called when the command is initially scheduled.
