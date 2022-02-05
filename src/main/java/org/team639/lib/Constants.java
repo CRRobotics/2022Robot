@@ -54,5 +54,7 @@ public final class Constants
 
     //Indexer Constants
     public static final int indexMotorID = 0;
+    public static final int indexSensorDistance = 10;
+    public static final double indexMotorSpeed = 0.125;
 
 }
