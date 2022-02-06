@@ -10,14 +10,13 @@ import org.team639.lib.Constants;
 
 public class Acquisition extends SubsystemBase {
 
-    static TalonSRX acquisitionMotor = new TalonSRX(1);
-    static Solenoid rightPiston = new Solenoid(PneumaticsModuleType.REVPH,4); //don't know what kind of piston this is
-    static Solenoid leftPiston = new Solenoid(PneumaticsModuleType.REVPH,4); //idk if there are 2 pistons or not
+    TalonSRX acquisitionMotor = new TalonSRX(1);
+    Solenoid rightPiston = new Solenoid(PneumaticsModuleType.REVPH,4); //don't know what kind of piston this is
+    Solenoid leftPiston = new Solenoid(PneumaticsModuleType.REVPH,4); //idk if there are 2 pistons or not
 
-    public static boolean acquisitionDown = false;
+    public boolean acquisitionDown = false;
 
     public Acquisition() {
-        //makes new acquisition
         acquisitionMotor.configFactoryDefault();
         acquisitionMotor.setNeutralMode(NeutralMode.Coast);
     }
@@ -30,7 +29,7 @@ public class Acquisition extends SubsystemBase {
     /**
      * Puts acquisition down
      */
-    public static void acquisitionDown() {
+    public void acquisitionDown() {
         leftPiston.set(true);
         rightPiston.set(true);
         acquisitionDown = true;
@@ -39,7 +38,7 @@ public class Acquisition extends SubsystemBase {
     /**
      * Puts acquisition up
      */
-    public static void acquisitionUp() {
+    public void acquisitionUp() {
         leftPiston.set(false);
         rightPiston.set(false);
         acquisitionDown = false;
@@ -48,14 +47,18 @@ public class Acquisition extends SubsystemBase {
     /**
      * Spins cargo in
      */
-    public static void spinAcquisitionIn(double speed) {
+    public void spinAcquisitionIn(double speed) {
         acquisitionMotor.set(ControlMode.PercentOutput, speed);
     }
 
     /**
      * Spins cargo out
      */
-    public static void spinAcquisitionOut(double speed) {
+    public void spinAcquisitionOut(double speed) {
         acquisitionMotor.set(ControlMode.PercentOutput, speed*-1);
+    }
+
+    public void stopAcquisitionMotor() {
+        acquisitionMotor.set(ControlMode.PercentOutput, 0);
     }
 }

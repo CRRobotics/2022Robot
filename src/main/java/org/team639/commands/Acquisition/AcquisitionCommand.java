@@ -5,9 +5,9 @@ import org.team639.controlboard.ControllerWrapper;
 import org.team639.lib.Constants;
 import org.team639.subsystems.Acquisition;
 
-public class AcquisitionCommand extends CommandBase {
+public class AcquisitionCommand extends CommandBase { //better to use 1 command or 2 for acquisition?
     Acquisition acquisition;
-    public AcquisitionCommand() {
+    public AcquisitionCommand(Acquisition acquisition) {
         this.acquisition = acquisition;
         addRequirements(acquisition);
     }
@@ -19,13 +19,13 @@ public class AcquisitionCommand extends CommandBase {
     @Override
     public void execute() {
         if (ControllerWrapper.ControlController.getYButton()) {
-            Acquisition.acquisitionDown();
-            Acquisition.spinAcquisitionIn(Constants.acquisitionMotorSpeed);
+            acquisition.acquisitionDown();
+            acquisition.spinAcquisitionIn(Constants.acquisitionMotorSpeed);
         } else if (ControllerWrapper.ControlController.getXButton()) {
-            Acquisition.acquisitionUp();
+            acquisition.acquisitionUp();
         }
         if (ControllerWrapper.ControlController.getBButton()) {
-            Acquisition.spinAcquisitionOut(Constants.acquisitionMotorSpeed);
+            acquisition.spinAcquisitionOut(Constants.acquisitionMotorSpeed);
         }
     }
 
