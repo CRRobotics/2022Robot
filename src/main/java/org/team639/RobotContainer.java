@@ -8,7 +8,6 @@ import org.team639.commands.Drive.*;
 import org.team639.subsystems.*;
 
 import org.team639.lib.AutonMode;
-import org.team639.lib.Constants;
 import org.team639.lib.DriveLayout;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -34,28 +33,13 @@ public class RobotContainer {
 
   // Command Declaration
   private final JoystickDrive joystickDrive = new JoystickDrive(driveTrain);
+  private final Autorotate rotate = new Autorotate(driveTrain, 90);
 
-  private static final SendableChooser<DriveLayout> driveMode;
-  private static final SendableChooser<AutonMode> autoMode;
+  static SendableChooser<DriveLayout> driveMode;
+  static SendableChooser<AutonMode> autoMode;
 
   private Pose2d basePose = new Pose2d();
 
-  static {
-    driveMode = new SendableChooser<>();
-    driveMode.setDefaultOption("Arcade Standard", DriveLayout.Arcade);
-    driveMode.addOption("CheesyDrive", DriveLayout.CheesyDrive);
-    driveMode.addOption("Tank", DriveLayout.Tank);
-
-    SmartDashboard.putData("Drive Layout", driveMode);
-  }
-
-  static 
-  {
-    autoMode = new SendableChooser<>();
-    autoMode.setDefaultOption("AutoCross Line", AutonMode.crossLine);
-
-    SmartDashboard.putData("Auto Mode", autoMode);
-  }
 
   /**
    * Returns the current selected drive layout
@@ -80,6 +64,7 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     defaultCommands();
+    chooserSetup();
   }
 
   /**
@@ -102,7 +87,7 @@ public class RobotContainer {
 
     // An ExampleCommand will run in autonomous
     driveTrain.resetOdometry(basePose);
-    return null;
+    return rotate;
   }
 
   /**
@@ -112,5 +97,21 @@ public class RobotContainer {
     CommandScheduler.getInstance().setDefaultCommand(driveTrain, joystickDrive);
   }
 
+  /**
+   * 
+   */
+  public void chooserSetup() {
+    driveMode = new SendableChooser<>();
+    driveMode.setDefaultOption("Arcade Standard", DriveLayout.Arcade);
+    driveMode.addOption("CheesyDrive", DriveLayout.CheesyDrive);
+    driveMode.addOption("Tank", DriveLayout.Tank);
+
+    SmartDashboard.putData("Drive Layout", driveMode);
+
+    autoMode = new SendableChooser<>();
+    autoMode.setDefaultOption("AutoCross Line", AutonMode.crossLine);
+
+    SmartDashboard.putData("Auto Mode", autoMode);
+  }
 
 }

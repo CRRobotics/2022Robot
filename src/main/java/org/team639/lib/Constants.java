@@ -20,21 +20,21 @@ public final class Constants
     public static final double kV = 0;
     
     public static final double chassisWidth = 0;
-    public static final double wheelDiameter = .1524;
-    public static final double wheelCircumference = 0.4788;
+    public static final double wheelDiameter = .1016;
+    public static final double wheelCircumference = wheelDiameter * Math.PI;
 
     //TODO: Figure out what these are
-    public static final int leftMainID = 0;
-    public static final int leftFollowerID = 1;
-    public static final int rightMainID = 2;
-    public static final int rightFollowerID = 3;
+    public static final int leftMainID = 12;
+    public static final int leftFollowerID = 13;
+    public static final int rightMainID = 11;
+    public static final int rightFollowerID = 10;
 
     //TODO: THESE ARE PLACEHOLDERS THAT WILL BREAK EVERYTHING(not really tho)
     public static final int shifterID = 0;
     public static final int phCompressorID = 1;
     public static final int maxCompressor = 110;
 
-    public static final double driveMultiplier = 1; //tune this down a bit....maybe
+    public static final double driveMultiplier = .4; //tune this down a bit....maybe
     public static final double kMaxAccelerationMetersPerSecondSquared = 2;
     public static final double kMaxSpeedMetersPerSecond = 2;
     public static final double kDriveRampSeconds = 0.3;

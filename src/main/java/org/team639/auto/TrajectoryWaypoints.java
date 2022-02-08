@@ -2,11 +2,12 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package org.team639.lib;
+package org.team639.auto;
 
 import java.io.IOException;
 import java.nio.file.Path;
 
+import org.team639.lib.Constants;
 import org.team639.subsystems.DriveTrain;
 
 import edu.wpi.first.math.controller.RamseteController;

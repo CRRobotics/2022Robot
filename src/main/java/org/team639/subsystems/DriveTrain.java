@@ -13,6 +13,7 @@ import org.team639.lib.GearMode;
 import org.team639.lib.math.ConversionMath;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -49,7 +50,8 @@ public class DriveTrain extends SubsystemBase {
     private TalonFX rightMain = new TalonFX(Constants.rightMainID);
     private TalonFX rightFollower = new TalonFX(Constants.rightFollowerID);
 
-    private Solenoid shifter = new Solenoid(PneumaticsModuleType.REVPH, Constants.shifterID);
+    //TODO: Fix the solenoid controls
+    //private Solenoid shifter = new Solenoid(PneumaticsModuleType.REVPH, Constants.shifterID);
 
 
     public static GearMode currGear;
@@ -58,7 +60,7 @@ public class DriveTrain extends SubsystemBase {
     public DriveTrain() {
         resetOdometry(startPosition);
         motorConfig();
-        this.toggleGearHigh();
+       // this.toggleGearHigh();
     }
 
     public void motorConfig() {
@@ -66,6 +68,10 @@ public class DriveTrain extends SubsystemBase {
         leftFollower.configFactoryDefault();
         rightMain.configFactoryDefault();
         rightFollower.configFactoryDefault();
+
+        leftMain.setInverted(true);
+        leftFollower.setInverted(InvertType.FollowMaster);
+
 
         leftFollower.follow(leftMain);
         rightFollower.follow(rightMain);
@@ -96,8 +102,8 @@ public class DriveTrain extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler run
         SmartDashboard.putNumber("Gyro Angle", getHeading().getDegrees());
-        SmartDashboard.putNumber("Right Encoder Position", getRightPostion());
-        SmartDashboard.putNumber("Right Encoder Position", getLeftPostion());
+        SmartDashboard.putNumber("Right Position", getRightPostion());
+        SmartDashboard.putNumber("Left Position", getLeftPostion());
 
     }
 
@@ -226,21 +232,21 @@ public class DriveTrain extends SubsystemBase {
         return feedforward;
     }
 
-    /**
-     * Sets high gear
-     */
-    public void toggleGearHigh() {
-        shifter.set(true);
-        currGear = GearMode.high;
-    }
+    // /**
+    //  * Sets high gear
+    //  */
+    // public void toggleGearHigh() {
+    //     shifter.set(true);
+    //     currGear = GearMode.high;
+    // }
 
-    /**
-     * Sets low gear
-     */
-    public void toggleGearLow() {
-        shifter.set(false);
-        currGear = GearMode.low;
-    }
+    // /**
+    //  * Sets low gear
+    //  */
+    // public void toggleGearLow() {
+    //     shifter.set(false);
+    //     currGear = GearMode.low;
+    // }
 
     public static GearMode getGear()
     {

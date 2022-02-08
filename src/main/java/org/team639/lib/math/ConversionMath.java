@@ -20,15 +20,9 @@ public class ConversionMath {
      */
     public static double getGearRatio(GearMode mode)
     { 
-        switch(mode)
-        {
-            default:
-                return Constants.highGearRatio;
-            case high:
-                return Constants.highGearRatio;
-            case low:
-                return Constants.lowGearRatio;
-        }
+        double ratio = Constants.highGearRatio;
+        
+        return ratio;
     }
 
 
