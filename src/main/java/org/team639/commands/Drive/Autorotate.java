@@ -21,10 +21,10 @@ public class Autorotate extends CommandBase {
   private boolean clockwise;
 
   /** Creates a new AutoRotate. */
-  public Autorotate(DriveTrain driveTrain, double ang) {
+  public Autorotate(DriveTrain driveTrain, double angle) {
     this.driveTrain = driveTrain;
     addRequirements(driveTrain);
-    angle = ang % 360;
+    this.angle = angle % 360;
     clockwise = Math.signum(angle) > 0;
 
     target = Math.abs(angle) + driveTrain.getHeading().getDegrees();
