@@ -11,11 +11,12 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class Autorotate extends CommandBase {
+
   private PIDController turnController = new PIDController(Constants.autoRotateP, Constants.autoRotateI,
       Constants.autoRotateD);
+      
   private DriveTrain driveTrain;
 
-  private double angle;
   private double target;
   private double error;
   private boolean clockwise;
@@ -24,7 +25,7 @@ public class Autorotate extends CommandBase {
   public Autorotate(DriveTrain driveTrain, double angle) {
     this.driveTrain = driveTrain;
     addRequirements(driveTrain);
-    this.angle = angle % 360;
+    angle %= 360;
     clockwise = Math.signum(angle) > 0;
 
     target = Math.abs(angle) + driveTrain.getHeading().getDegrees();
