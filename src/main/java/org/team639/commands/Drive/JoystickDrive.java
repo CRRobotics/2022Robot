@@ -39,9 +39,11 @@ public class JoystickDrive extends CommandBase {
     DriveLayout currMode = RobotContainer.getDriveLayout();
     switch (currMode) {
       default:
-        arcadeDrive(handleDeadband(ControllerWrapper.DriverController.getLeftY(), Constants.kJoystickThreshold), handleDeadband(ControllerWrapper.DriverController.getRightX(), Constants.kJoystickThreshold));
+        arcadeDrive(handleDeadband(ControllerWrapper.DriverController.getLeftY(), Constants.kJoystickThreshold), handleDeadband(ControllerWrapper.DriverController.getLeftX(), Constants.kJoystickThreshold));
       case CheesyDrive:
         cheezyDrive(ControllerWrapper.DriverController.getLeftY(), ControllerWrapper.DriverController.getRightX(), false);
+      case Tank:
+        tankDrive(ControllerWrapper.DriverController.getLeftY(), ControllerWrapper.DriverController.getRightY());
     }
   }
 
@@ -76,6 +78,13 @@ public class JoystickDrive extends CommandBase {
     double right = speed - turnValue;
 
     driveTrain.setSpeedsPercent(left, right);
+  }
+
+  public void tankDrive(double lSpeed, double rSpeed)
+  {
+    lSpeed *= Constants.driveMultiplier;
+    rSpeed *= Constants.driveMultiplier;
+    driveTrain.setSpeedsPercent(lSpeed, rSpeed);
   }
 
   /**
