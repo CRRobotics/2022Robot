@@ -17,6 +17,7 @@ public class ReverseIndexer extends CommandBase {
 
     @Override
     public void initialize() {
+        //stop shooter
         if (indexer.topDetected()) {
             indexer.setIndexMotor(-1*Constants.indexMotorSpeed);
             if (indexer.bottomDetected()) {

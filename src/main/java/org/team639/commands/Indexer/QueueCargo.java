@@ -24,12 +24,15 @@ public class QueueCargo extends CommandBase {
     public void execute() {
         while () { //while acquisition is running
             indexer.setIndexMotor(Constants.indexMotorSpeed);
-            if (indexer.topDetected()) {
-                //start spinning shooter motor
-                if (indexer.bottomDetected()) {
+            if () { //if shooter is not running
+                //have shooter motor spin in opposite direction
+                if (indexer.topDetected() && indexer.bottomDetected()) {
                     indexer.setIndexMotor(0);
                     //stop shooter motor
+                    //stop acquisition
                 }
+            } else {
+                //shoot shooter
             }
         }
         indexer.setIndexMotor(0);
