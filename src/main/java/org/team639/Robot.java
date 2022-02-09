@@ -5,6 +5,7 @@
 package org.team639;
 
 import org.team639.lib.Constants;
+import org.team639.subsystems.JeVoisInterface;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -83,7 +84,10 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() 
+  {
+    // JeVoisInterface test = new JeVoisInterface(false);
+  }
 
   @Override
   public void testInit() {
