@@ -641,9 +641,11 @@ public class JeVoisInterface
     {
         public void run()
         {
-            // NetworkTableInstance inst = NetworkTableInstance.getDefault();
-            // NetworkTable sd = inst.getTable("Visions");
-            // NetworkTableEntry positionHub = sd.getEntry("positionHub");
+            NetworkTableInstance inst = NetworkTableInstance.getDefault();
+            NetworkTable sd = inst.getTable("Visions");
+            NetworkTableEntry positionHub = sd.getEntry("positionHub");
+            inst.startClientTeam(639);
+            inst.startDSClient();
         	while(!Thread.interrupted())
             {
         		backgroundUpdate();   
