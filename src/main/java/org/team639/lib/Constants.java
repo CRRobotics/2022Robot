@@ -17,74 +17,92 @@ import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstrai
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants 
+public interface Constants 
 {
-    //Drive Constants
-    public static final double kS = .5;
-    public static final double kA = .5;
-    public static final double kV = .5;
+    public interface Ports
+    {
+        public interface Drive
+        {
+            public static final int leftMainID = 12;
+            public static final int leftFollowerID = 13;
+            public static final int rightMainID = 11;
+            public static final int rightFollowerID = 10;
+        }
+
+        public interface PneumaticsModuleType
+        {
+            public static final int shifterID = 0;
+            public static final int phCompressorID = 1;
+        }
+    }
+
+    public interface AutoConstants
+    {
+        public static final double kS = .5;
+        public static final double kA = .5;
+        public static final double kV = .5;
+
+        public static final double kMaxAccelerationMetersPerSecondSquared = 2;
+        public static final double kMaxSpeedMetersPerSecond = 2;
+
+        public static final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);
+        public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.DriveConstants.chassisWidth);
     
-    public static final double chassisWidth = 1;
-    public static final double wheelDiameter = .1016;
-    public static final double wheelCircumference = wheelDiameter * Math.PI;
+        public static final DifferentialDriveVoltageConstraint autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
+            new SimpleMotorFeedforward(kS,
+                kV,
+                kA),
+            kinematics,
+            12);
+        
+        public static final TrajectoryConfig config = new TrajectoryConfig(kMaxSpeedMetersPerSecond,
+            kMaxAccelerationMetersPerSecondSquared)
+                .setKinematics(kinematics)
+                .addConstraint(autoVoltageConstraint);
 
-    public static final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.kS, Constants.kV, Constants.kA);
-    public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.chassisWidth);
+        
+        public static final double autoRotateP = .035;
+        public static final double autoRotateI = 0.0;
+        public static final double autoRotateD = 0.055;
 
-    public static final DifferentialDriveVoltageConstraint autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
-        new SimpleMotorFeedforward(Constants.kS,
-            Constants.kV,
-            Constants.kA),
-        kinematics,
-        12);
-    
-    public static final TrajectoryConfig config = new TrajectoryConfig(Constants.kMaxSpeedMetersPerSecond,
-        Constants.kMaxAccelerationMetersPerSecondSquared)
-            .setKinematics(kinematics)
-            .addConstraint(autoVoltageConstraint);
-    
+        public static final double autoForwardP = 0.00015;
+        public static final double autoForwardI = 0.0;
+        public static final double autoForwardD = 0.0;
 
-    //TODO: Figure out what these are
-    public static final int leftMainID = 12;
-    public static final int leftFollowerID = 13;
-    public static final int rightMainID = 11;
-    public static final int rightFollowerID = 10;
+    }
 
-    //TODO: THESE ARE PLACEHOLDERS THAT WILL BREAK EVERYTHING(not really tho)
-    public static final int shifterID = 0;
-    public static final int phCompressorID = 1;
-    public static final int maxCompressor = 110;
+    public interface DriveConstants
+    {
+        public static final double chassisWidth = 1;
+        public static final double wheelDiameter = .1016;
+        public static final double wheelCircumference = wheelDiameter * Math.PI;
 
-    public static final double driveMultiplier = 1; //tune this down a bit....maybe
-    public static final double kMaxAccelerationMetersPerSecondSquared = 2;
-    public static final double kMaxSpeedMetersPerSecond = 2;
-    public static final double kDriveRampSeconds = 0.3;
+        public static final double driveMultiplier = 1; //tune this down a bit....maybe
 
-    public static final double supplyCurrentLimiter = 30;
-    public static final double supplyCurrentThreshHold = 35;
+        public static final double kDriveRampSeconds = 0.3;
+        
+        public static final double supplyCurrentLimiter = 30;
+        public static final double supplyCurrentThreshHold = 35;
+           
+        //TODO: Find this
+        public static final double lowGearRatio = 18;
+        public static final double highGearRatio = 18;
 
-    //TODO: Find this
-    public static final double lowGearRatio = 18;
-    public static final double highGearRatio = 18;
+        public static final double ticksPerRevolution = 2048;
 
-    public static final double ticksPerRevolution = 2048;
+        //Curvature Drive Constants
+        public static final double kWheelDeadband = 0.1;
+        public static final double kTurnSensitivity = 1;
+        public static final double kThrottleDeadband = 0.02;
+        public static final double overrideThreshhold = 0.1;
 
-    public static final double autoRotateP = .035;
-    public static final double autoRotateI = 0.0;
-    public static final double autoRotateD = 0.055;
+        
+    }
 
-    public static final double autoForwardP = 0.00015;
-    public static final double autoForwardI = 0.0;
-    public static final double autoForwardD = 0.0;
-
-
-    //Curvature Drive Constants
-    public static final double kWheelDeadband = 0.1;
-    public static final double kTurnSensitivity = 1;
-    public static final double kThrottleDeadband = 0.02;
-    public static final double overrideThreshhold = 0.1;
-
-    //Control Board Constants
-    public static final double kJoystickThreshold = 0.2;
+    public interface ControlboardConstants
+    {
+        //Control Board Constants
+        public static final double kJoystickThreshold = 0.2;
+    }
 
 }

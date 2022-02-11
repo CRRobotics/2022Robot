@@ -6,7 +6,6 @@ package org.team639;
 
 
 import org.team639.auto.TrajectoryFactory;
-import org.team639.auto.TrajectoryWaypoints;
 import org.team639.auto.routines.ThreeBallFromFender;
 import org.team639.commands.Drive.*;
 import org.team639.controlboard.ControllerWrapper;

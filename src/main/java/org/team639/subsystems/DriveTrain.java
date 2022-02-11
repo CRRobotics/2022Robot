@@ -47,10 +47,10 @@ public class DriveTrain extends SubsystemBase {
     PIDController rightPIDController = new PIDController(.001, 0, 0);
 
     // Talon motor controllers
-    private TalonFX leftMain = new TalonFX(Constants.leftMainID);
-    private TalonFX leftFollower = new TalonFX(Constants.leftFollowerID);
-    private TalonFX rightMain = new TalonFX(Constants.rightMainID);
-    private TalonFX rightFollower = new TalonFX(Constants.rightFollowerID);
+    private TalonFX leftMain = new TalonFX(Constants.Ports.Drive.leftMainID);
+    private TalonFX leftFollower = new TalonFX(Constants.Ports.Drive.leftFollowerID);
+    private TalonFX rightMain = new TalonFX(Constants.Ports.Drive.rightMainID);
+    private TalonFX rightFollower = new TalonFX(Constants.Ports.Drive.rightFollowerID);
 
     //TODO: Fix the solenoid controls
     //private Solenoid shifter = new Solenoid(PneumaticsModuleType.REVPH, Constants.shifterID);
@@ -84,21 +84,21 @@ public class DriveTrain extends SubsystemBase {
         rightMain.setNeutralMode(NeutralMode.Brake);
         rightFollower.setNeutralMode(NeutralMode.Brake);
 
-        leftMain.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, Constants.supplyCurrentLimiter,
-                Constants.supplyCurrentThreshHold, 0.5));
-        rightMain.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, Constants.supplyCurrentLimiter,
-                Constants.supplyCurrentThreshHold, 0.5));
+        leftMain.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, Constants.DriveConstants.supplyCurrentLimiter,
+                Constants.DriveConstants.supplyCurrentThreshHold, 0.5));
+        rightMain.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, Constants.DriveConstants.supplyCurrentLimiter,
+                Constants.DriveConstants.supplyCurrentThreshHold, 0.5));
 
-        leftFollower.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, Constants.supplyCurrentLimiter,
-                Constants.supplyCurrentThreshHold, 0.5));
-        rightFollower.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, Constants.supplyCurrentLimiter,
-                Constants.supplyCurrentThreshHold, 0.5));
+        leftFollower.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, Constants.DriveConstants.supplyCurrentLimiter,
+                Constants.DriveConstants.supplyCurrentThreshHold, 0.5));
+        rightFollower.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, Constants.DriveConstants.supplyCurrentLimiter,
+                Constants.DriveConstants.supplyCurrentThreshHold, 0.5));
 
-        leftMain.configOpenloopRamp(Constants.kDriveRampSeconds);
-        rightMain.configOpenloopRamp(Constants.kDriveRampSeconds);
+        leftMain.configOpenloopRamp(Constants.DriveConstants.kDriveRampSeconds);
+        rightMain.configOpenloopRamp(Constants.DriveConstants.kDriveRampSeconds);
         
-        leftFollower.configOpenloopRamp(Constants.kDriveRampSeconds);
-        rightFollower.configOpenloopRamp(Constants.kDriveRampSeconds);
+        leftFollower.configOpenloopRamp(Constants.DriveConstants.kDriveRampSeconds);
+        rightFollower.configOpenloopRamp(Constants.DriveConstants.kDriveRampSeconds);
 
     }
 
@@ -161,8 +161,8 @@ public class DriveTrain extends SubsystemBase {
         pathRunner,
         this::getPose,
         new RamseteController(2.0, 0.7),
-        Constants.feedforward,
-        Constants.kinematics,
+        Constants.AutoConstants.feedforward,
+        Constants.AutoConstants.kinematics,
         this::getWheelSpeeds,
         leftPIDController,
         rightPIDController,
@@ -178,7 +178,7 @@ public class DriveTrain extends SubsystemBase {
      * Returns the kinematics of the robot
      */
     public DifferentialDriveKinematics getKinematics() {
-        return Constants.kinematics;
+        return Constants.AutoConstants.kinematics;
     }
 
     /**
@@ -257,7 +257,7 @@ public class DriveTrain extends SubsystemBase {
      * @return feeforward.
      */
     public SimpleMotorFeedforward getFeedForward() {
-        return Constants.feedforward;
+        return Constants.AutoConstants.feedforward;
     }
 
     // /**

@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class Autorotate extends CommandBase {
 
-  private PIDController turnController = new PIDController(Constants.autoRotateP, Constants.autoRotateI,
-      Constants.autoRotateD);
+  private PIDController turnController = new PIDController(Constants.AutoConstants.autoRotateP, Constants.AutoConstants.autoRotateI,
+      Constants.AutoConstants.autoRotateD);
       
   private DriveTrain driveTrain;
 
@@ -27,8 +27,10 @@ public class Autorotate extends CommandBase {
     addRequirements(driveTrain);
     angle %= 360;
 
+    this.clockwise = Math.signum(angle) > 0 ? true : false;
     target = Math.abs(angle) + driveTrain.getHeading().getDegrees();
-
+    
+    //target = (Math.signum(angle) > 0) ? Math.abs(angle) + driveTrain.getHeading().getDegrees() : driveTrain.getHeading().getDegrees() - Math.abs(angle);
   }
 
   // Called when the command is initially scheduled.
@@ -41,11 +43,18 @@ public class Autorotate extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    error = target - driveTrain.getHeading().getDegrees();
-    double currMultiplier = turnController.calculate(error);
-    driveTrain.setSpeedsPercent(-1 * currMultiplier, 1 * currMultiplier);
-    
-
+    if(clockwise)
+    {
+      error = target - driveTrain.getHeading().getDegrees();
+      double currMultiplier = turnController.calculate(error);
+      driveTrain.setSpeedsPercent(-1 * currMultiplier, 1 * currMultiplier);
+    }
+    else
+    {
+      error = Math.abs(target) - Math.abs(driveTrain.getHeading().getDegrees());
+      double currMultiplier = turnController.calculate(error);
+      driveTrain.setSpeedsPercent(-1 * currMultiplier, 1 * currMultiplier);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -58,7 +67,7 @@ public class Autorotate extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (error == 0.0)
+    if (error > 0.3)
       return true;
     return false;
   }
