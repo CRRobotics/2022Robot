@@ -26,7 +26,6 @@ public class Autorotate extends CommandBase {
     this.driveTrain = driveTrain;
     addRequirements(driveTrain);
     angle %= 360;
-    clockwise = Math.signum(angle) > 0;
 
     target = Math.abs(angle) + driveTrain.getHeading().getDegrees();
 
@@ -36,6 +35,7 @@ public class Autorotate extends CommandBase {
   @Override
   public void initialize() {
     driveTrain.setSpeedsPercent(0, 0);
+    System.out.println("Auto rotate initializing");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -43,11 +43,8 @@ public class Autorotate extends CommandBase {
   public void execute() {
     error = target - driveTrain.getHeading().getDegrees();
     double currMultiplier = turnController.calculate(error);
-    if (clockwise) {
-      driveTrain.setSpeedsPercent(1 * currMultiplier, -1 * currMultiplier);
-    } else {
-      driveTrain.setSpeedsPercent(1 * currMultiplier, -1 * currMultiplier);
-    }
+    driveTrain.setSpeedsPercent(-1 * currMultiplier, 1 * currMultiplier);
+    
 
   }
 
@@ -55,6 +52,7 @@ public class Autorotate extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     driveTrain.setSpeedsPercent(0, 0);
+    System.out.println("Auto rotate headed out");
   }
 
   // Returns true when the command should end.
