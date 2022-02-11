@@ -9,6 +9,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.Servo;
 
 public class Shooter extends SubsystemBase {
 
@@ -26,6 +27,9 @@ public class Shooter extends SubsystemBase {
 
   private PIDController leftPID = new PIDController(0.0001, 0.001, 0);
   private PIDController rightPID = new PIDController(0.0001, 0.001, 0);
+
+  private Servo linearActuator1 = new Servo(0);
+  private Servo linearActuator2 = new Servo(1);
   
 
 
@@ -33,6 +37,13 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
     leftMotor.setIdleMode(IdleMode.kCoast);
     rightMotor.setIdleMode(IdleMode.kCoast);
+
+    linearActuator1.setBounds(2.0,1.8,1.5,1.2,1.0);
+    linearActuator1.setSpeed(1);
+
+    linearActuator2.setBounds(2.0,1.8,1.5,1.2,1.0);
+    linearActuator2.setSpeed(1);
+
   }
 
   @Override
@@ -60,6 +71,11 @@ public class Shooter extends SubsystemBase {
   //Keeps the right motor at a target rpm
   public void maintainRightRPM(double targetRPM){
     leftMotor.set(leftPID.calculate(leftEncoder.getPosition(), setpoint));
+  }
+
+  public void actuatorMove(double pos){
+    linearActuator1.setPosition(pos);
+    linearActuator2.setPosition(pos);
   }
 
 }

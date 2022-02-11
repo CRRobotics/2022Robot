@@ -63,63 +63,63 @@ public class JoystickDrive extends CommandBase {
    * @param turnValue Magnitude of turning
    */
   public void arcadeDrive(double speed, double turnValue) {
-    speed *= Constants.driveMultiplier;
+  //   speed *= Constants.driveMultiplier;
 
-    double turnMultiplier = 1 - speed;
-    if (turnMultiplier < 1d / 3d)
-      turnMultiplier = 1d / 3d;
-    if (turnMultiplier > 2d / 3d)
-      turnMultiplier = 2d / 3d;
-    turnValue = turnValue * turnMultiplier;
+  //   double turnMultiplier = 1 - speed;
+  //   if (turnMultiplier < 1d / 3d)
+  //     turnMultiplier = 1d / 3d;
+  //   if (turnMultiplier > 2d / 3d)
+  //     turnMultiplier = 2d / 3d;
+  //   turnValue = turnValue * turnMultiplier;
 
-    double left = speed + turnValue;
-    double right = speed - turnValue;
+  //   double left = speed + turnValue;
+  //   double right = speed - turnValue;
 
-    driveTrain.setSpeedsPercent(left, right);
-  }
+  //   driveTrain.setSpeedsPercent(left, right);
+     }
 
-  public void cheezyDrive(double throttle, double wheel, boolean isQuickTurn) {
-    wheel = handleDeadband(wheel, Constants.kWheelDeadband);
-    throttle = -handleDeadband(throttle, Constants.kThrottleDeadband);
+    public void cheezyDrive(double throttle, double wheel, boolean isQuickTurn) {
+  //   wheel = handleDeadband(wheel, Constants.kWheelDeadband);
+  //   throttle = -handleDeadband(throttle, Constants.kThrottleDeadband);
 
-    double overPower;
-    double angularPower;
+  //   double overPower;
+  //   double angularPower;
 
-    if (this.quickTurnOverride(throttle)) {
-      if (Math.abs(throttle) < 0.2) {
-        double alpha = 0.1;
-        mQuickStopAccumulator = (1 - alpha) * mQuickStopAccumulator + alpha * limit(wheel, 1.0) * 2;
-      }
-      overPower = 1.0;
-      angularPower = wheel;
-    } else {
-      overPower = 0.0;
-      angularPower = Math.abs(throttle) * wheel * Constants.kTurnSensitivity - mQuickStopAccumulator;
-      if (mQuickStopAccumulator > 1) {
-        mQuickStopAccumulator -= 1;
-      } else if (mQuickStopAccumulator < -1) {
-        mQuickStopAccumulator += 1;
-      } else {
-        mQuickStopAccumulator = 0.0;
-      }
-    }
+  //   if (this.quickTurnOverride(throttle)) {
+  //     if (Math.abs(throttle) < 0.2) {
+  //       double alpha = 0.1;
+  //       mQuickStopAccumulator = (1 - alpha) * mQuickStopAccumulator + alpha * limit(wheel, 1.0) * 2;
+  //     }
+  //     overPower = 1.0;
+  //     angularPower = wheel;
+  //   } else {
+  //     overPower = 0.0;
+  //     angularPower = Math.abs(throttle) * wheel * Constants.kTurnSensitivity - mQuickStopAccumulator;
+  //     if (mQuickStopAccumulator > 1) {
+  //       mQuickStopAccumulator -= 1;
+  //     } else if (mQuickStopAccumulator < -1) {
+  //       mQuickStopAccumulator += 1;
+  //     } else {
+  //       mQuickStopAccumulator = 0.0;
+  //     }
+     //}
 
-    double rightPwm = throttle - angularPower;
-    double leftPwm = throttle + angularPower;
-    if (leftPwm > 1.0) {
-      rightPwm -= overPower * (leftPwm - 1.0);
-      leftPwm = 1.0;
-    } else if (rightPwm > 1.0) {
-      leftPwm -= overPower * (rightPwm - 1.0);
-      rightPwm = 1.0;
-    } else if (leftPwm < -1.0) {
-      rightPwm += overPower * (-1.0 - leftPwm);
-      leftPwm = -1.0;
-    } else if (rightPwm < -1.0) {
-      leftPwm += overPower * (-1.0 - rightPwm);
-      rightPwm = -1.0;
-    }
-    driveTrain.setSpeedsPercent(leftPwm * Constants.driveMultiplier, rightPwm * Constants.driveMultiplier);
+  //   double rightPwm = throttle - angularPower;
+  //   double leftPwm = throttle + angularPower;
+  //   if (leftPwm > 1.0) {
+  //     rightPwm -= overPower * (leftPwm - 1.0);
+  //     leftPwm = 1.0;
+  //   } else if (rightPwm > 1.0) {
+  //     leftPwm -= overPower * (rightPwm - 1.0);
+  //     rightPwm = 1.0;
+  //   } else if (leftPwm < -1.0) {
+  //     rightPwm += overPower * (-1.0 - leftPwm);
+  //     leftPwm = -1.0;
+  //   } else if (rightPwm < -1.0) {
+  //     leftPwm += overPower * (-1.0 - rightPwm);
+  //     rightPwm = -1.0;
+  //   }
+  //   driveTrain.setSpeedsPercent(leftPwm * Constants.driveMultiplier, rightPwm * Constants.driveMultiplier);
   }
 
   public double handleDeadband(double val, double deadband) {

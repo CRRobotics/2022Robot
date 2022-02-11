@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import org.team639.commands.Drive.JoystickDrive;
+import org.team639.commands.shooter.shooterAimUp;
 import org.team639.lib.Constants;
 import org.team639.subsystems.DriveTrain;
+import org.team639.subsystems.Shooter;
 
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -37,11 +39,13 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  private final Shooter shooter = new Shooter();
   // Subsystem declaration
   private final DriveTrain driveTrain = new DriveTrain();
 
   // Command Declaration
   private final JoystickDrive joystickDrive = new JoystickDrive(driveTrain);
+  private final shooterAimUp shooteraim = new shooterAimUp(shooter);
 
   private static final SendableChooser<DriveLayout> driveMode;
 
@@ -131,6 +135,7 @@ public class RobotContainer {
    */
   public void defaultCommands() {
     CommandScheduler.getInstance().setDefaultCommand(driveTrain, joystickDrive);
+    CommandScheduler.getInstance().setDefaultCommand(shooter, shooteraim);
   }
 
   /**
