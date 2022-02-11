@@ -4,6 +4,11 @@
 
 package org.team639.lib;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -15,13 +20,29 @@ package org.team639.lib;
 public final class Constants 
 {
     //Drive Constants
-    public static final double kS = 0;
-    public static final double kA = 0;
-    public static final double kV = 0;
+    public static final double kS = .5;
+    public static final double kA = .5;
+    public static final double kV = .5;
     
-    public static final double chassisWidth = 0;
+    public static final double chassisWidth = 1;
     public static final double wheelDiameter = .1016;
     public static final double wheelCircumference = wheelDiameter * Math.PI;
+
+    public static final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.kS, Constants.kV, Constants.kA);
+    public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.chassisWidth);
+
+    public static final DifferentialDriveVoltageConstraint autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
+        new SimpleMotorFeedforward(Constants.kS,
+            Constants.kV,
+            Constants.kA),
+        kinematics,
+        12);
+    
+    public static final TrajectoryConfig config = new TrajectoryConfig(Constants.kMaxSpeedMetersPerSecond,
+        Constants.kMaxAccelerationMetersPerSecondSquared)
+            .setKinematics(kinematics)
+            .addConstraint(autoVoltageConstraint);
+    
 
     //TODO: Figure out what these are
     public static final int leftMainID = 12;
@@ -34,7 +55,7 @@ public final class Constants
     public static final int phCompressorID = 1;
     public static final int maxCompressor = 110;
 
-    public static final double driveMultiplier = .4; //tune this down a bit....maybe
+    public static final double driveMultiplier = 1; //tune this down a bit....maybe
     public static final double kMaxAccelerationMetersPerSecondSquared = 2;
     public static final double kMaxSpeedMetersPerSecond = 2;
     public static final double kDriveRampSeconds = 0.3;
@@ -48,9 +69,9 @@ public final class Constants
 
     public static final double ticksPerRevolution = 2048;
 
-    public static final double autoRotateP = .00015;
+    public static final double autoRotateP = .035;
     public static final double autoRotateI = 0.0;
-    public static final double autoRotateD = 0.0;
+    public static final double autoRotateD = 0.055;
 
     public static final double autoForwardP = 0.00015;
     public static final double autoForwardI = 0.0;

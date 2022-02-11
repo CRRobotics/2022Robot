@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import org.team639.auto.TrajectoryFactory;
 import org.team639.lib.Constants;
 import org.team639.lib.GearMode;
 import org.team639.lib.math.ConversionMath;
@@ -22,11 +23,14 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveTrain extends SubsystemBase {
@@ -36,13 +40,11 @@ public class DriveTrain extends SubsystemBase {
     private Pose2d startPosition = new Pose2d(new Translation2d(0, 0), getHeading());
 
     // Differential Control Systems
-    DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.chassisWidth);
     DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(getHeading());
-    SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.kS, Constants.kV, Constants.kA);
 
     // Independent left and right PID controllers
-    PIDController leftPIDController = new PIDController(.0001, 0, 0);
-    PIDController rightPIDController = new PIDController(.0001, 0, 0);
+    PIDController leftPIDController = new PIDController(.001, 0, 0);
+    PIDController rightPIDController = new PIDController(.001, 0, 0);
 
     // Talon motor controllers
     private TalonFX leftMain = new TalonFX(Constants.leftMainID);
@@ -53,6 +55,7 @@ public class DriveTrain extends SubsystemBase {
     //TODO: Fix the solenoid controls
     //private Solenoid shifter = new Solenoid(PneumaticsModuleType.REVPH, Constants.shifterID);
 
+    TrajectoryFactory factory = new TrajectoryFactory("paths");
 
     public static GearMode currGear;
 
@@ -93,6 +96,7 @@ public class DriveTrain extends SubsystemBase {
 
         leftMain.configOpenloopRamp(Constants.kDriveRampSeconds);
         rightMain.configOpenloopRamp(Constants.kDriveRampSeconds);
+        
         leftFollower.configOpenloopRamp(Constants.kDriveRampSeconds);
         rightFollower.configOpenloopRamp(Constants.kDriveRampSeconds);
 
@@ -104,7 +108,7 @@ public class DriveTrain extends SubsystemBase {
         SmartDashboard.putNumber("Gyro Angle", getHeading().getDegrees());
         SmartDashboard.putNumber("Right Position", getRightPostion());
         SmartDashboard.putNumber("Left Position", getLeftPostion());
-
+        
     }
 
     /**
@@ -142,15 +146,39 @@ public class DriveTrain extends SubsystemBase {
      * @param initPose Initial position of robot
      */
     public void resetOdometry(Pose2d initPose) {
-        gyro.reset();
         odometry.resetPosition(initPose, getHeading());
+        gyro.reset();
+
     }
+
+      /**
+   * Generates a Ramsete command
+   * 
+   * @return the generated command
+   */
+  public RamseteCommand ramseteGenerator(Trajectory pathRunner) {
+    RamseteCommand ramseteCommand = new RamseteCommand(
+        pathRunner,
+        this::getPose,
+        new RamseteController(2.0, 0.7),
+        Constants.feedforward,
+        Constants.kinematics,
+        this::getWheelSpeeds,
+        leftPIDController,
+        rightPIDController,
+        this::setVoltages,
+        this);
+    return ramseteCommand;
+  }
+
+  public RamseteCommand FenderToFender = this.ramseteGenerator(factory.getTrajectory("3BallFender"));
+
 
     /**
      * Returns the kinematics of the robot
      */
     public DifferentialDriveKinematics getKinematics() {
-        return kinematics;
+        return Constants.kinematics;
     }
 
     /**
@@ -229,7 +257,7 @@ public class DriveTrain extends SubsystemBase {
      * @return feeforward.
      */
     public SimpleMotorFeedforward getFeedForward() {
-        return feedforward;
+        return Constants.feedforward;
     }
 
     // /**
@@ -252,4 +280,5 @@ public class DriveTrain extends SubsystemBase {
     {
         return currGear;
     }
+    
 }
