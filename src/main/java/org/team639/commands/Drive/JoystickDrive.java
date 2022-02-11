@@ -36,14 +36,16 @@ public class JoystickDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    DriveLayout currMode = RobotContainer.getDriveLayout();
-    switch (currMode) {
-      default:
+    switch (RobotContainer.getDriveLayout()) {
+      case Arcade:
         arcadeDrive(handleDeadband(ControllerWrapper.DriverController.getLeftY(), Constants.kJoystickThreshold), handleDeadband(ControllerWrapper.DriverController.getLeftX(), Constants.kJoystickThreshold));
+        break;
       case CheesyDrive:
         cheezyDrive(ControllerWrapper.DriverController.getLeftY(), ControllerWrapper.DriverController.getRightX(), false);
+        break;
       case Tank:
         tankDrive(ControllerWrapper.DriverController.getLeftY(), ControllerWrapper.DriverController.getRightY());
+        break;
     }
   }
 
@@ -80,11 +82,11 @@ public class JoystickDrive extends CommandBase {
     driveTrain.setSpeedsPercent(left, right);
   }
 
-  public void tankDrive(double lSpeed, double rSpeed)
+  public void tankDrive(double leftSpeed, double rightSpeed)
   {
-    lSpeed *= Constants.driveMultiplier;
-    rSpeed *= Constants.driveMultiplier;
-    driveTrain.setSpeedsPercent(lSpeed, rSpeed);
+    leftSpeed *= Constants.driveMultiplier;
+    rightSpeed *= Constants.driveMultiplier;
+    driveTrain.setSpeedsPercent(leftSpeed, rightSpeed);
   }
 
   /**
