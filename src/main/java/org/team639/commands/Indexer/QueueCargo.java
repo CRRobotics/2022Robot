@@ -27,6 +27,11 @@ public class QueueCargo extends CommandBase {
 
     @Override
     public void execute() {
+        if(acquisition.getAcquisitionIn())
+        {
+            indexer.setIndexMotor(Constants.IndexConstants.indexQueueSpeed);
+            
+        }
         // while (acquisition.getAcquisitionIn()) { //while acquisition is running
         //     indexer.setIndexMotor(Constants.IndexConstants.indexQueueSpeed);
         //     if (!shooter.getExhaling()) { //if shooter is not running

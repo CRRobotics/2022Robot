@@ -4,5 +4,20 @@
 
 package org.team639.lib;
 
-/** Add your docs here. */
-public class PhotoelectricSensor {}
+import edu.wpi.first.wpilibj.DigitalInput;
+
+/**
+ * Photoelectric sensor
+ */
+public class PhotoelectricSensor
+{
+    private DigitalInput input;
+    public PhotoelectricSensor(int channel)
+    {
+        input = new DigitalInput(channel);
+    }
+    public boolean isDetected()
+    {
+        return input.get();
+    }
+}
