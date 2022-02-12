@@ -7,7 +7,7 @@ import org.team639.subsystems.Acquisition;
 /**
  * StartAcquisition Command
  */
-public class StartAcquisition extends CommandBase {
+public class RunAcquisition extends CommandBase {
 
     Acquisition acquisition;
 
@@ -15,7 +15,7 @@ public class StartAcquisition extends CommandBase {
      * Creates a new StartAcquisition
      * @param acquisition Acquisition to be used
      */
-    public StartAcquisition(Acquisition acquisition) {
+    public RunAcquisition(Acquisition acquisition) {
         this.acquisition = acquisition;
         addRequirements(acquisition);
     }
@@ -23,15 +23,18 @@ public class StartAcquisition extends CommandBase {
     @Override
     public void initialize() {
         acquisition.acquisitionDown();
-        acquisition.spinAcquisitionIn(Constants.acquisitionMotorSpeed);
     }
 
     @Override
     public void execute() {
+        acquisition.spinAcquisitionIn(Constants.acquisitionMotorSpeed);
     }
 
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+        acquisition.stopAcquisitionMotor();
+        acquisition.spinAcquisitionIn(Constants.acquisitionMotorSpeed);
+    }
 
     @Override
     public boolean isFinished() {
