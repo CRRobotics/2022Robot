@@ -126,4 +126,7 @@ public interface Constants
     public static final int indexSensorDistance = 10;
     public static final double indexMotorSpeed = 0.125;
 
+    public static final double reverseIndexWhenShootingSpeed = 0.1;
+    public static final double reverseIndexWhenShootingTime = 0.25;
+
 }
