@@ -4,11 +4,10 @@
 
 package org.team639;
 
-
+import org.team639.auto.DriveRamsete;
 import org.team639.auto.TrajectoryFactory;
-import org.team639.auto.routines.ThreeBallFromFender;
+import org.team639.auto.routines.ThreeBallFender;
 import org.team639.commands.Drive.*;
-import org.team639.controlboard.ControllerWrapper;
 import org.team639.subsystems.*;
 
 import org.team639.lib.AutonMode;
@@ -21,7 +20,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -38,30 +36,29 @@ public class RobotContainer {
 
   // Command Declaration
   private final JoystickDrive joystickDrive = new JoystickDrive(driveTrain);
-  private final Autorotate rotate = new Autorotate(driveTrain, -90);
-  private final Test test = new Test(driveTrain);
-  private final ThreeBallFromFender three = new ThreeBallFromFender(driveTrain);
+  private final ThreeBallFender threeBallFender = new ThreeBallFender(driveTrain);
 
   static SendableChooser<DriveLayout> driveMode = new SendableChooser<>();
   static SendableChooser<AutonMode> autoMode = new SendableChooser<>();
 
-  private Pose2d basePose = new Pose2d();
 
-  static{
+  public static final TrajectoryFactory factory = new TrajectoryFactory("paths");
+
+  static {
     driveMode.setDefaultOption("Arcade Standard", DriveLayout.Arcade);
     driveMode.addOption("Tank", DriveLayout.Tank);
     driveMode.addOption("CheesyDrive", DriveLayout.CheesyDrive);
     SmartDashboard.putData("Drive Layout", driveMode);
   }
 
-  static
-  {
+  static {
     autoMode.setDefaultOption("AutoCross Line", AutonMode.crossLine);
     SmartDashboard.putData("Auto Mode", autoMode);
   }
 
   /**
    * Returns the current selected drive layout
+   * 
    * @return The chosen drive layout
    */
   public static DriveLayout getDriveLayout() {
@@ -70,6 +67,7 @@ public class RobotContainer {
 
   /**
    * Returns the current selected auto layout
+   * 
    * @return The chosen auto layout
    */
   public static AutonMode getAutonomousMode() {
@@ -81,8 +79,6 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure the button bindings
-    ControllerWrapper.DriverButtonX.whenHeld(test);
-    ControllerWrapper.DriverButtonY.whenPressed(rotate);
     defaultCommands();
   }
 
@@ -103,10 +99,17 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-
-    // An ExampleCommand will run in autonomous
-    driveTrain.resetOdometry(basePose);
-    return rotate;
+    Command auton;
+    switch(getAutonomousMode())
+    {
+      default:
+        auton = new AutoDriveForward(driveTrain, 2);
+        break;
+      case ThreeBallFender:
+        auton = threeBallFender;
+        break;
+    }
+    return auton;
   }
 
   /**
@@ -114,6 +117,9 @@ public class RobotContainer {
    */
   public void defaultCommands() {
     CommandScheduler.getInstance().setDefaultCommand(driveTrain, joystickDrive);
-  }  
+  }
+
   
+  
+
 }

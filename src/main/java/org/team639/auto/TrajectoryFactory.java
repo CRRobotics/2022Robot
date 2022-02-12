@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 
 /** Factory for generating trajectories */
 public class TrajectoryFactory {
-    private Map<String, Trajectory> trajectories = new HashMap<String, Trajectory>();
+    Map<String, Trajectory> trajectories = new HashMap<String, Trajectory>();
 
     public TrajectoryFactory(String pathSubDir){
         double loadStart = System.currentTimeMillis() / 1000;
@@ -63,6 +63,7 @@ public class TrajectoryFactory {
         }
         return trajectory;
     }
+
 
     public Trajectory getTrajectory(String name)
     {

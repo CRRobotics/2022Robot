@@ -38,9 +38,9 @@ public interface Constants
 
     public interface AutoConstants
     {
-        public static final double kS = .5;
-        public static final double kA = .5;
-        public static final double kV = .5;
+        public static final double kS = .132;
+        public static final double kA = 2;
+        public static final double kV = .0209;
 
         public static final double kMaxAccelerationMetersPerSecondSquared = 2;
         public static final double kMaxSpeedMetersPerSecond = 2;
@@ -69,11 +69,16 @@ public interface Constants
         public static final double autoForwardI = 0.0;
         public static final double autoForwardD = 0.0;
 
+        public interface pathNames
+        {
+            public static final String FenderToFender = "3BallFender";
+        }
+
     }
 
     public interface DriveConstants
     {
-        public static final double chassisWidth = 1;
+        public static final double chassisWidth = 1.0;
         public static final double wheelDiameter = .1016;
         public static final double wheelCircumference = wheelDiameter * Math.PI;
 
@@ -102,7 +107,8 @@ public interface Constants
     public interface ControlboardConstants
     {
         //Control Board Constants
-        public static final double kJoystickThreshold = 0.2;
+        public static final double kJoystickThreshold = 0.05;
     }
+
 
 }

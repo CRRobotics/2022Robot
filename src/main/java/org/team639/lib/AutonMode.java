@@ -6,5 +6,6 @@ package org.team639.lib;
 
 public enum AutonMode {
     crossLine,
-    weave
+    weave,
+    ThreeBallFender
 }

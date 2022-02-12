@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.kauailabs.navx.frc.AHRS;
 
-import org.team639.auto.TrajectoryFactory;
 import org.team639.lib.Constants;
 import org.team639.lib.GearMode;
 import org.team639.lib.math.ConversionMath;
@@ -17,20 +16,17 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveTrain extends SubsystemBase {
@@ -43,24 +39,25 @@ public class DriveTrain extends SubsystemBase {
     DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(getHeading());
 
     // Independent left and right PID controllers
-    PIDController leftPIDController = new PIDController(.001, 0, 0);
-    PIDController rightPIDController = new PIDController(.001, 0, 0);
+    public PIDController leftPIDController = new PIDController(.0001, 0, 0);
+    public PIDController rightPIDController = new PIDController(.0001, 0, 0);
 
     // Talon motor controllers
-    private TalonFX leftMain = new TalonFX(Constants.Ports.Drive.leftMainID);
-    private TalonFX leftFollower = new TalonFX(Constants.Ports.Drive.leftFollowerID);
-    private TalonFX rightMain = new TalonFX(Constants.Ports.Drive.rightMainID);
-    private TalonFX rightFollower = new TalonFX(Constants.Ports.Drive.rightFollowerID);
+    private WPI_TalonFX leftMain = new WPI_TalonFX(Constants.Ports.Drive.leftMainID);
+    private WPI_TalonFX leftFollower = new WPI_TalonFX(Constants.Ports.Drive.leftFollowerID);
+    private WPI_TalonFX rightMain = new WPI_TalonFX(Constants.Ports.Drive.rightMainID);
+    private WPI_TalonFX rightFollower = new WPI_TalonFX(Constants.Ports.Drive.rightFollowerID);
+
 
     //TODO: Fix the solenoid controls
     //private Solenoid shifter = new Solenoid(PneumaticsModuleType.REVPH, Constants.shifterID);
-
-    TrajectoryFactory factory = new TrajectoryFactory("paths");
+    
 
     public static GearMode currGear;
 
     /** Creates a new DriveTrain. */
     public DriveTrain() {
+        resetEncoders();
         resetOdometry(startPosition);
         motorConfig();
        // this.toggleGearHigh();
@@ -122,7 +119,6 @@ public class DriveTrain extends SubsystemBase {
         rightMain.set(ControlMode.PercentOutput, rightSpeed);
     }
 
-    // TODO: Fix this and set up all SmartDashboard values correctly
 
     /**
      * Sets the voltages of the left and right motors.
@@ -131,8 +127,8 @@ public class DriveTrain extends SubsystemBase {
      * @param rightVoltage The voltage to set the right motor.
      */
     public void setVoltages(double leftVoltage, double rightVoltage) {
-        leftMain.set(ControlMode.Current, leftVoltage);
-        rightMain.set(ControlMode.Current, leftVoltage);
+        leftMain.setVoltage(leftVoltage);
+        rightMain.setVoltage(leftVoltage);
     }
 
     public void setVelocities(double leftVelocity, double rightVelocity) {
@@ -146,33 +142,17 @@ public class DriveTrain extends SubsystemBase {
      * @param initPose Initial position of robot
      */
     public void resetOdometry(Pose2d initPose) {
+        resetEncoders();
         odometry.resetPosition(initPose, getHeading());
         gyro.reset();
 
     }
 
-      /**
-   * Generates a Ramsete command
-   * 
-   * @return the generated command
-   */
-  public RamseteCommand ramseteGenerator(Trajectory pathRunner) {
-    RamseteCommand ramseteCommand = new RamseteCommand(
-        pathRunner,
-        this::getPose,
-        new RamseteController(2.0, 0.7),
-        Constants.AutoConstants.feedforward,
-        Constants.AutoConstants.kinematics,
-        this::getWheelSpeeds,
-        leftPIDController,
-        rightPIDController,
-        this::setVoltages,
-        this);
-    return ramseteCommand;
-  }
-
-  public RamseteCommand FenderToFender = this.ramseteGenerator(factory.getTrajectory("3BallFender"));
-
+    public void resetEncoders()
+    {
+        rightMain.setSelectedSensorPosition(0);
+        leftMain.setSelectedSensorPosition(0);
+    }
 
     /**
      * Returns the kinematics of the robot
@@ -218,7 +198,7 @@ public class DriveTrain extends SubsystemBase {
     public double getLeftPostion() {
         // return leftMain.getSelectedSensorPosition(0) * Constants.driveTrainGearRatio
         // * (Units.inchesToMeters(6)*Math.PI);
-        return ConversionMath.ticksToMeters(leftMain.getSelectedSensorPosition(0));
+        return ConversionMath.ticksToMeters(leftMain.getSelectedSensorPosition());
     }
 
     /**
@@ -229,7 +209,7 @@ public class DriveTrain extends SubsystemBase {
     public double getRightPostion() {
         // return rightMain.getSelectedSensorPosition(0) * Constants.driveTrainGearRatio
         // * (Units.inchesToMeters(6)*Math.PI);
-        return ConversionMath.ticksToMeters(rightMain.getSelectedSensorPosition(0));
+        return ConversionMath.ticksToMeters(rightMain.getSelectedSensorPosition());
 
     }
 
