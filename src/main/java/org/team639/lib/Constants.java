@@ -116,4 +116,7 @@ public interface Constants
     }
 
 
+    //Acquisition constants
+    public static final double acquisitionMotorSpeed = 0.5;
+
 }
