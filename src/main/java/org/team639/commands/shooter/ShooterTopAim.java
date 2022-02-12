@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package org.team639.commands.shooter;
+package org.team639.commands.Shooter;
 
 import org.team639.controlboard.ControllerWrapper;
 import org.team639.subsystems.Shooter;
@@ -10,12 +10,12 @@ import org.team639.subsystems.Shooter;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class shooterAimUp extends CommandBase {
+public class ShooterTopAim extends CommandBase {
 
   private Shooter shooter;
   private double position = 0;
   /** Creates a new shooterAimUp. */
-  public shooterAimUp(Shooter shooter) {
+  public ShooterTopAim(Shooter shooter) {
     this.shooter = shooter;
     addRequirements(shooter);
     // Use addRequirements() here to declare subsystem dependencies.

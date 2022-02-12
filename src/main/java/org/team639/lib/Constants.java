@@ -120,12 +120,4 @@ public interface Constants
     public static final int indexSensorDistance = 10;
     public static final double indexMotorSpeed = 0.125;
 
-    //Acquisition constants
-    public static final double acquisitionMotorSpeed = 0.5;
-
-
-    //Shooter Constants
-    public static final long shootTime = 100;
-    public static double TargetRPM;
-
 }
