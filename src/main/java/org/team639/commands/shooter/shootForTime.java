@@ -2,21 +2,21 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package org.team639.commands.Shooter;
+package org.team639.commands.shooter;
 
 import org.team639.lib.Constants;
 import org.team639.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ShootForTime extends CommandBase {
+public class shootForTime extends CommandBase {
 
   private Shooter shooter;
   private long startTime;
   private long shootTime;
   
   /** Creates a new shootForTime. */
-  public ShootForTime(Shooter shooter) {
+  public shootForTime(Shooter shooter) {
     this.shooter = shooter;
     addRequirements(shooter);
   }
@@ -25,19 +25,19 @@ public class ShootForTime extends CommandBase {
   @Override
   public void initialize() {
     startTime = System.currentTimeMillis();
-    shootTime = Constants.shootTime;
+    shootTime = Constants.ShooterConstants.shootTime;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if(System.currentTimeMillis() - startTime < shootTime){
-      shooter.maintainLeftRPM(Constants.TargetRPM);
-      shooter.maintainRightRPM(Constants.TargetRPM);
+      shooter.setSpeedRPM(Constants.ShooterConstants.targetRPM);
+      shooter.setSpeedRPM(Constants.ShooterConstants.targetRPM);
     }
     else{
-      shooter.toggleleftOn(0);
-      shooter.togglerightOn(0);
+      shooter.setSpeed(0);
+      shooter.setSpeed(0);
     }
   }
 

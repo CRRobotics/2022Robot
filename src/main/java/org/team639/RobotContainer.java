@@ -8,6 +8,7 @@ import org.team639.auto.DriveRamsete;
 import org.team639.auto.TrajectoryFactory;
 import org.team639.auto.routines.ThreeBallFender;
 import org.team639.commands.Drive.*;
+import org.team639.commands.shooter.ShooterTopAim;
 import org.team639.subsystems.*;
 
 import org.team639.lib.AutonMode;
@@ -33,10 +34,12 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class RobotContainer {
   // Subsystem declaration
   private final DriveTrain driveTrain = new DriveTrain();
+  private final Shooter shooter = new Shooter();
 
   // Command Declaration
   private final JoystickDrive joystickDrive = new JoystickDrive(driveTrain);
   private final ThreeBallFender threeBallFender = new ThreeBallFender(driveTrain);
+  private final ShooterTopAim shooterAim = new ShooterTopAim(shooter);
 
   static SendableChooser<DriveLayout> driveMode = new SendableChooser<>();
   static SendableChooser<AutonMode> autoMode = new SendableChooser<>();
@@ -117,7 +120,7 @@ public class RobotContainer {
    */
   public void defaultCommands() {
     CommandScheduler.getInstance().setDefaultCommand(driveTrain, joystickDrive);
-    CommandScheduler.getInstance().setDefaultCommand(shooter, shooteraim);
+    CommandScheduler.getInstance().setDefaultCommand(shooter, shooterAim);
   }
 
   
