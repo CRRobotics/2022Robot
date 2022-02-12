@@ -115,6 +115,12 @@ public interface Constants
         public static final double overrideThreshhold = 0.1;
     }
 
+    public interface ShooterConstants
+    {
+        public static final long shootTime = 0;
+        public static final double targetRPM = 1000;
+    }
+
     public interface IndexConstants
     {
         public static final double indexQueueSpeed = 0.125;
