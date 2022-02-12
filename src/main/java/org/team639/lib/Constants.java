@@ -121,12 +121,17 @@ public interface Constants
         public static final double kJoystickThreshold = 0.05;
     }
 
-    //Indexer Constants
-    public static final int indexMotorID = 0;
-    public static final int indexSensorDistance = 10;
-    public static final double indexMotorSpeed = 0.125;
+    public interface ShooterConstants {
+        public static final double reverseIndexWhenShootingSpeed = -0.1;
+        public static final double reverseIndexWhenShootingTime = 0.25;
+        public static final int shootHighRPM = 5000;
+        public static final double shootHighSpeed = 1;
+    }
 
-    public static final double reverseIndexWhenShootingSpeed = 0.1;
-    public static final double reverseIndexWhenShootingTime = 0.25;
+    public interface IndexerConstants {
+        public static final int indexMotorID = 0;
+        public static final int indexSensorDistance = 10;
+        public static final double indexMotorSpeed = 0.125;
+    }
 
 }
