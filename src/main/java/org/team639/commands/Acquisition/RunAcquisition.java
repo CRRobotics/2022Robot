@@ -9,31 +9,33 @@ import org.team639.subsystems.Acquisition;
  */
 public class RunAcquisition extends CommandBase {
 
-    Acquisition acquisition;
+    private Acquisition acquisition;
+    private double acquisitionMotorSpeed;
 
     /**
      * Creates a new StartAcquisition
      * @param acquisition Acquisition to be used
      */
-    public RunAcquisition(Acquisition acquisition) {
+    public RunAcquisition(Acquisition acquisition, double acquisitionMotorSpeed) {
         this.acquisition = acquisition;
+        this.acquisitionMotorSpeed = acquisitionMotorSpeed;
         addRequirements(acquisition);
     }
 
     @Override
     public void initialize() {
-        acquisition.acquisitionDown();
+        if(!acquisition.isAcquisitionDown())
+            acquisition.acquisitionDown();
     }
 
     @Override
     public void execute() {
-        acquisition.spinAcquisitionIn(Constants.acquisitionMotorSpeed);
+        acquisition.spinAcquisitionIn(acquisitionMotorSpeed);
     }
 
     @Override
     public void end(boolean interrupted) {
         acquisition.stopAcquisitionMotor();
-        acquisition.spinAcquisitionIn(Constants.acquisitionMotorSpeed);
     }
 
     @Override

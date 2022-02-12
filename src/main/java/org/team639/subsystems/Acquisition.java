@@ -1,8 +1,5 @@
 package org.team639.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -17,7 +14,7 @@ public class Acquisition extends SubsystemBase {
     Solenoid rightPiston = new Solenoid(PneumaticsModuleType.REVPH,4); //don't know what kind of piston this is
     Solenoid leftPiston = new Solenoid(PneumaticsModuleType.REVPH,4); //idk if there are 2 pistons or not
 
-    public boolean acquisitionDown = false;
+    boolean acquisitionDown = false;
 
     public Acquisition() {
         acquisitionMotor.restoreFactoryDefaults();
@@ -26,6 +23,8 @@ public class Acquisition extends SubsystemBase {
 
         acquisitionMotor2.setIdleMode(CANSparkMax.IdleMode.kBrake);
         acquisitionMotor2.follow(acquisitionMotor);
+
+        acquisitionUp();
     }
 
     @Override
@@ -49,6 +48,15 @@ public class Acquisition extends SubsystemBase {
         leftPiston.set(false);
         rightPiston.set(false);
         acquisitionDown = false;
+    }
+
+    /**
+     * Determines if the acquistion is deployed
+     * @return acquistionDown
+     */
+    public boolean isAcquisitionDown()
+    {
+        return acquisitionDown;
     }
 
     /**
