@@ -115,6 +115,10 @@ public interface Constants
         public static final double kJoystickThreshold = 0.05;
     }
 
+    //Indexer Constants
+    public static final int indexMotorID = 0;
+    public static final int indexSensorDistance = 10;
+    public static final double indexMotorSpeed = 0.125;
 
     //Acquisition constants
     public static final double acquisitionMotorSpeed = 0.5;
