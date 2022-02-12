@@ -4,18 +4,19 @@
 
 package org.team639.auto.routines;
 
+import org.team639.auto.DriveRamsete;
+import org.team639.subsystems.DriveTrain;
+
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ThreeBallFromFender extends SequentialCommandGroup {
-  /** Creates a new ThreeBallFromFender. */
-  public ThreeBallFromFender() {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
+public class ThreeBallFender extends SequentialCommandGroup {
+  /** Creates a new ThreeBallFender. */
+  public ThreeBallFender(DriveTrain driveTrain) {
     addCommands(
-      
+      new DriveRamsete(driveTrain, "3BallFender")
     );
   }
 }

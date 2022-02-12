@@ -4,29 +4,68 @@
 
 package org.team639.commands.Drive;
 
+import org.team639.lib.Constants;
+import org.team639.lib.math.ConversionMath;
+import org.team639.subsystems.DriveTrain;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AutoDriveForward extends CommandBase {
+  private DriveTrain driveTrain;
+
+  private PIDController leftController = new PIDController(Constants.AutoConstants.autoForwardP, Constants.AutoConstants.autoForwardI, Constants.AutoConstants.autoForwardD);
+  private PIDController rightController = new PIDController(Constants.AutoConstants.autoForwardP, Constants.AutoConstants.autoForwardI, Constants.AutoConstants.autoForwardD);
+
+  private double startLeft;
+  private double startRight;
+  private double targetLeft;
+  private double targetRight;
+
+  private double errorRight;
+  private double errorLeft;
+
   /** Creates a new AutoDriveForward. */
-  public AutoDriveForward() {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public AutoDriveForward(DriveTrain driveTrain, double distance) {
+    this.driveTrain = driveTrain;
+    addRequirements(driveTrain);
+
+    distance = Math.abs(distance);
+
+    startLeft = driveTrain.getLeftPostion(); startRight = driveTrain.getRightPostion();
+    targetLeft = startLeft + ConversionMath.metersToTicks(distance);
+    targetRight = startRight + ConversionMath.metersToTicks(distance);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    driveTrain.setSpeedsPercent(0, 0);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    errorLeft = targetLeft - driveTrain.getLeftPostion();
+    errorRight = targetRight - driveTrain.getRightPostion();
+
+    double leftMultiplier = leftController.calculate(errorLeft);
+    double rightMultiplier = rightController.calculate(errorRight);
+
+    driveTrain.setSpeedsPercent(1 * leftMultiplier, 1 * rightMultiplier);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    driveTrain.setSpeedsPercent(0, 0);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(errorLeft <= 10 && errorRight <= 10)
+      return true;
     return false;
   }
 }
