@@ -123,4 +123,9 @@ public interface Constants
     //Acquisition constants
     public static final double acquisitionMotorSpeed = 0.5;
 
+
+    //Shooter Constants
+    public static final long shootTime = 100;
+    public static double TargetRPM;
+
 }
