@@ -6,11 +6,12 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.team639.lib.Constants;
 
 public class Acquisition extends SubsystemBase {
 
     TalonSRX acquisitionMotor = new TalonSRX(1);
+    TalonSRX acquisitionMotor2 = new TalonSRX(1);
+    TalonSRX acquisitionMotor3 = new TalonSRX(1); //idk if the other 2 are the right kind of motor
     Solenoid rightPiston = new Solenoid(PneumaticsModuleType.REVPH,4); //don't know what kind of piston this is
     Solenoid leftPiston = new Solenoid(PneumaticsModuleType.REVPH,4); //idk if there are 2 pistons or not
 
@@ -19,6 +20,14 @@ public class Acquisition extends SubsystemBase {
     public Acquisition() {
         acquisitionMotor.configFactoryDefault();
         acquisitionMotor.setNeutralMode(NeutralMode.Coast);
+
+        acquisitionMotor2.configFactoryDefault();
+        acquisitionMotor2.setNeutralMode(NeutralMode.Coast);
+        acquisitionMotor2.follow(acquisitionMotor);
+
+        acquisitionMotor3.configFactoryDefault();
+        acquisitionMotor3.setNeutralMode(NeutralMode.Coast);
+        acquisitionMotor3.follow(acquisitionMotor);
     }
 
     @Override
