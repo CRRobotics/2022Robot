@@ -61,7 +61,7 @@ public class Shooter extends SubsystemBase {
   }
 
   //Keeps the left motor at a target rpm
-  public void setSpeedRPM(double targetRPM){
+  public void setSpeedRPM(int targetRPM){
     mainMotor.set(shooterPID.calculate(rightEncoder.getPosition(), setpoint));
   }
 

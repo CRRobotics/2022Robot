@@ -16,23 +16,23 @@ public class shootForTime extends CommandBase {
   private long shootTime;
   
   /** Creates a new shootForTime. */
-  public shootForTime(Shooter shooter) {
+  public shootForTime(Shooter shooter, long shootTime, long startTime) {
     this.shooter = shooter;
     addRequirements(shooter);
+    this.startTime = System.currentTimeMillis();
+    this.shootTime = 1000;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    startTime = System.currentTimeMillis();
-    shootTime = Constants.ShooterConstants.shootTime;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if(System.currentTimeMillis() - startTime < shootTime){
-      shooter.setSpeedRPM(Constants.ShooterConstants.targetRPM);
+      shooter.setSpeedRPM(Constants.ShooterConstants.shootHighRPM);
     }
     else{
       shooter.setSpeed(0);
