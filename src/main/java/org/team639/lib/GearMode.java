@@ -4,8 +4,10 @@
 
 package org.team639.lib;
 
-public enum AutonMode {
-    crossLine,
-    weave,
-    ThreeBallFender
+/** 
+ * Gear states
+ */
+public enum GearMode {
+    high,
+    low
 }

@@ -11,7 +11,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 public class Indexer extends SubsystemBase {
-    private VictorSPX indexMotor = new VictorSPX(Constants.indexMotorID);
+    private VictorSPX indexMotor = new VictorSPX(Constants.Ports.Indexer.indexMotorID);
     private ColorSensorV3 bottomSensor = new ColorSensorV3(I2C.Port.kMXP);
 
     double stationarySpeed = 0.128; 

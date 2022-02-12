@@ -4,11 +4,13 @@
 
 package org.team639;
 
+import org.team639.auto.DriveRamsete;
+import org.team639.auto.TrajectoryFactory;
+import org.team639.auto.routines.ThreeBallFender;
 import org.team639.commands.Drive.*;
 import org.team639.subsystems.*;
 
 import org.team639.lib.AutonMode;
-import org.team639.lib.Constants;
 import org.team639.lib.DriveLayout;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -34,31 +36,29 @@ public class RobotContainer {
 
   // Command Declaration
   private final JoystickDrive joystickDrive = new JoystickDrive(driveTrain);
+  private final ThreeBallFender threeBallFender = new ThreeBallFender(driveTrain);
 
-  private static final SendableChooser<DriveLayout> driveMode;
-  private static final SendableChooser<AutonMode> autoMode;
+  static SendableChooser<DriveLayout> driveMode = new SendableChooser<>();
+  static SendableChooser<AutonMode> autoMode = new SendableChooser<>();
 
-  private Pose2d basePose = new Pose2d();
+
+  public static final TrajectoryFactory factory = new TrajectoryFactory("paths");
 
   static {
-    driveMode = new SendableChooser<>();
     driveMode.setDefaultOption("Arcade Standard", DriveLayout.Arcade);
-    driveMode.addOption("CheesyDrive", DriveLayout.CheesyDrive);
     driveMode.addOption("Tank", DriveLayout.Tank);
-
+    driveMode.addOption("CheesyDrive", DriveLayout.CheesyDrive);
     SmartDashboard.putData("Drive Layout", driveMode);
   }
 
-  static 
-  {
-    autoMode = new SendableChooser<>();
+  static {
     autoMode.setDefaultOption("AutoCross Line", AutonMode.crossLine);
-
     SmartDashboard.putData("Auto Mode", autoMode);
   }
 
   /**
    * Returns the current selected drive layout
+   * 
    * @return The chosen drive layout
    */
   public static DriveLayout getDriveLayout() {
@@ -67,6 +67,7 @@ public class RobotContainer {
 
   /**
    * Returns the current selected auto layout
+   * 
    * @return The chosen auto layout
    */
   public static AutonMode getAutonomousMode() {
@@ -78,7 +79,6 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure the button bindings
-    configureButtonBindings();
     defaultCommands();
   }
 
@@ -99,10 +99,17 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-
-    // An ExampleCommand will run in autonomous
-    driveTrain.resetOdometry(basePose);
-    return null;
+    Command auton;
+    switch(getAutonomousMode())
+    {
+      default:
+        auton = new AutoDriveForward(driveTrain, 2);
+        break;
+      case ThreeBallFender:
+        auton = threeBallFender;
+        break;
+    }
+    return auton;
   }
 
   /**
@@ -112,5 +119,7 @@ public class RobotContainer {
     CommandScheduler.getInstance().setDefaultCommand(driveTrain, joystickDrive);
   }
 
+  
+  
 
 }
