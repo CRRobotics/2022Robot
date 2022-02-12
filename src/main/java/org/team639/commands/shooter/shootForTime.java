@@ -33,10 +33,8 @@ public class shootForTime extends CommandBase {
   public void execute() {
     if(System.currentTimeMillis() - startTime < shootTime){
       shooter.setSpeedRPM(Constants.ShooterConstants.targetRPM);
-      shooter.setSpeedRPM(Constants.ShooterConstants.targetRPM);
     }
     else{
-      shooter.setSpeed(0);
       shooter.setSpeed(0);
     }
   }
