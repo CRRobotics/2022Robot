@@ -7,7 +7,6 @@ package org.team639.commands.shooter;
 import org.team639.controlboard.ControllerWrapper;
 import org.team639.subsystems.Shooter;
 
-import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ShooterTopAim extends CommandBase {

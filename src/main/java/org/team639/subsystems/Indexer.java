@@ -1,11 +1,9 @@
 package org.team639.subsystems;
 
 
-import com.revrobotics.ColorSensorV3;
 import org.team639.lib.Constants;
 import org.team639.lib.PhotoelectricSensor;
 
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -15,6 +13,8 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 public class Indexer extends SubsystemBase {
     private VictorSPX indexMotor = new VictorSPX(Constants.Ports.Indexer.indexMotorID);
     private PhotoelectricSensor bottomSensor = new PhotoelectricSensor(0);
+    private PhotoelectricSensor topSensor = new PhotoelectricSensor(1);
+
     //TODO configure top sensor
     //private ColorSensorV3 placeholderSensor = new ColorSensorV3(I2C.Port.kMXP);
 
@@ -37,14 +37,13 @@ public class Indexer extends SubsystemBase {
         indexMotor.set(ControlMode.PercentOutput, speed);
     }
 
-    //TODO find index motor distance
     public boolean bottomDetected()
     {
-        //return bottomSensor.getProximity() <= Constants.indexSensorDistance;
         return bottomSensor.isDetected();
     }
 
-    // public boolean topDetected() {
-    //     return placeholderSensor.getProximity() <= Constants.indexSensorDistance;
-    // }
+    public boolean topDetected()
+    {
+        return topSensor.isDetected();
+    }
 }
