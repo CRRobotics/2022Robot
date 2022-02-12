@@ -34,17 +34,19 @@ public interface Constants
             public static final int indexMotorID = 1;
         }
 
+        public interface Acquisition
+        {
+            public static final int acquisitionMotor1port = 1;
+            public static final int acquisitionMotor2port = 2;
+        }
+
         public interface PneumaticsModuleType
         {
             public static final int shifterID = 0;
             public static final int phCompressorID = 1;
         }
 
-        public interface Acquisition
-        {
-            public static final int acquisitionMotor1port = 1;
-            public static final int acquisitionMotor2port = 2;
-        }
+        
     }
 
     public interface AutoConstants
@@ -111,8 +113,12 @@ public interface Constants
         public static final double kTurnSensitivity = 1;
         public static final double kThrottleDeadband = 0.02;
         public static final double overrideThreshhold = 0.1;
+    }
 
-        
+    public interface IndexConstants
+    {
+        public static final double indexQueueSpeed = 0.125;
+
     }
 
     public interface ControlboardConstants
@@ -120,10 +126,4 @@ public interface Constants
         //Control Board Constants
         public static final double kJoystickThreshold = 0.05;
     }
-
-    //Indexer Constants
-    public static final int indexMotorID = 0;
-    public static final int indexSensorDistance = 10;
-    public static final double indexMotorSpeed = 0.125;
-
 }

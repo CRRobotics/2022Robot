@@ -14,29 +14,31 @@ import edu.wpi.first.wpilibj.Servo;
 public class Shooter extends SubsystemBase {
 
   //Motor Controllers
-  private CANSparkMax leftMotor = new CANSparkMax(1, CANSparkMax.MotorType.kBrushless);
-  private CANSparkMax rightMotor = new CANSparkMax(2, CANSparkMax.MotorType.kBrushless);
+  private CANSparkMax mainMotor = new CANSparkMax(1, CANSparkMax.MotorType.kBrushless);
+  private CANSparkMax followMotor = new CANSparkMax(2, CANSparkMax.MotorType.kBrushless);
 
-  private RelativeEncoder leftEncoder = leftMotor.getEncoder();
-  private RelativeEncoder rightEncoder = rightMotor.getEncoder();
+  private RelativeEncoder leftEncoder = mainMotor.getEncoder();
+  private RelativeEncoder rightEncoder = followMotor.getEncoder();
 
   public double rightRPM;
   public double leftRPM;
 
   private long setpoint;
 
-  private PIDController leftPID = new PIDController(0.0001, 0.001, 0);
-  private PIDController rightPID = new PIDController(0.0001, 0.001, 0);
+  private PIDController shooterPID = new PIDController(0.0001, 0.001, 0);
 
   private Servo linearActuator1 = new Servo(0);
   private Servo linearActuator2 = new Servo(1);
-  
-
 
   /** Creates a new Shooter. */
   public Shooter() {
-    leftMotor.setIdleMode(IdleMode.kCoast);
-    rightMotor.setIdleMode(IdleMode.kCoast);
+    mainMotor.restoreFactoryDefaults();
+    followMotor.restoreFactoryDefaults();
+
+    mainMotor.setIdleMode(IdleMode.kCoast);
+    followMotor.setIdleMode(IdleMode.kCoast);
+
+    mainMotor.follow(followMotor);
 
     linearActuator1.setBounds(2.0,1.8,1.5,1.2,1.0);
     linearActuator1.setSpeed(1);
@@ -48,34 +50,34 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    rightRPM = rightEncoder.getVelocity()/42;
-    leftRPM = leftEncoder.getVelocity()/42;
+    rightRPM = rightEncoder.getVelocity() / 42;
+    leftRPM = leftEncoder.getVelocity() / 42;
 
   }
 
   //turns the left motor on
-  public void toggleleftOn(double speed){
-    leftMotor.set(speed);
-  }
-
-  //turns the right motor on
-  public void togglerightOn(double speed){
-    rightMotor.set(speed);
+  public void setSpeed(double speed){
+    mainMotor.set(speed);
   }
 
   //Keeps the left motor at a target rpm
-  public void maintainLeftRPM(double targetRPM){
-    rightMotor.set(rightPID.calculate(rightEncoder.getPosition(), setpoint));
-  }
-
-  //Keeps the right motor at a target rpm
-  public void maintainRightRPM(double targetRPM){
-    leftMotor.set(leftPID.calculate(leftEncoder.getPosition(), setpoint));
+  public void setSpeedRPM(double targetRPM){
+    mainMotor.set(shooterPID.calculate(rightEncoder.getPosition(), setpoint));
   }
 
   public void actuatorMove(double pos){
     linearActuator1.setPosition(pos);
     linearActuator2.setPosition(pos);
+  }
+
+  public boolean getExhaling()
+  {
+    return mainMotor.get() > 0;
+  }
+
+  public boolean getInhaling()
+  {
+    return mainMotor.get() < 0;
   }
 
 }
