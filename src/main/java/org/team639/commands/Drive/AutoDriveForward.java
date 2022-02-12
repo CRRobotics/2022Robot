@@ -14,8 +14,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class AutoDriveForward extends CommandBase {
   private DriveTrain driveTrain;
 
-  private PIDController leftController = new PIDController(Constants.autoForwardP, Constants.autoForwardI, Constants.autoForwardD);
-  private PIDController rightController = new PIDController(Constants.autoForwardP, Constants.autoForwardI, Constants.autoForwardD);
+  private PIDController leftController = new PIDController(Constants.AutoConstants.autoForwardP, Constants.AutoConstants.autoForwardI, Constants.AutoConstants.autoForwardD);
+  private PIDController rightController = new PIDController(Constants.AutoConstants.autoForwardP, Constants.AutoConstants.autoForwardI, Constants.AutoConstants.autoForwardD);
 
   private double startLeft;
   private double startRight;
@@ -64,7 +64,7 @@ public class AutoDriveForward extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(errorLeft == 0 && errorRight == 0)
+    if(errorLeft <= 10 && errorRight <= 10)
       return true;
     return false;
   }

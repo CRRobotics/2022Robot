@@ -8,7 +8,6 @@ import org.team639.RobotContainer;
 
 import org.team639.controlboard.ControllerWrapper;
 import org.team639.lib.Constants;
-import org.team639.lib.DriveLayout;
 import org.team639.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -38,7 +37,7 @@ public class JoystickDrive extends CommandBase {
   public void execute() {
     switch (RobotContainer.getDriveLayout()) {
       case Arcade:
-        arcadeDrive(handleDeadband(ControllerWrapper.DriverController.getLeftY(), Constants.kJoystickThreshold), handleDeadband(ControllerWrapper.DriverController.getLeftX(), Constants.kJoystickThreshold));
+        arcadeDrive(handleDeadband(ControllerWrapper.DriverController.getLeftY(), Constants.ControlboardConstants.kJoystickThreshold), handleDeadband(ControllerWrapper.DriverController.getRightX(), Constants.ControlboardConstants.kJoystickThreshold));
         break;
       case CheesyDrive:
         cheezyDrive(ControllerWrapper.DriverController.getLeftY(), ControllerWrapper.DriverController.getRightX(), false);
@@ -67,7 +66,7 @@ public class JoystickDrive extends CommandBase {
    * @param turnValue Magnitude of turning
    */
   public void arcadeDrive(double speed, double turnValue) {
-    speed *= Constants.driveMultiplier;
+    speed *= Constants.DriveConstants.driveMultiplier;
 
     double turnMultiplier = 1 - speed;
     if (turnMultiplier < 1d / 3d)
@@ -84,8 +83,8 @@ public class JoystickDrive extends CommandBase {
 
   public void tankDrive(double leftSpeed, double rightSpeed)
   {
-    leftSpeed *= Constants.driveMultiplier;
-    rightSpeed *= Constants.driveMultiplier;
+    leftSpeed *= Constants.DriveConstants.driveMultiplier;
+    rightSpeed *= Constants.DriveConstants.driveMultiplier;
     driveTrain.setSpeedsPercent(leftSpeed, rightSpeed);
   }
 
@@ -96,8 +95,8 @@ public class JoystickDrive extends CommandBase {
    * @param isQuickTurn Override in order to turn in place or at slow speeds
    */
   public void cheezyDrive(double throttle, double wheel, boolean isQuickTurn) {
-    wheel = handleDeadband(wheel, Constants.kWheelDeadband);
-    throttle = -handleDeadband(throttle, Constants.kThrottleDeadband);
+    wheel = handleDeadband(wheel, Constants.DriveConstants.kWheelDeadband);
+    throttle = -handleDeadband(throttle, Constants.DriveConstants.kThrottleDeadband);
 
     double overPower;
     double angularPower;
@@ -111,7 +110,7 @@ public class JoystickDrive extends CommandBase {
       angularPower = wheel;
     } else {
       overPower = 0.0;
-      angularPower = Math.abs(throttle) * wheel * Constants.kTurnSensitivity - mQuickStopAccumulator;
+      angularPower = Math.abs(throttle) * wheel * Constants.DriveConstants.kTurnSensitivity - mQuickStopAccumulator;
       if (mQuickStopAccumulator > 1) {
         mQuickStopAccumulator -= 1;
       } else if (mQuickStopAccumulator < -1) {
@@ -136,7 +135,7 @@ public class JoystickDrive extends CommandBase {
       leftPwm += overPower * (-1.0 - rightPwm);
       rightPwm = -1.0;
     }
-    driveTrain.setSpeedsPercent(leftPwm * Constants.driveMultiplier, rightPwm * Constants.driveMultiplier);
+    driveTrain.setSpeedsPercent(leftPwm * Constants.DriveConstants.driveMultiplier, rightPwm * Constants.DriveConstants.driveMultiplier);
   }
 
   public double handleDeadband(double val, double deadband) {
@@ -144,7 +143,7 @@ public class JoystickDrive extends CommandBase {
   }
 
   public boolean quickTurnOverride(double throttle) {
-    if (throttle < Constants.overrideThreshhold)
+    if (throttle < Constants.DriveConstants.overrideThreshhold)
       return true;
     return false;
   }

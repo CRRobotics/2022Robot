@@ -20,7 +20,7 @@ public class ConversionMath {
      */
     public static double getGearRatio(GearMode mode)
     { 
-        double ratio = Constants.highGearRatio;
+        double ratio = Constants.DriveConstants.highGearRatio;
         
         return ratio;
     }
@@ -32,9 +32,9 @@ public class ConversionMath {
      */
     public static double ticksToMeters(double ticks)
     {   
-        double rotation = (ticks / Constants.ticksPerRevolution) / getGearRatio(DriveTrain.currGear); 
+        double rotation = (ticks / Constants.DriveConstants.ticksPerRevolution) / getGearRatio(DriveTrain.currGear); 
 
-        return rotation * Constants.wheelCircumference;
+        return rotation * Constants.DriveConstants.wheelCircumference;
     }
 
     /**
@@ -43,7 +43,7 @@ public class ConversionMath {
      */
     public static double metersToTicks(double meters)
     {
-        double rotations = meters / Constants.wheelCircumference;
-        return rotations * getGearRatio(DriveTrain.currGear)* Constants.ticksPerRevolution;
+        double rotations = meters / Constants.DriveConstants.wheelCircumference;
+        return rotations * getGearRatio(DriveTrain.currGear)* Constants.DriveConstants.ticksPerRevolution;
     }
 }
