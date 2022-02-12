@@ -17,6 +17,7 @@ import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstrai
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
+public interface Constants 
 {
     public interface Ports
     {
@@ -26,6 +27,11 @@ import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstrai
             public static final int leftFollowerID = 13;
             public static final int rightMainID = 11;
             public static final int rightFollowerID = 10;
+        }
+
+        public interface Indexer
+        {
+            public static final int indexMotorID = 1;
         }
 
         public interface PneumaticsModuleType

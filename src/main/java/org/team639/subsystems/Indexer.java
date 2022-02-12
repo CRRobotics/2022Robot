@@ -29,7 +29,7 @@ public class Indexer extends SubsystemBase {
     }
 
     /**
-     * Sets speed of motor from -1 to 1
+     * Sets speed of motor from -1 to 1 
      * @param speed Speed to be set
      */
     public void setIndexMotor(double speed)
