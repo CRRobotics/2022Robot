@@ -39,6 +39,12 @@ public interface Constants
             public static final int shifterID = 0;
             public static final int phCompressorID = 1;
         }
+
+        public interface Acquisition
+        {
+            public static final int acquisitionMotor1port = 1;
+            public static final int acquisitionMotor2port = 2;
+        }
     }
 
     public interface AutoConstants
