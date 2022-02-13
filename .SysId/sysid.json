@@ -1,8 +1,11 @@
 {
   "SysId": {
     "Analysis Type": "Drivetrain",
+    "AnalyzerJSONLocation": "C:\\Users\\alber\\Documents\\2022Robot\\.SysId\\sysid_data20220212-182428.json",
     "NetworkTables Settings": {
       "serverTeam": "639"
-    }
+    },
+    "mode": "Client",
+    "serverTeam": "639"
   }
 }
