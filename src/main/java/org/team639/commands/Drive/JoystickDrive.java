@@ -51,6 +51,7 @@ public class JoystickDrive extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("Joystick drive peelin' out");
   }
 
   // Returns true when the command should end.
@@ -66,7 +67,7 @@ public class JoystickDrive extends CommandBase {
    * @param turnValue Magnitude of turning
    */
   public void arcadeDrive(double speed, double turnValue) {
-    speed *= Constants.DriveConstants.driveMultiplier;
+    speed *= -Constants.DriveConstants.driveMultiplier;
 
     double turnMultiplier = 1 - speed;
     if (turnMultiplier < 1d / 3d)
@@ -74,7 +75,7 @@ public class JoystickDrive extends CommandBase {
     if (turnMultiplier > 2d / 3d)
       turnMultiplier = 2d / 3d;
     turnValue = turnValue * turnMultiplier;
-
+ 
     double left = speed + turnValue;
     double right = speed - turnValue;
 
@@ -84,7 +85,8 @@ public class JoystickDrive extends CommandBase {
   public void tankDrive(double leftSpeed, double rightSpeed)
   {
     leftSpeed *= Constants.DriveConstants.driveMultiplier;
-    rightSpeed *= Constants.DriveConstants.driveMultiplier;
+    rightSpeed *= 
+    Constants.DriveConstants.driveMultiplier;
     driveTrain.setSpeedsPercent(leftSpeed, rightSpeed);
   }
 
@@ -95,8 +97,8 @@ public class JoystickDrive extends CommandBase {
    * @param isQuickTurn Override in order to turn in place or at slow speeds
    */
   public void cheezyDrive(double throttle, double wheel, boolean isQuickTurn) {
-    wheel = handleDeadband(wheel, Constants.DriveConstants.kWheelDeadband);
-    throttle = -handleDeadband(throttle, Constants.DriveConstants.kThrottleDeadband);
+    wheel = -handleDeadband(wheel, Constants.DriveConstants.kWheelDeadband);
+    throttle = handleDeadband(throttle, Constants.DriveConstants.kThrottleDeadband);
 
     double overPower;
     double angularPower;

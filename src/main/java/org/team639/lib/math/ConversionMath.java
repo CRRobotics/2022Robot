@@ -20,7 +20,7 @@ public class ConversionMath {
      */
     public static double getGearRatio(GearMode mode)
     { 
-        double ratio = Constants.DriveConstants.highGearRatio;
+        double ratio = Constants.DriveConstants.lowGearRatio;
         
         return ratio;
     }

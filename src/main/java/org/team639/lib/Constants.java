@@ -23,10 +23,10 @@ public interface Constants
     {
         public interface Drive
         {
-            public static final int leftMainID = 12;
-            public static final int leftFollowerID = 13;
-            public static final int rightMainID = 11;
-            public static final int rightFollowerID = 10;
+            public static final int leftMainID = 10;
+            public static final int leftFollowerID = 11;
+            public static final int rightMainID = 13;
+            public static final int rightFollowerID = 12;
         }
 
         public interface PneumaticsModuleType
@@ -38,9 +38,9 @@ public interface Constants
 
     public interface AutoConstants
     {
-        public static final double kS = .132;
-        public static final double kA = 2;
-        public static final double kV = .0209;
+        public static final double kS = 0.52484;
+        public static final double kV = 6.1517;
+        public static final double kA = 0.22645;
 
         public static final double kMaxAccelerationMetersPerSecondSquared = 2;
         public static final double kMaxSpeedMetersPerSecond = 2;
@@ -78,11 +78,11 @@ public interface Constants
 
     public interface DriveConstants
     {
-        public static final double chassisWidth = 1.0;
+        public static final double chassisWidth = 0.44;
         public static final double wheelDiameter = .1016;
         public static final double wheelCircumference = wheelDiameter * Math.PI;
 
-        public static final double driveMultiplier = 1; //tune this down a bit....maybe
+        public static final double driveMultiplier = 0.6; //tune this down a bit....maybe
 
         public static final double kDriveRampSeconds = 0.3;
         
@@ -90,8 +90,8 @@ public interface Constants
         public static final double supplyCurrentThreshHold = 35;
            
         //TODO: Find this
-        public static final double lowGearRatio = 18;
-        public static final double highGearRatio = 18;
+        public static final double lowGearRatio = 18;//12.255;
+        public static final double highGearRatio = 5.392;
 
         public static final double ticksPerRevolution = 2048;
 
@@ -107,7 +107,7 @@ public interface Constants
     public interface ControlboardConstants
     {
         //Control Board Constants
-        public static final double kJoystickThreshold = 0.05;
+        public static final double kJoystickThreshold = 0.1;
     }
 
 

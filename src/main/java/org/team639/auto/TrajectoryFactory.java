@@ -19,13 +19,14 @@ public class TrajectoryFactory {
     Map<String, Trajectory> trajectories = new HashMap<String, Trajectory>();
 
     public TrajectoryFactory(String pathSubDir){
-        double loadStart = System.currentTimeMillis() / 1000;
+        double loadStart = System.currentTimeMillis();
         File deployDirectory = Filesystem.getDeployDirectory();
         File pathDirectory = new File(deployDirectory, pathSubDir);
         File[] pathNames = pathDirectory.listFiles();
 
         for (File pathname : pathNames)
         {
+            System.out.println(pathname);
             // Only consider files which appear to be JSON.
             if (!pathname.getName().contains(".json"))
             {
@@ -40,7 +41,7 @@ public class TrajectoryFactory {
                 trajectories.put(pathname.getName().replace(".wpilib.json", ""), trajectory);
             }
         }
-        System.out.println("Wow, trajectories loaded in " + ((System.currentTimeMillis() / 1000) - loadStart) + " seconds");
+        System.out.println("Wow, trajectories loaded in " + ((System.currentTimeMillis()) - loadStart) + " milliseconds");
     }
 
     /**

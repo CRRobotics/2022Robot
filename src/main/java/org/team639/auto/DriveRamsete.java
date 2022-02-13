@@ -55,5 +55,12 @@ public class DriveRamsete extends RamseteCommand {
     if (resetPosition) {
       driveTrain.resetOdometry(trajectory.getInitialPose());
     }
+    System.out.println("Drive RAMSETE Has Been Initialized");
+  }
+
+  public void end()
+  {
+    driveTrain.setVoltages(0, 0);
+    System.out.println("Drive RAMSETE Has Been Ended");
   }
 }

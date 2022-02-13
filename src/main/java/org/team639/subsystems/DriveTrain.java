@@ -33,20 +33,20 @@ public class DriveTrain extends SubsystemBase {
 
     // Gyroscope and initial pose
     AHRS gyro = new AHRS(SPI.Port.kMXP);
-    private Pose2d startPosition = new Pose2d(new Translation2d(0, 0), getHeading());
+    private Pose2d startPosition = new Pose2d(new Translation2d(0, 0), gyro.getRotation2d());
 
     // Differential Control Systems
-    DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(getHeading());
+    DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
 
     // Independent left and right PID controllers
-    public PIDController leftPIDController = new PIDController(.0001, 0, 0);
-    public PIDController rightPIDController = new PIDController(.0001, 0, 0);
+    public PIDController leftPIDController = new PIDController(0.00027328, 0, 0);
+    public PIDController rightPIDController = new PIDController(0.00027328, 0, 0);
 
     // Talon motor controllers
-    private WPI_TalonFX leftMain = new WPI_TalonFX(Constants.Ports.Drive.leftMainID);
-    private WPI_TalonFX leftFollower = new WPI_TalonFX(Constants.Ports.Drive.leftFollowerID);
-    private WPI_TalonFX rightMain = new WPI_TalonFX(Constants.Ports.Drive.rightMainID);
-    private WPI_TalonFX rightFollower = new WPI_TalonFX(Constants.Ports.Drive.rightFollowerID);
+    public WPI_TalonFX leftMain = new WPI_TalonFX(Constants.Ports.Drive.leftMainID);
+    public WPI_TalonFX leftFollower = new WPI_TalonFX(Constants.Ports.Drive.leftFollowerID);
+    public WPI_TalonFX rightMain = new WPI_TalonFX(Constants.Ports.Drive.rightMainID);
+    public WPI_TalonFX rightFollower = new WPI_TalonFX(Constants.Ports.Drive.rightFollowerID);
 
 
     //TODO: Fix the solenoid controls
@@ -61,6 +61,8 @@ public class DriveTrain extends SubsystemBase {
         resetOdometry(startPosition);
         motorConfig();
        // this.toggleGearHigh();
+       SmartDashboard.putData(leftPIDController);
+       SmartDashboard.putData(rightPIDController);
     }
 
     public void motorConfig() {
@@ -71,7 +73,6 @@ public class DriveTrain extends SubsystemBase {
 
         leftMain.setInverted(true);
         leftFollower.setInverted(InvertType.FollowMaster);
-
 
         leftFollower.follow(leftMain);
         rightFollower.follow(rightMain);
@@ -102,10 +103,10 @@ public class DriveTrain extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        SmartDashboard.putNumber("Gyro Angle", getHeading().getDegrees());
+        SmartDashboard.putNumber("Gyro Angle", getHeading());
         SmartDashboard.putNumber("Right Position", getRightPostion());
         SmartDashboard.putNumber("Left Position", getLeftPostion());
-        
+        odometry.update(gyro.getRotation2d(), getLeftPostion(), getRightPostion());
     }
 
     /**
@@ -128,7 +129,7 @@ public class DriveTrain extends SubsystemBase {
      */
     public void setVoltages(double leftVoltage, double rightVoltage) {
         leftMain.setVoltage(leftVoltage);
-        rightMain.setVoltage(leftVoltage);
+        rightMain.setVoltage(rightVoltage); 
     }
 
     public void setVelocities(double leftVelocity, double rightVelocity) {
@@ -143,8 +144,8 @@ public class DriveTrain extends SubsystemBase {
      */
     public void resetOdometry(Pose2d initPose) {
         resetEncoders();
-        odometry.resetPosition(initPose, getHeading());
         gyro.reset();
+        odometry.resetPosition(initPose, gyro.getRotation2d());
 
     }
 
@@ -177,8 +178,8 @@ public class DriveTrain extends SubsystemBase {
      * @return The current wheel speeds.
      */
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-        return new DifferentialDriveWheelSpeeds(leftMain.getSelectedSensorVelocity(),
-                rightMain.getSelectedSensorVelocity());
+        return new DifferentialDriveWheelSpeeds(ConversionMath.ticksToMeters(leftMain.getSelectedSensorVelocity()),
+                ConversionMath.ticksToMeters(rightMain.getSelectedSensorVelocity()));
     }
 
     /**
@@ -186,8 +187,8 @@ public class DriveTrain extends SubsystemBase {
      * 
      * @return The current gyroscopic angle
      */
-    public Rotation2d getHeading() {
-        return Rotation2d.fromDegrees(gyro.getAngle());
+    public double getHeading() {
+        return gyro.getAngle();
     }
 
     /**

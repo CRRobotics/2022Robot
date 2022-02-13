@@ -6,8 +6,8 @@ package org.team639;
 
 import org.team639.auto.DriveRamsete;
 import org.team639.auto.TrajectoryFactory;
-import org.team639.auto.routines.ThreeBallFender;
 import org.team639.commands.Drive.*;
+import org.team639.controlboard.ControllerWrapper;
 import org.team639.subsystems.*;
 
 import org.team639.lib.AutonMode;
@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -36,7 +37,6 @@ public class RobotContainer {
 
   // Command Declaration
   private final JoystickDrive joystickDrive = new JoystickDrive(driveTrain);
-  private final ThreeBallFender threeBallFender = new ThreeBallFender(driveTrain);
 
   static SendableChooser<DriveLayout> driveMode = new SendableChooser<>();
   static SendableChooser<AutonMode> autoMode = new SendableChooser<>();
@@ -53,6 +53,7 @@ public class RobotContainer {
 
   static {
     autoMode.setDefaultOption("AutoCross Line", AutonMode.crossLine);
+    autoMode.addOption("3BallFender", AutonMode.ThreeBallFender);
     SmartDashboard.putData("Auto Mode", autoMode);
   }
 
@@ -79,6 +80,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure the button bindings
+    configureButtonBindings();
     defaultCommands();
   }
 
@@ -91,6 +93,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    ControllerWrapper.DriverButtonA.whenHeld(new DJRobot(driveTrain, "oldTownRoad.chrp"));
   }
 
   /**
@@ -99,17 +102,18 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    Command auton;
-    switch(getAutonomousMode())
-    {
-      default:
-        auton = new AutoDriveForward(driveTrain, 2);
-        break;
-      case ThreeBallFender:
-        auton = threeBallFender;
-        break;
-    }
-    return auton;
+    // Command auton;
+    // switch(getAutonomousMode())
+    // {
+    //   default:
+    //     auton = new AutoDriveForward(driveTrain, 2);
+    //     break;
+    //   case ThreeBallFender:
+    //     auton = threeBallFender;
+    //     break;
+    // } 
+
+    return new SequentialCommandGroup(new DriveRamsete(driveTrain,"bounce1"), new DriveRamsete(driveTrain,"bounce2"), new DriveRamsete(driveTrain,"bounce1"), new DriveRamsete(driveTrain, "bounce3"));
   }
 
   /**

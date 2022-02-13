@@ -28,7 +28,7 @@ public class Autorotate extends CommandBase {
     angle %= 360;
 
     this.clockwise = Math.signum(angle) > 0 ? true : false;
-    target = Math.abs(angle) + driveTrain.getHeading().getDegrees();
+    target = Math.abs(angle) + driveTrain.getHeading();
     
     //target = (Math.signum(angle) > 0) ? Math.abs(angle) + driveTrain.getHeading().getDegrees() : driveTrain.getHeading().getDegrees() - Math.abs(angle);
   }
@@ -45,13 +45,13 @@ public class Autorotate extends CommandBase {
   public void execute() {
     if(clockwise)
     {
-      error = target - driveTrain.getHeading().getDegrees();
+      error = target - driveTrain.getHeading();
       double currMultiplier = turnController.calculate(error);
       driveTrain.setSpeedsPercent(-1 * currMultiplier, 1 * currMultiplier);
     }
     else
     {
-      error = Math.abs(target) - Math.abs(driveTrain.getHeading().getDegrees());
+      error = Math.abs(target) - Math.abs(driveTrain.getHeading());
       double currMultiplier = turnController.calculate(error);
       driveTrain.setSpeedsPercent(-1 * currMultiplier, 1 * currMultiplier);
     }
