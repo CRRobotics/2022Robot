@@ -29,8 +29,8 @@ public class QueueCargo extends CommandBase {
     public void execute() {
         if(acquisition.getAcquisitionIn())
         {
-            indexer.setIndexMotor(Constants.IndexConstants.indexQueueSpeed);
-            
+            indexer.setIndexMotor(Constants.IndexerConstants.indexMotorSpeed);
+            shooter.setSpeed(Constants.ShooterConstants.reverseIndexWhenShootingSpeed);
         }
         // while (acquisition.getAcquisitionIn()) { //while acquisition is running
         //     indexer.setIndexMotor(Constants.IndexConstants.indexQueueSpeed);
@@ -50,6 +50,7 @@ public class QueueCargo extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-
+        indexer.setIndexMotor(0);
+        shooter.setSpeed(0);
     }
 }
