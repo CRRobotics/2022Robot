@@ -17,12 +17,20 @@ public class DJRobot extends CommandBase {
   private DriveTrain driveTrain;
   private Orchestra orchestra;
   private String songPath;
+  private double time;
+
   ArrayList<TalonFX> instruments = new ArrayList<TalonFX>();
-  /** Creates a new DJRobot. */
-  public DJRobot(DriveTrain driveTrain, String songPath) {
-    // Use addRequirements() here to declare subsystem dependencies.
+
+  /**
+   * Constructs a new DJRobot
+   * @param driveTrain DriveTrain to be used
+   * @param songPath File name of song
+   * @param time Time in seconds to play song
+   */
+  public DJRobot(DriveTrain driveTrain, String songPath, double time) {
     this.driveTrain = driveTrain;
     this.songPath = songPath;
+    this.time = time;
     addRequirements(driveTrain);
     
   }
@@ -58,6 +66,8 @@ public class DJRobot extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(orchestra.getCurrentTime() / 1000 > time)
+      return true;
     return false;
   }
 }

@@ -26,18 +26,13 @@ public class TrajectoryFactory {
 
         for (File pathname : pathNames)
         {
-            System.out.println(pathname);
-            // Only consider files which appear to be JSON.
             if (!pathname.getName().contains(".json"))
             {
                 continue;
             }
-
-            // Creating trajectory with json
             Trajectory trajectory = loadConfig(pathname);
             if (trajectory != null)
             {
-                // Add trajectory to set
                 trajectories.put(pathname.getName().replace(".wpilib.json", ""), trajectory);
             }
         }
@@ -57,7 +52,6 @@ public class TrajectoryFactory {
         }
         catch (IOException e)
         {
-            // If we are unable to open the file the method returns a null object
             DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON.getName(),
                 e.getStackTrace());
             return null;
@@ -70,16 +64,6 @@ public class TrajectoryFactory {
     {
         return trajectories.get(name);
     }
-
-    /**
-     * Gets the number of trajectories available
-     * @return The number of treajectories
-     */
-    public int getNumTrajectories()
-    {
-        return trajectories.size();
-    }
-
 }
     
 

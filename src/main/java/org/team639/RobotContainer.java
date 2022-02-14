@@ -93,7 +93,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    ControllerWrapper.DriverButtonA.whenHeld(new DJRobot(driveTrain, "industryBaby.chrp"));
+    ControllerWrapper.DriverButtonA.whenHeld(new DJRobot(driveTrain, "industryBaby.chrp", 3));
   }
 
   /**
