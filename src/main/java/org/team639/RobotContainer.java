@@ -11,7 +11,9 @@ import org.team639.controlboard.ControllerWrapper;
 import org.team639.subsystems.*;
 
 import org.team639.lib.AutonMode;
+import org.team639.lib.Constants;
 import org.team639.lib.DriveLayout;
+import org.team639.lib.Songs;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -40,6 +42,7 @@ public class RobotContainer {
 
   static SendableChooser<DriveLayout> driveMode = new SendableChooser<>();
   static SendableChooser<AutonMode> autoMode = new SendableChooser<>();
+  static SendableChooser<String> songChooser = new SendableChooser<>();
 
 
   public static final TrajectoryFactory factory = new TrajectoryFactory("paths");
@@ -55,6 +58,11 @@ public class RobotContainer {
     autoMode.setDefaultOption("AutoCross Line", AutonMode.crossLine);
     autoMode.addOption("3BallFender", AutonMode.ThreeBallFender);
     SmartDashboard.putData("Auto Mode", autoMode);
+  }
+
+  static {
+    songChooser.setDefaultOption("Old Town Road", Constants.DJConstants.old_town_road);
+    songChooser.addOption("Industry Baby", Constants.DJConstants.industry_baby);
   }
 
   /**
@@ -73,6 +81,14 @@ public class RobotContainer {
    */
   public static AutonMode getAutonomousMode() {
     return autoMode.getSelected();
+  }
+  /**
+   * Returns the current song name loaded
+   * @return Song to be chosen
+   */
+  public static String songChooser()
+  {
+    return songChooser.getSelected();
   }
 
   /**
@@ -93,7 +109,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    ControllerWrapper.DriverButtonA.whenHeld(new DJRobot(driveTrain, "industryBaby.chrp", 3));
+    ControllerWrapper.DriverButtonA.whenHeld(new DJRobot(driveTrain, 3));
   }
 
   /**

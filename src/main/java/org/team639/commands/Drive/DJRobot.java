@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.music.Orchestra;
 
+import org.team639.RobotContainer;
 import org.team639.subsystems.DriveTrain;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -27,9 +28,8 @@ public class DJRobot extends CommandBase {
    * @param songPath File name of song
    * @param time Time in seconds to play song
    */
-  public DJRobot(DriveTrain driveTrain, String songPath, double time) {
+  public DJRobot(DriveTrain driveTrain, double time) {
     this.driveTrain = driveTrain;
-    this.songPath = songPath;
     this.time = time;
     addRequirements(driveTrain);
     
@@ -44,7 +44,7 @@ public class DJRobot extends CommandBase {
     instruments.add(driveTrain.leftFollower);
     orchestra = new Orchestra(instruments);
 
-    orchestra.loadMusic(songPath);
+    orchestra.loadMusic(RobotContainer.songChooser());
     System.out.println("DJRobot Initializing");
   }
 
