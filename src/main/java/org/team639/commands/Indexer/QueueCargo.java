@@ -30,22 +30,8 @@ public class QueueCargo extends CommandBase {
         if(acquisition.getAcquisitionIn())
         {
             indexer.setIndexMotor(Constants.IndexerConstants.indexMotorSpeed);
-            shooter.setSpeed(Constants.ShooterConstants.reverseIndexWhenShootingSpeed);
+            shooter.setSpeed(Constants.ShooterConstants.reverseIndexSpeed);
         }
-        // while (acquisition.getAcquisitionIn()) { //while acquisition is running
-        //     indexer.setIndexMotor(Constants.IndexConstants.indexQueueSpeed);
-        //     if (!shooter.getExhaling()) { //if shooter is not running
-        //         //have shooter motor spin in opposite direction
-        //         if (indexer.topDetected() && indexer.bottomDetected()) {
-        //             indexer.setIndexMotor(0);
-        //             //stop shooter motor
-        //             acquisition.stopAcquisitionMotor();
-        //         }
-        //     } else {
-        //         //shoot shooter
-        //     }
-        // }
-        // indexer.setIndexMotor(0);
     }
 
     @Override

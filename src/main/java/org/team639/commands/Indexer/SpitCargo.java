@@ -5,6 +5,7 @@
 package org.team639.commands.Indexer;
 
 import org.opencv.photo.Photo;
+import org.team639.lib.Constants;
 import org.team639.lib.PhotoelectricSensor;
 import org.team639.subsystems.Acquisition;
 import org.team639.subsystems.Indexer;
@@ -37,7 +38,7 @@ public class SpitCargo extends CommandBase {
   @Override
   public void execute() {
     if(indexer.topDetected() || indexer.bottomDetected()){
-      shooter.setSpeed(-1);
+      shooter.setSpeed(Constants.ShooterConstants.reverseIndexSpeed);
       indexer.setIndexMotor(-1);
       acquisition.spinAcquisitionOut(1);
     }

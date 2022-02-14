@@ -31,7 +31,7 @@ public interface Constants
 
         public interface Indexer
         {
-            public static final int indexMotorID = 1;
+            public static final int indexMotorID = 7;
         }
 
         public interface PneumaticsModuleType
@@ -122,7 +122,7 @@ public interface Constants
     }
 
     public interface ShooterConstants {
-        public static final double reverseIndexWhenShootingSpeed = -0.1;
+        public static final double reverseIndexSpeed = -0.1;
         public static final double reverseIndexWhenShootingTime = 0.25;
         public static final int shootHighRPM = 5000;
         public static final double shootHighSpeed = 1;
@@ -131,7 +131,7 @@ public interface Constants
     public interface IndexerConstants {
         public static final int indexMotorID = 0;
         public static final int indexSensorDistance = 10;
-        public static final double indexMotorSpeed = 0.125;
+        public static final double indexMotorSpeed = 0.75;
     }
 
 }

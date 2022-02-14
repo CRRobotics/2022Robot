@@ -26,7 +26,7 @@ public class ShootCloseLoop extends CommandBase {
     @Override
     public void execute() {
         if (System.currentTimeMillis() < startTime + Constants.ShooterConstants.reverseIndexWhenShootingTime) {
-            indexer.setIndexMotor(Constants.ShooterConstants.reverseIndexWhenShootingSpeed);
+            indexer.setIndexMotor(Constants.ShooterConstants.reverseIndexSpeed);
         } else if (System.currentTimeMillis() >= startTime + Constants.ShooterConstants.reverseIndexWhenShootingTime) {
             shooter.setSpeedRPM(Constants.ShooterConstants.shootHighRPM);
         }
