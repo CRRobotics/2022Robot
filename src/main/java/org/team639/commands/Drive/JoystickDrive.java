@@ -36,9 +36,17 @@ public class JoystickDrive extends CommandBase {
   @Override
   public void execute() {
     switch (RobotContainer.getDriveLayout()) {
+      case Swapcade:
+        if(!DriveTrain.reversedHeading)
+          arcadeDrive(handleDeadband(ControllerWrapper.DriverController.getLeftY(), Constants.ControlboardConstants.kJoystickThreshold), handleDeadband(ControllerWrapper.DriverController.getRightX(), Constants.ControlboardConstants.kJoystickThreshold));
+        else
+          arcadeReversed(handleDeadband(ControllerWrapper.DriverController.getLeftY(), Constants.ControlboardConstants.kJoystickThreshold), handleDeadband(ControllerWrapper.DriverController.getRightX(), Constants.ControlboardConstants.kJoystickThreshold));
+        break;
       case Arcade:
         arcadeDrive(handleDeadband(ControllerWrapper.DriverController.getLeftY(), Constants.ControlboardConstants.kJoystickThreshold), handleDeadband(ControllerWrapper.DriverController.getRightX(), Constants.ControlboardConstants.kJoystickThreshold));
         break;
+      case ArcadeReversed:
+        arcadeReversed(handleDeadband(ControllerWrapper.DriverController.getLeftY(), Constants.ControlboardConstants.kJoystickThreshold), handleDeadband(ControllerWrapper.DriverController.getRightX(), Constants.ControlboardConstants.kJoystickThreshold));
       case CheesyDrive:
         cheezyDrive(ControllerWrapper.DriverController.getLeftY(), ControllerWrapper.DriverController.getRightX(), false);
         break;
@@ -80,6 +88,29 @@ public class JoystickDrive extends CommandBase {
     double right = speed - turnValue;
 
     driveTrain.setSpeedsPercent(left, right);
+  }
+
+  /**
+   * Arcade drive given a speed and turning magnitude
+   * This is the reversed version
+   * @param speed     Speed in percent
+   * @param turnValue Magnitude of turning
+   */
+  public void arcadeReversed(double speed, double turnValue)
+  {
+    speed *= -Constants.DriveConstants.driveMultiplier;
+
+    double turnMultiplier = 1 - speed;
+    if (turnMultiplier < 1d / 3d)
+      turnMultiplier = 1d / 3d;
+    if (turnMultiplier > 2d / 3d)
+      turnMultiplier = 2d / 3d;
+    turnValue = turnValue * turnMultiplier;
+ 
+    double left = speed + turnValue;
+    double right = speed - turnValue;
+
+    driveTrain.setSpeedsPercent(-left, -right);
   }
 
   public void tankDrive(double leftSpeed, double rightSpeed)
@@ -149,11 +180,6 @@ public class JoystickDrive extends CommandBase {
       return true;
     return false;
   }
-  // HOW TO IMPLEMENT:
-  // Three values: Throttle, Wheel and Quickturn
-  // For turn in place, you can override the normal drive mode by checking if the
-  // throttle is pressed rather than if override button is pressed
-  // Implement by copying cheesy poofs 2016 cheezy drive
 
   /**
    * Limits the given input to the given magnitude.

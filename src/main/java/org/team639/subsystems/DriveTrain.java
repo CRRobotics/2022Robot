@@ -49,11 +49,14 @@ public class DriveTrain extends SubsystemBase {
     public WPI_TalonFX rightFollower = new WPI_TalonFX(Constants.Ports.Drive.rightFollowerID);
 
 
+
     //TODO: Fix the solenoid controls
     //private Solenoid shifter = new Solenoid(PneumaticsModuleType.REVPH, Constants.shifterID);
     
 
     public static GearMode currGear;
+    public static boolean reversedHeading = false;
+
 
     /** Creates a new DriveTrain. */
     public DriveTrain() {

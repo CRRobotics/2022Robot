@@ -5,7 +5,9 @@
 package org.team639.lib;
 
 public enum DriveLayout {
+    Swapcade,
     Arcade,
+    ArcadeReversed,
     CheesyDrive,
     Tank
   }

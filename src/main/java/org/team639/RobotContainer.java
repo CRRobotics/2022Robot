@@ -13,9 +13,7 @@ import org.team639.subsystems.*;
 import org.team639.lib.AutonMode;
 import org.team639.lib.Constants;
 import org.team639.lib.DriveLayout;
-import org.team639.lib.Songs;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -38,17 +36,21 @@ public class RobotContainer {
   private final DriveTrain driveTrain = new DriveTrain();
 
   // Command Declaration
+  AutonomousRoutines auton = new AutonomousRoutines();
   private final JoystickDrive joystickDrive = new JoystickDrive(driveTrain);
+  
 
-  static SendableChooser<DriveLayout> driveMode = new SendableChooser<>();
-  static SendableChooser<AutonMode> autoMode = new SendableChooser<>();
-  static SendableChooser<String> songChooser = new SendableChooser<>();
+  public static SendableChooser<DriveLayout> driveMode = new SendableChooser<>();
+  public static SendableChooser<AutonMode> autoMode = new SendableChooser<>();
+  public static SendableChooser<String> songChooser = new SendableChooser<>();
 
 
   public static final TrajectoryFactory factory = new TrajectoryFactory("paths");
 
   static {
     driveMode.setDefaultOption("Arcade Standard", DriveLayout.Arcade);
+    driveMode.addOption("Arcade Reversed", DriveLayout.ArcadeReversed);
+    driveMode.addOption("Swapcade", DriveLayout.Swapcade);
     driveMode.addOption("Tank", DriveLayout.Tank);
     driveMode.addOption("CheesyDrive", DriveLayout.CheesyDrive);
     SmartDashboard.putData("Drive Layout", driveMode);
@@ -57,6 +59,7 @@ public class RobotContainer {
   static {
     autoMode.setDefaultOption("AutoCross Line", AutonMode.crossLine);
     autoMode.addOption("3BallFender", AutonMode.ThreeBallFender);
+    autoMode.addOption("BounceTest", AutonMode.bounceTest);
     SmartDashboard.putData("Auto Mode", autoMode);
   }
 
@@ -110,6 +113,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     ControllerWrapper.DriverButtonA.whenHeld(new DJRobot(driveTrain, 3));
+    ControllerWrapper.DriverButtonB.whenPressed(new ReverseHeading());
   }
 
   /**
@@ -118,18 +122,18 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // Command auton;
-    // switch(getAutonomousMode())
-    // {
-    //   default:
-    //     auton = new AutoDriveForward(driveTrain, 2);
-    //     break;
-    //   case ThreeBallFender:
-    //     auton = threeBallFender;
-    //     break;
-    // } 
-
-    return new SequentialCommandGroup(new DriveRamsete(driveTrain,"bounce1"), new DriveRamsete(driveTrain,"bounce2"), new DriveRamsete(driveTrain,"bounce1"), new DriveRamsete(driveTrain, "bounce3"));
+    Command auto;
+    switch(getAutonomousMode())
+    {
+      default:
+        auto = new AutoDriveForward(driveTrain, 2);
+        break;
+      case bounceTest:
+        auto = auton.bounceTest;
+        break;
+    } 
+      return auton.bounceTest;
+    //return new SequentialCommandGroup(new DriveRamsete(driveTrain,"bounce1"), new DriveRamsete(driveTrain,"bounce2"), new DriveRamsete(driveTrain,"bounce1"), new DriveRamsete(driveTrain, "bounce3"));
   }
 
   /**
@@ -138,8 +142,11 @@ public class RobotContainer {
   public void defaultCommands() {
     CommandScheduler.getInstance().setDefaultCommand(driveTrain, joystickDrive);
   }
+  
+  public class AutonomousRoutines
+  {
+    public final SequentialCommandGroup bounceTest = new SequentialCommandGroup(new DriveRamsete(driveTrain,"bounce1"), new DriveRamsete(driveTrain,"bounce2"), new DriveRamsete(driveTrain,"bounce1"), new DriveRamsete(driveTrain, "bounce3")); 
 
-  
-  
+  }
 
 }

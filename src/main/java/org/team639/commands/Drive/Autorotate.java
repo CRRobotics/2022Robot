@@ -53,7 +53,7 @@ public class Autorotate extends CommandBase {
     {
       error = Math.abs(target) - Math.abs(driveTrain.getHeading());
       double currMultiplier = turnController.calculate(error);
-      driveTrain.setSpeedsPercent(-1 * currMultiplier, 1 * currMultiplier);
+      driveTrain.setSpeedsPercent(currMultiplier, -1 * currMultiplier);
     }
   }
 
