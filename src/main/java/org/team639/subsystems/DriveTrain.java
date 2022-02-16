@@ -109,6 +109,8 @@ public class DriveTrain extends SubsystemBase {
         SmartDashboard.putNumber("Gyro Angle", getHeading());
         SmartDashboard.putNumber("Right Position", getRightPostion());
         SmartDashboard.putNumber("Left Position", getLeftPostion());
+
+        SmartDashboard.putBoolean("Swapcade Mode", reversedHeading);
         odometry.update(gyro.getRotation2d(), getLeftPostion(), getRightPostion());
     }
 
@@ -139,7 +141,7 @@ public class DriveTrain extends SubsystemBase {
         leftMain.set(ControlMode.Velocity, leftVelocity);
         rightMain.set(ControlMode.Velocity, leftVelocity);
     }
-
+ 
     /**
      * Resets odometry of robot to initial position
      * 

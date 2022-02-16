@@ -9,5 +9,5 @@ public enum DriveLayout {
     Arcade,
     ArcadeReversed,
     CheesyDrive,
-    Tank
-  }
+    Tank   
+}
