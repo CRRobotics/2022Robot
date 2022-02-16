@@ -24,6 +24,11 @@ public interface Constants
             public static final int rightFollowerID = 12;
         }
 
+        public interface Indexer
+        {
+            public static final int indexMotorID = 7;
+        }
+
         public interface PneumaticsModuleType
         {
             public static final int shifterID = 0;
@@ -95,8 +100,24 @@ public interface Constants
         public static final double kTurnSensitivity = 1;
         public static final double kThrottleDeadband = 0.02;
         public static final double overrideThreshhold = 0.1;
+    }
 
-        
+    public interface ShooterConstants
+    {
+        public static final double reverseIndexSpeed = -0.1;
+        public static final double reverseIndexWhenShootingTime = 500;
+        public static final double spinUpTime = 500;
+
+        public static final double pureShootingTime = spinUpTime + reverseIndexWhenShootingTime + 1500;
+
+        public static final int shootHighRPM = 5000;
+        public static final double shootHighSpeed = 1;
+    }
+
+    public interface IndexerConstants 
+    {
+        public static final int indexSensorDistance = 10;
+        public static final double indexMotorSpeed = 0.75;
     }
 
     public interface ControlboardConstants

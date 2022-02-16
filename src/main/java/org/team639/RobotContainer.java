@@ -132,7 +132,7 @@ public class RobotContainer {
         auto = auton.bounceTest;
         break;
     } 
-      return auton.bounceTest;
+    return auton.bounceTest;
     //return new SequentialCommandGroup(new DriveRamsete(driveTrain,"bounce1"), new DriveRamsete(driveTrain,"bounce2"), new DriveRamsete(driveTrain,"bounce1"), new DriveRamsete(driveTrain, "bounce3"));
   }
 
@@ -143,10 +143,9 @@ public class RobotContainer {
     CommandScheduler.getInstance().setDefaultCommand(driveTrain, joystickDrive);
   }
   
-  public class AutonomousRoutines
+  class AutonomousRoutines
   {
-    public final SequentialCommandGroup bounceTest = new SequentialCommandGroup(new DriveRamsete(driveTrain,"bounce1"), new DriveRamsete(driveTrain,"bounce2"), new DriveRamsete(driveTrain,"bounce1"), new DriveRamsete(driveTrain, "bounce3")); 
-
+    final SequentialCommandGroup bounceTest = new SequentialCommandGroup(new DriveRamsete(driveTrain,"bounce1"), new DriveRamsete(driveTrain,"bounce2"), new DriveRamsete(driveTrain,"bounce1"), new DriveRamsete(driveTrain, "bounce3")); 
   }
 
 }
