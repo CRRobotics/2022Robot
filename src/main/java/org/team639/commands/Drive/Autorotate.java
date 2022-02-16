@@ -67,7 +67,7 @@ public class Autorotate extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (error < 5)
+    if (error < Constants.AutoConstants.autoRotateThreshHold)
       return true;
     return false;
   }

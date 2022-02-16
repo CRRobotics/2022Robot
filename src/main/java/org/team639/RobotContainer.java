@@ -7,6 +7,7 @@ package org.team639;
 import org.team639.auto.DriveRamsete;
 import org.team639.auto.TrajectoryFactory;
 import org.team639.commands.Drive.*;
+import org.team639.commands.Shooter.ShootOpenLoop;
 import org.team639.controlboard.ControllerWrapper;
 import org.team639.subsystems.*;
 
@@ -133,7 +134,6 @@ public class RobotContainer {
         break;
     } 
     return auton.bounceTest;
-    //return new SequentialCommandGroup(new DriveRamsete(driveTrain,"bounce1"), new DriveRamsete(driveTrain,"bounce2"), new DriveRamsete(driveTrain,"bounce1"), new DriveRamsete(driveTrain, "bounce3"));
   }
 
   /**
@@ -146,6 +146,7 @@ public class RobotContainer {
   class AutonomousRoutines
   {
     final SequentialCommandGroup bounceTest = new SequentialCommandGroup(new DriveRamsete(driveTrain,"bounce1"), new DriveRamsete(driveTrain,"bounce2"), new DriveRamsete(driveTrain,"bounce1"), new DriveRamsete(driveTrain, "bounce3")); 
+    //final SequentialCommandGroup threeBallFender = new SequentialCommandGroup(new ShootOpenLoop(indexer, shooter, rpm))
   }
 
 }

@@ -29,6 +29,12 @@ public interface Constants
             public static final int indexMotorID = 7;
         }
 
+        public interface Shooter
+        {
+            public static final int mainID = 3;
+            public static final int followID = 4;
+        }
+
         public interface PneumaticsModuleType
         {
             public static final int shifterID = 0;
@@ -68,6 +74,7 @@ public interface Constants
         public static final double autoForwardP = 0.00015;
         public static final double autoForwardI = 0.0;
         public static final double autoForwardD = 0.0;
+        public static final double autoRotateThreshHold = 4;
 
         public interface pathNames
         {
