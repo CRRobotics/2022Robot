@@ -29,13 +29,15 @@ public class ManualShooterAim extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(ControllerWrapper.DriverController.getLeftTriggerAxis() > 0.1){
-      position += 0.1;
-    }
-    else if(ControllerWrapper.DriverController.getRightTriggerAxis() > 0.1){
-      position += -0.1;
-    }
-    shooter.setActuator(position);
+    // if(ControllerWrapper.DriverController.getLeftY() > 0.01){
+    //   position += 0.1;
+    // }
+    // else if(ControllerWrapper.DriverController.getRightY() > 0.01){
+    //   position += -0.1;
+    // }
+    
+
+    shooter.setActuator(ControllerWrapper.DriverController.getLeftTriggerAxis());
   }
 
   // Called once the command ends or is interrupted.

@@ -7,7 +7,10 @@ package org.team639;
 import org.team639.auto.DriveRamsete;
 import org.team639.auto.TrajectoryFactory;
 import org.team639.commands.Drive.*;
+import org.team639.commands.Shooter.ManualShooterAim;
 import org.team639.commands.Shooter.ShootOpenLoop;
+import org.team639.commands.Shooter.SpitShooter;
+import org.team639.commands.Shooter.ToggleActuator;
 import org.team639.controlboard.ControllerWrapper;
 import org.team639.subsystems.*;
 
@@ -15,6 +18,7 @@ import org.team639.lib.AutonMode;
 import org.team639.lib.Constants;
 import org.team639.lib.DriveLayout;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -33,12 +37,18 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  //NetworkTableEntry shooter_test = new NetworkTableEntry("SmartDashboard", handle)
+
   // Subsystem declaration
   private final DriveTrain driveTrain = new DriveTrain();
+  private final Shooter shooter = new Shooter();
+  private final Indexer indexer = new Indexer();
 
   // Command Declaration
   AutonomousRoutines auton = new AutonomousRoutines();
   private final JoystickDrive joystickDrive = new JoystickDrive(driveTrain);
+  private final SpitShooter spitter = new SpitShooter(shooter, 0);
+  private final ManualShooterAim manualAim = new ManualShooterAim(shooter);
   
 
   public static SendableChooser<DriveLayout> driveMode = new SendableChooser<>();
@@ -115,6 +125,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     ControllerWrapper.DriverButtonA.whenHeld(new DJRobot(driveTrain, 3));
     ControllerWrapper.DriverButtonB.whenPressed(new ReverseHeading());
+    ControllerWrapper.DriverButtonY.whenPressed(new ToggleActuator(shooter));
   }
 
   /**
@@ -141,6 +152,7 @@ public class RobotContainer {
    */
   public void defaultCommands() {
     CommandScheduler.getInstance().setDefaultCommand(driveTrain, joystickDrive);
+    CommandScheduler.getInstance().setDefaultCommand(shooter, manualAim);
   }
   
   class AutonomousRoutines

@@ -79,6 +79,11 @@ public class Shooter extends SubsystemBase {
     linearActuator2.setPosition(pos);
   }
 
+  public double getActuatorPosition()
+  {
+    return linearActuator1.get();
+  }
+
   public boolean getExhaling()
   {
     return mainMotor.get() > 0;

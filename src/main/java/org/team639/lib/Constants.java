@@ -27,6 +27,8 @@ public interface Constants
         public interface Indexer
         {
             public static final int indexMotorID = 7;
+            public static final int indexBottomSensorID = 0;
+            public static final int indexTopSensorID = 1;
         }
 
         public interface Shooter
@@ -35,11 +37,25 @@ public interface Constants
             public static final int followID = 4;
         }
 
+        public interface Acquisition
+        {
+
+            public static final int acquisitionPortMain = 5;
+            public static final int acquisitionPortFollow = 6;
+
+            public static final int acquisitionRightPistonID = 0;
+            public static final int acquisitionLeftPistonID = 1;
+
+
+
+        }
+
         public interface PneumaticsModuleType
         {
             public static final int shifterID = 0;
             public static final int phCompressorID = 1;
         }
+
     }
 
     public interface AutoConstants
