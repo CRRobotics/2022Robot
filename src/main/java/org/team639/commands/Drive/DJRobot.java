@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class DJRobot extends CommandBase {
   private DriveTrain driveTrain;
   private Orchestra orchestra;
-  private String songPath;
   private double time;
 
   ArrayList<TalonFX> instruments = new ArrayList<TalonFX>();
@@ -25,7 +24,6 @@ public class DJRobot extends CommandBase {
   /**
    * Constructs a new DJRobot
    * @param driveTrain DriveTrain to be used
-   * @param songPath File name of song
    * @param time Time in seconds to play song
    */
   public DJRobot(DriveTrain driveTrain, double time) {

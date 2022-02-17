@@ -1,32 +1,44 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package org.team639.commands.Acquisition;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import org.team639.subsystems.Acquisition;
 
+/**
+ * StartAcquisition Command
+ */
 public class RunAcquisition extends CommandBase {
-  /** Creates a new RunAcquisition. */
-  public RunAcquisition() {
-    // Use addRequirements() here to declare subsystem dependencies.
-  }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
+    private Acquisition acquisition;
+    private double acquisitionMotorSpeed;
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
+    /**
+     * Creates a new StartAcquisition
+     * @param acquisition Acquisition to be used
+     */
+    public RunAcquisition(Acquisition acquisition, double acquisitionMotorSpeed) {
+        this.acquisition = acquisition;
+        this.acquisitionMotorSpeed = acquisitionMotorSpeed;
+        addRequirements(acquisition);
+    }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
+    @Override
+    public void initialize() {
+        if(!acquisition.isAcquisitionDown())
+            acquisition.acquisitionDown();
+    }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+    @Override
+    public void execute() {
+        acquisition.spinAcquisitionIn(acquisitionMotorSpeed);
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        acquisition.stopAcquisitionMotor();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }
