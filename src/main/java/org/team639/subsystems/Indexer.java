@@ -1,8 +1,5 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package org.team639.subsystems;
+
 
 import org.team639.lib.Constants;
 
@@ -24,6 +21,7 @@ public class Indexer extends SubsystemBase {
     public Indexer() {
         indexMotor.configFactoryDefault();
         indexMotor.setNeutralMode(NeutralMode.Brake);
+        //bottomSensor.configureProximitySensor(ColorSensorV3.ProximitySensorResolution.kProxRes11bit, ColorSensorV3.ProximitySensorMeasurementRate.kProxRate50ms);
     }
 
     @Override
