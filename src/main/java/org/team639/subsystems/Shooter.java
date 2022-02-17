@@ -7,6 +7,9 @@ package org.team639.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
+
+import org.team639.lib.Constants;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Servo;
@@ -14,8 +17,8 @@ import edu.wpi.first.wpilibj.Servo;
 public class Shooter extends SubsystemBase {
 
   //Motor Controllers
-  private CANSparkMax mainMotor = new CANSparkMax(1, CANSparkMax.MotorType.kBrushless);
-  private CANSparkMax followMotor = new CANSparkMax(2, CANSparkMax.MotorType.kBrushless);
+  private CANSparkMax mainMotor = new CANSparkMax(Constants.Ports.Shooter.mainID, CANSparkMax.MotorType.kBrushless);
+  private CANSparkMax followMotor = new CANSparkMax(Constants.Ports.Shooter.followID, CANSparkMax.MotorType.kBrushless);
 
   private RelativeEncoder mainEncoder = mainMotor.getEncoder();
   private RelativeEncoder secondaryEncoder = followMotor.getEncoder();
@@ -48,8 +51,8 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    mainRPM = mainEncoder.getVelocity() / 42;
-    secondaryRPM = secondaryEncoder.getVelocity() / 42;
+    mainRPM = mainEncoder.getVelocity();
+    secondaryRPM = secondaryEncoder.getVelocity();
   }
 
 /**
