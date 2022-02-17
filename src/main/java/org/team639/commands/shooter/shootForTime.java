@@ -29,7 +29,9 @@ public class shootForTime extends CommandBase {
   }
 
   // Called every time the scheduler runs while the command is scheduled.
-  @Override
+
+  /**Checks how long the command has been running and sets the shooter rpm **/
+ @Override
   public void execute() {
     if(System.currentTimeMillis() - startTime < shootTime){
       shooter.setSpeedRPM(Constants.ShooterConstants.shootHighRPM);

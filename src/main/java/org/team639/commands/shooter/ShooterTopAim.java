@@ -25,6 +25,10 @@ public class ShooterTopAim extends CommandBase {
   public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
+  
+  /**Moves the shooter linear actuators up or down based on trigger input.
+   * 
+   */
   @Override
   public void execute() {
     if(ControllerWrapper.DriverController.getLeftTriggerAxis() > 0.1){

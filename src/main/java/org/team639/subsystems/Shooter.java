@@ -50,8 +50,8 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    rightRPM = rightEncoder.getVelocity() / 42;
-    leftRPM = leftEncoder.getVelocity() / 42;
+    rightRPM = rightEncoder.getVelocity();
+    leftRPM = leftEncoder.getVelocity();
 
   }
 

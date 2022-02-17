@@ -4,9 +4,7 @@
 
 package org.team639.commands.Indexer;
 
-import org.opencv.photo.Photo;
 import org.team639.lib.Constants;
-import org.team639.lib.PhotoelectricSensor;
 import org.team639.subsystems.Acquisition;
 import org.team639.subsystems.Indexer;
 import org.team639.subsystems.Shooter;
@@ -35,12 +33,14 @@ public class SpitCargo extends CommandBase {
   public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
+
+  /**spins the acquisition backwards if there are any balls in the system.**/
   @Override
   public void execute() {
     if(indexer.topDetected() || indexer.bottomDetected()){
       shooter.setSpeed(Constants.ShooterConstants.reverseIndexSpeed);
-      indexer.setIndexMotor(-1);
-      acquisition.spinAcquisitionOut(1);
+      indexer.setIndexMotor(-0.1);
+      acquisition.spinAcquisitionOut(0.1);
     }
     else{
       shooter.setSpeed(0);
