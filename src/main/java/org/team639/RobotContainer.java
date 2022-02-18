@@ -4,8 +4,10 @@
 
 package org.team639;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import org.team639.auto.DriveRamsete;
 import org.team639.auto.TrajectoryFactory;
+import org.team639.commands.Acquisition.RunAcquisition;
 import org.team639.commands.Drive.*;
 import org.team639.commands.Shooter.ManualShooterAim;
 import org.team639.commands.Shooter.ShootOpenLoop;
@@ -164,6 +166,16 @@ public class RobotContainer {
       new DriveRamsete(driveTrain,"bounce1"), 
       new DriveRamsete(driveTrain, "bounce3")); 
     //final SequentialCommandGroup threeBallFender = new SequentialCommandGroup(new ShootOpenLoop(indexer, shooter, rpm))
+    final SequentialCommandGroup taSks = new SequentialCommandGroup(
+            new ParallelCommandGroup(
+                    new RunAcquisition(acquisition, 1),
+                    new DriveRamsete(driveTrain,"CardSwipe")),
+            new ShootOpenLoop(indexer, shooter),
+            new ParallelCommandGroup(
+                    new RunAcquisition(acquisition, 1),
+                    new DriveRamsete(driveTrain,"CleanVentilators")),
+            new ShootOpenLoop(indexer, shooter)
+    );
   }
 
 }
