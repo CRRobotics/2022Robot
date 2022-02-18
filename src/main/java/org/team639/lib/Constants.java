@@ -22,6 +22,8 @@ public interface Constants
             public static final int leftFollowerID = 11;
             public static final int rightMainID = 13;
             public static final int rightFollowerID = 12;
+
+            public static final int shifterID = 0;
         }
 
         public interface Indexer
@@ -35,6 +37,8 @@ public interface Constants
         {
             public static final int mainID = 3;
             public static final int followID = 4;
+            public static final int followActuatorID = 0;
+            public static final int mainActuatorID = 0;
         }
 
         public interface Acquisition
@@ -45,8 +49,6 @@ public interface Constants
 
             public static final int acquisitionRightPistonID = 0;
             public static final int acquisitionLeftPistonID = 1;
-
-
 
         }
 
@@ -113,7 +115,7 @@ public interface Constants
         public static final double supplyCurrentThreshHold = 35;
            
         //TODO: Find this
-        public static final double lowGearRatio = 18;//12.255;
+        public static final double lowGearRatio = 12.255;
         public static final double highGearRatio = 5.392;
 
         public static final double ticksPerRevolution = 2048;

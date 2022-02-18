@@ -50,8 +50,7 @@ public class DriveTrain extends SubsystemBase {
 
 
 
-    //TODO: Fix the solenoid controls
-    //private Solenoid shifter = new Solenoid(PneumaticsModuleType.REVPH, Constants.shifterID);
+    private Solenoid shifter = new Solenoid(PneumaticsModuleType.REVPH, Constants.Ports.Drive.shifterID);
     
 
     public static GearMode currGear;
@@ -63,7 +62,7 @@ public class DriveTrain extends SubsystemBase {
         resetEncoders();
         resetOdometry(startPosition);
         motorConfig();
-       // this.toggleGearHigh();
+       this.toggleGearHigh();
        SmartDashboard.putData(leftPIDController);
        SmartDashboard.putData(rightPIDController);
     }
@@ -176,7 +175,6 @@ public class DriveTrain extends SubsystemBase {
         return odometry.getPoseMeters();
     }
 
-    // TODO: Convert ticks to meters per second
     /**
      * Returns the current wheel speeds of the robot.
      *
@@ -246,21 +244,21 @@ public class DriveTrain extends SubsystemBase {
         return Constants.AutoConstants.feedforward;
     }
 
-    // /**
-    //  * Sets high gear
-    //  */
-    // public void toggleGearHigh() {
-    //     shifter.set(true);
-    //     currGear = GearMode.high;
-    // }
+    /**
+     * Sets high gear
+     */
+    public void toggleGearHigh() {
+        shifter.set(true);
+        currGear = GearMode.high;
+    }
 
-    // /**
-    //  * Sets low gear
-    //  */
-    // public void toggleGearLow() {
-    //     shifter.set(false);
-    //     currGear = GearMode.low;
-    // }
+    /**
+     * Sets low gear
+     */
+    public void toggleGearLow() {
+        shifter.set(false);
+        currGear = GearMode.low;
+    }
 
     public static GearMode getGear()
     {

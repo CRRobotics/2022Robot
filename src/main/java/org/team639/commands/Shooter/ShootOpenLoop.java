@@ -15,7 +15,7 @@ public class ShootOpenLoop extends CommandBase {
 
     long startTime;
 
-    public ShootOpenLoop(Indexer indexer, Shooter shooter, int rpm) {
+    public ShootOpenLoop(Indexer indexer, Shooter shooter) {
         this.indexer = indexer;
         this.shooter = shooter;
         addRequirements(indexer);

@@ -28,8 +28,8 @@ public class Shooter extends SubsystemBase {
 
   private PIDController shooterPID = new PIDController(0.0001, 0.001, 0);
 
-  private Servo linearActuator1 = new Servo(0);
-  private Servo linearActuator2 = new Servo(1);
+  private Servo mainLinearActuator = new Servo(Constants.Ports.Shooter.mainActuatorID);
+  private Servo followLinearActuator = new Servo(Constants.Ports.Shooter.followActuatorID);
 
   /** Creates a new Shooter. */
   public Shooter() {
@@ -41,11 +41,11 @@ public class Shooter extends SubsystemBase {
 
     mainMotor.follow(followMotor);
 
-    linearActuator1.setBounds(2.0,1.8,1.5,1.2,1.0);
-    linearActuator1.setSpeed(1);
+    mainLinearActuator.setBounds(2.0,1.8,1.5,1.2,1.0);
+    mainLinearActuator.setSpeed(1);
 
-    linearActuator2.setBounds(2.0,1.8,1.5,1.2,1.0);
-    linearActuator2.setSpeed(1);
+    followLinearActuator.setBounds(2.0,1.8,1.5,1.2,1.0);
+    followLinearActuator.setSpeed(1);
 
   }
 
@@ -75,13 +75,13 @@ public class Shooter extends SubsystemBase {
    * @param pos Position to be set between 0 and 1
    */
   public void setActuator(double pos){
-    linearActuator1.setPosition(pos);
-    linearActuator2.setPosition(pos);
+    mainLinearActuator.setPosition(pos);
+    followLinearActuator.setPosition(pos);
   }
 
   public double getActuatorPosition()
   {
-    return linearActuator1.get();
+    return mainLinearActuator.get();
   }
 
   public boolean getExhaling()

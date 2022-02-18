@@ -32,6 +32,11 @@ public class AutoIndexer extends CommandBase {
             indexer.setIndexMotor(Constants.IndexerConstants.indexMotorSpeed);
             shooter.setSpeed(Constants.ShooterConstants.reverseIndexSpeed);
         }
+        else if(acquisition.getAcquisitionOut())
+        {
+            indexer.setIndexMotor(-Constants.IndexerConstants.indexMotorSpeed);
+            shooter.setSpeed(Constants.ShooterConstants.reverseIndexSpeed);
+        }
     }
 
     @Override

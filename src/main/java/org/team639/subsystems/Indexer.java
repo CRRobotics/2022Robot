@@ -12,8 +12,8 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 public class Indexer extends SubsystemBase {
     private VictorSPX indexMotor = new VictorSPX(Constants.Ports.Indexer.indexMotorID);
-    private DigitalInput bottomSensor = new DigitalInput(0);
-    private DigitalInput topSensor = new DigitalInput(1);
+    private DigitalInput bottomSensor = new DigitalInput(Constants.Ports.Indexer.indexBottomSensorID);
+    private DigitalInput topSensor = new DigitalInput(Constants.Ports.Indexer.indexTopSensorID);
 
     //TODO configure top sensor
     //private ColorSensorV3 placeholderSensor = new ColorSensorV3(I2C.Port.kMXP);

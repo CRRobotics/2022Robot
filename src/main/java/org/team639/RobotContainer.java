@@ -43,6 +43,7 @@ public class RobotContainer {
   private final DriveTrain driveTrain = new DriveTrain();
   private final Shooter shooter = new Shooter();
   private final Indexer indexer = new Indexer();
+  private final Acquisition acquisition = new Acquisition();
 
   // Command Declaration
   AutonomousRoutines auton = new AutonomousRoutines();

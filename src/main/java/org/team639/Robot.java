@@ -4,6 +4,7 @@
 
 package org.team639;
 
+import org.team639.lib.Constants;
 import org.team639.subsystems.JeVoisInterface;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -11,6 +12,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 /**
@@ -23,7 +25,13 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-  //Compressor phCompressor = new Compressor(Constants.phCompressorID, PneumaticsModuleType.REVPH);
+  Compressor phCompressor = new Compressor(Constants.Ports.PneumaticsModuleType.phCompressorID, PneumaticsModuleType.REVPH);
+
+  public static double horizontalDistanceToTarget;
+  public static double horizontalAngleToTarget;
+
+  public static double runningHorizontalAngle;
+  public static double runningHorizontalDistance;
 
   
   /**
@@ -52,13 +60,13 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
-    //SmartDashboard.putNumber("Current Pressure", getCompressorPressure());
 
-    //TODO: NETWORK TABLES STUFF, FINISH THIS
-    //0: Horizontal angle
-    //1: Horizontal distance
-   // System.out.println(NetworkTableInstance.getDefault().getTable("limelight").getEntry("HorizontalDistance").getDouble(0));
-   // System.out.println(NetworkTableInstance.getDefault().getTable("limelight").getEntry("HorizontalAngle").getDouble(0));
+    SmartDashboard.putNumber("Current Pressure", getCompressorPressure());
+
+    System.out.println(NetworkTableInstance.getDefault().getTable("limelight").getEntry("HorizontalDistance").getDouble(-1.0));
+    System.out.println(NetworkTableInstance.getDefault().getTable("limelight").getEntry("HorizontalAngle").getDouble(361.0));
+    horizontalAngleToTarget = NetworkTableInstance.getDefault().getTable("limelight").getEntry("HorizontalAngle").getDouble(-1.0);
+    horizontalDistanceToTarget = NetworkTableInstance.getDefault().getTable("limelight").getEntry("HorizontalDistance").getDouble(361.0);
     CommandScheduler.getInstance().run();
   }
 
@@ -103,8 +111,34 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {}
 
-  // public double getCompressorPressure()
-  // {
-  //   return phCompressor.getPressure();
-  // }
+  public double getCompressorPressure()
+  {
+    return phCompressor.getPressure();
+  }
+
+  /**
+   * Returns the running horizontal angle. This makes sure that the last value is not undefined
+   * @return runningHorizontalAngle of horizontal angle
+   */
+  public static double getAngleToTarget()
+  {
+    if(horizontalAngleToTarget != 361.0)
+    {
+      runningHorizontalAngle = horizontalAngleToTarget;
+    }
+    return runningHorizontalAngle;
+  }
+
+  /**
+   * Returns the running horizontal distance. This makes sure that the last value is not undefined
+   * @return runningHorizontalDistance of horizontal distance
+   */
+  public static double getDistanceToTarget()
+  {
+    if(horizontalDistanceToTarget != -1.0)
+    {
+      runningHorizontalDistance = horizontalDistanceToTarget;
+    }
+    return runningHorizontalDistance;
+  }
 }
