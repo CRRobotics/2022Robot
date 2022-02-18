@@ -14,9 +14,7 @@ public class AutoIndexer extends CommandBase {
     public AutoIndexer(Indexer indexer, Acquisition acquisition, Shooter shooter) {
         this.indexer = indexer;
         this.acquisition = acquisition;
-        addRequirements(indexer);
-        addRequirements(acquisition);
-        addRequirements(shooter);
+        addRequirements(indexer, acquisition, shooter);
     }
 
     @Override

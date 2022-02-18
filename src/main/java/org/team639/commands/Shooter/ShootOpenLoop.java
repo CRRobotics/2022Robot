@@ -18,8 +18,8 @@ public class ShootOpenLoop extends CommandBase {
     public ShootOpenLoop(Indexer indexer, Shooter shooter) {
         this.indexer = indexer;
         this.shooter = shooter;
-        addRequirements(indexer);
-        addRequirements(shooter);
+        addRequirements(indexer, shooter);
+
     }
 
     @Override

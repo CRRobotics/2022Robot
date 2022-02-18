@@ -20,8 +20,7 @@ public class ShootClosedLoop extends CommandBase {
       this.indexer = indexer;
       this.shooter = shooter;
       this.rpm = rpm;
-      addRequirements(indexer);
-      addRequirements(shooter);
+      addRequirements(indexer, shooter);
   }
 
   @Override
