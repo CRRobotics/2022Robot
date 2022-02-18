@@ -158,7 +158,11 @@ public class RobotContainer {
   
   class AutonomousRoutines
   {
-    final SequentialCommandGroup bounceTest = new SequentialCommandGroup(new DriveRamsete(driveTrain,"bounce1"), new DriveRamsete(driveTrain,"bounce2"), new DriveRamsete(driveTrain,"bounce1"), new DriveRamsete(driveTrain, "bounce3")); 
+    final SequentialCommandGroup bounceTest = new SequentialCommandGroup(
+      new DriveRamsete(driveTrain,"bounce1"), 
+      new DriveRamsete(driveTrain,"bounce2"), 
+      new DriveRamsete(driveTrain,"bounce1"), 
+      new DriveRamsete(driveTrain, "bounce3")); 
     //final SequentialCommandGroup threeBallFender = new SequentialCommandGroup(new ShootOpenLoop(indexer, shooter, rpm))
   }
 
