@@ -21,6 +21,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.*;
@@ -105,7 +106,7 @@ public class DriveTrain extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        SmartDashboard.putNumber("Gyro Angle", getHeading());
+        SmartDashboard.putData("Gyro Angle", gyro);
         SmartDashboard.putNumber("Right Position", getRightPostion());
         SmartDashboard.putNumber("Left Position", getLeftPostion());
 
