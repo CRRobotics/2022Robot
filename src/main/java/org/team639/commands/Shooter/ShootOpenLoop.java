@@ -45,7 +45,8 @@ public class ShootOpenLoop extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-
+      shooter.setSpeed(0);
+      indexer.setIndexMotor(0);
     }
 
     @Override

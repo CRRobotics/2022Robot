@@ -33,19 +33,19 @@ public class ShootClosedLoop extends CommandBase {
   @Override
   public void execute() {
       if(System.currentTimeMillis() >= startTime + Constants.ShooterConstants.reverseIndexWhenShootingTime)
-      {
         shooter.setSpeedRPM(rpm);
-      }
-      if(System.currentTimeMillis() >= startTime + Constants.ShooterConstants.reverseIndexWhenShootingTime + Constants.ShooterConstants.spinUpTime)
+      if(shooter.getVelocity() >= rpm)
       {
         shooter.setSpeedRPM(rpm);
         indexer.setIndexMotor(Constants.IndexerConstants.indexMotorSpeed);
       }
+        
   }
 
   @Override
   public void end(boolean interrupted) {
-
+    shooter.setSpeed(0);
+    indexer.setIndexMotor(0);
   }
 
   @Override

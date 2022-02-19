@@ -13,6 +13,7 @@ import org.team639.lib.Constants;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Shooter extends SubsystemBase {
 
@@ -21,7 +22,6 @@ public class Shooter extends SubsystemBase {
   private CANSparkMax followMotor = new CANSparkMax(Constants.Ports.Shooter.followID, CANSparkMax.MotorType.kBrushless);
 
   private RelativeEncoder mainEncoder = mainMotor.getEncoder();
-  private RelativeEncoder secondaryEncoder = followMotor.getEncoder();
 
   public double mainRPM;
   public double secondaryRPM;
@@ -51,8 +51,7 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    mainRPM = mainEncoder.getVelocity();
-    secondaryRPM = secondaryEncoder.getVelocity();
+    SmartDashboard.putNumber("Shooter RPM", getVelocity());
   }
 
 /**
@@ -70,6 +69,7 @@ public class Shooter extends SubsystemBase {
   public void setSpeedRPM(int setpoint){
     mainMotor.set(shooterPID.calculate(mainEncoder.getPosition(), setpoint));
   }
+
   /**
    * Sets linear actuator to certain position
    * @param pos Position to be set between 0 and 1
@@ -77,6 +77,11 @@ public class Shooter extends SubsystemBase {
   public void setActuator(double pos){
     mainLinearActuator.setPosition(pos);
     followLinearActuator.setPosition(pos);
+  }
+
+  public double getVelocity()
+  {
+    return mainEncoder.getVelocity();
   }
 
   public double getActuatorPosition()
@@ -111,4 +116,17 @@ public class Shooter extends SubsystemBase {
       else
           setSpeed(1);
   }
+
+  public void setBrake()
+  {
+    mainMotor.setIdleMode(IdleMode.kBrake);
+    followMotor.setIdleMode(IdleMode.kBrake);
+  }
+
+  public void setCoast()
+  {
+    mainMotor.setIdleMode(IdleMode.kCoast);
+    followMotor.setIdleMode(IdleMode.kCoast);
+  }
+
 }
