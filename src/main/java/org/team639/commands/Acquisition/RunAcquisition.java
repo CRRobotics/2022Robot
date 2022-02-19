@@ -23,8 +23,7 @@ public class RunAcquisition extends CommandBase {
 
     @Override
     public void initialize() {
-        if(!acquisition.isAcquisitionDown())
-            acquisition.acquisitionDown();
+        System.out.println("RunAcquisition Initialized");
     }
 
     @Override

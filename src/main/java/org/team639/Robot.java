@@ -22,11 +22,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
-
-  private RobotContainer m_robotContainer;
-
   Compressor phCompressor = new Compressor(Constants.Ports.PneumaticsModuleType.phCompressorID, PneumaticsModuleType.REVPH);
 
+  private RobotContainer m_robotContainer;
   public static double horizontalDistanceToTarget;
   public static double horizontalAngleToTarget;
 
@@ -40,11 +38,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    //phCompressor.enableAnalog(0, Constants.maxCompressor);
     m_robotContainer = new RobotContainer();
-
-
-
   }
 
   /**
@@ -61,10 +55,8 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
 
-    SmartDashboard.putNumber("Current Pressure", getCompressorPressure());
-
-    System.out.println(NetworkTableInstance.getDefault().getTable("limelight").getEntry("HorizontalDistance").getDouble(-1.0));
-    System.out.println(NetworkTableInstance.getDefault().getTable("limelight").getEntry("HorizontalAngle").getDouble(361.0));
+   // System.out.println(NetworkTableInstance.getDefault().getTable("limelight").getEntry("HorizontalDistance").getDouble(-1.0));
+   // System.out.println(NetworkTableInstance.getDefault().getTable("limelight").getEntry("HorizontalAngle").getDouble(361.0));
     horizontalAngleToTarget = NetworkTableInstance.getDefault().getTable("limelight").getEntry("HorizontalAngle").getDouble(-1.0);
     horizontalDistanceToTarget = NetworkTableInstance.getDefault().getTable("limelight").getEntry("HorizontalDistance").getDouble(361.0);
     CommandScheduler.getInstance().run();
@@ -111,10 +103,6 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {}
 
-  public double getCompressorPressure()
-  {
-    return phCompressor.getPressure();
-  }
 
   /**
    * Returns the running horizontal angle. This makes sure that the last value is not undefined

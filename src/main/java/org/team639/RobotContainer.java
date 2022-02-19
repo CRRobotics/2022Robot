@@ -6,17 +6,19 @@ package org.team639;
 
 import org.team639.auto.DriveRamsete;
 import org.team639.auto.TrajectoryFactory;
+import org.team639.commands.Acquisition.SpitCargo;
+import org.team639.commands.Acquisition.ToggleAcquisition;
 import org.team639.commands.Drive.*;
+import org.team639.commands.Indexer.ManualIndexer;
 import org.team639.commands.Shooter.ManualShooterAim;
 import org.team639.commands.Shooter.ShootOpenLoop;
 import org.team639.commands.Shooter.SpitShooter;
 import org.team639.commands.Shooter.ToggleActuator;
 import org.team639.controlboard.ControllerWrapper;
 import org.team639.subsystems.*;
-
-import org.team639.lib.AutonMode;
 import org.team639.lib.Constants;
-import org.team639.lib.DriveLayout;
+import org.team639.lib.states.AutonMode;
+import org.team639.lib.states.DriveLayout;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -124,9 +126,11 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    ControllerWrapper.DriverButtonA.whenHeld(new DJRobot(driveTrain, 3));
-    ControllerWrapper.DriverButtonB.whenPressed(new ReverseHeading());
-    ControllerWrapper.DriverButtonY.whenPressed(new ToggleActuator(shooter));
+    ControllerWrapper.DriverButtonA.whenHeld(new ManualIndexer(indexer, shooter));
+    ControllerWrapper.DriverButtonB.whenHeld(new SpitCargo(shooter, indexer, acquisition));
+    ControllerWrapper.DriverButtonY.whenPressed(new ShootOpenLoop(indexer, shooter));
+    ControllerWrapper.DriverButtonX.whenPressed(new ToggleGears(driveTrain).withTimeout(0.2));
+    ControllerWrapper.DriverDPadDown.whenPressed(new ToggleAcquisition(acquisition));
   }
 
   /**
@@ -152,7 +156,7 @@ public class RobotContainer {
    * Sets the default commands
    */
   public void defaultCommands() {
-    CommandScheduler.getInstance().setDefaultCommand(driveTrain, joystickDrive);
+   CommandScheduler.getInstance().setDefaultCommand(driveTrain, joystickDrive);
     CommandScheduler.getInstance().setDefaultCommand(shooter, manualAim);
   }
   
@@ -163,7 +167,7 @@ public class RobotContainer {
       new DriveRamsete(driveTrain,"bounce2"), 
       new DriveRamsete(driveTrain,"bounce1"), 
       new DriveRamsete(driveTrain, "bounce3")); 
-    //final SequentialCommandGroup threeBallFender = new SequentialCommandGroup(new ShootOpenLoop(indexer, shooter, rpm))
+    final SequentialCommandGroup threeBallFender = new SequentialCommandGroup(new ShootOpenLoop(indexer, shooter));
   }
 
 }
