@@ -33,8 +33,11 @@ public class AutoDriveForward extends CommandBase {
     distance = Math.abs(distance);
 
     startLeft = driveTrain.getLeftPostion(); startRight = driveTrain.getRightPostion();
-    targetLeft = startLeft + ConversionMath.metersToTicks(distance);
-    targetRight = startRight + ConversionMath.metersToTicks(distance);
+    targetLeft = startLeft + distance;
+    targetRight = startRight + distance;
+
+    errorLeft = targetLeft - startLeft;
+    errorRight = targetRight - startRight;
   }
 
   // Called when the command is initially scheduled.
@@ -64,7 +67,7 @@ public class AutoDriveForward extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(errorLeft <= 10 && errorRight <= 10)
+    if(errorLeft <= 0.05 && errorRight <= 0.05)
       return true;
     return false;
   }

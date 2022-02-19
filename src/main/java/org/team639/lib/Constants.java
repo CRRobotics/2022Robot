@@ -23,7 +23,7 @@ public interface Constants
             public static final int rightMainID = 13;
             public static final int rightFollowerID = 12;
 
-            public static final int shifterID = 0;
+            public static final int shifterID = 2;
         }
 
         public interface Indexer
@@ -36,25 +36,24 @@ public interface Constants
         public interface Shooter
         {
             public static final int mainID = 3;
-            public static final int followID = 4;
+            public static final int followID = 6;
             public static final int followActuatorID = 0;
-            public static final int mainActuatorID = 0;
+            public static final int mainActuatorID = 1;
+
         }
 
         public interface Acquisition
         {
 
-            public static final int acquisitionPortMain = 5;
-            public static final int acquisitionPortFollow = 6;
+            public static final int acquisitionPortMain = 4;
+            public static final int acquisitionPortFollow = 5;
 
-            public static final int acquisitionRightPistonID = 0;
-            public static final int acquisitionLeftPistonID = 1;
-
+            public static final int acquisitionRetract = 0;
+            public static final int acquisitionExtend = 1;
         }
 
         public interface PneumaticsModuleType
         {
-            public static final int shifterID = 0;
             public static final int phCompressorID = 1;
         }
 
@@ -107,7 +106,7 @@ public interface Constants
         public static final double wheelDiameter = .1016;
         public static final double wheelCircumference = wheelDiameter * Math.PI;
 
-        public static final double driveMultiplier = 0.6; //tune this down a bit....maybe
+        public static final double driveMultiplier = 0.2; //tune this down a bit....maybe
 
         public static final double kDriveRampSeconds = 0.3;
         
@@ -129,20 +128,24 @@ public interface Constants
 
     public interface ShooterConstants
     {
-        public static final double reverseIndexSpeed = -0.1;
-        public static final double reverseIndexWhenShootingTime = 500;
-        public static final double spinUpTime = 500;
+        public static final double reverseIndexSpeed = -0.2;
+        public static final double reverseIndexWhenShootingTime = 300;
+        public static final double spinUpTime = 1000;
 
-        public static final double pureShootingTime = spinUpTime + reverseIndexWhenShootingTime + 1500;
+        public static final double pureShootingTime = spinUpTime + reverseIndexWhenShootingTime + 2000;
 
-        public static final int shootHighRPM = 5000;
-        public static final double shootHighSpeed = 1;
+        public static final int shootHighRPM = 500;//5000;
+        public static final double shootHighSpeed = 0.1;//1;
+
+        public static final double shooterP = 0.0015;
+        public static final double shooterI = 0.0;
+        public static final double shooterD = 0.0;
     }
 
     public interface IndexerConstants 
     {
         public static final int indexSensorDistance = 10;
-        public static final double indexMotorSpeed = 0.75;
+        public static final double indexMotorSpeed = 1;
     }
 
     public interface ControlboardConstants

@@ -5,7 +5,7 @@
 package org.team639.lib.math;
 
 import org.team639.lib.Constants;
-import org.team639.lib.GearMode;
+import org.team639.lib.states.GearMode;
 import org.team639.subsystems.DriveTrain;
 
 
@@ -33,20 +33,20 @@ public class ConversionMath {
      * Converts encoder ticks of falcon 5 hundos to meters
      * @param ticks Ticks to be converted
      */
-    public static double ticksToMeters(double ticks)
+    public static double ticksToMeters(double ticks, double ratio)
     {   
-        double rotation = (ticks / Constants.DriveConstants.ticksPerRevolution) / getGearRatio(DriveTrain.currGear); 
+        double rotation = (ticks / Constants.DriveConstants.ticksPerRevolution) / ratio; 
 
         return rotation * Constants.DriveConstants.wheelCircumference;
     }
 
     /**
-     * Converts encoder ticks of falcon 5 hundos to meters
-     * @param ticks Ticks to be converted
+     * Converts meters of falcon 5 hundos to ticks
+     * @param meters meters to be converted
      */
-    public static double metersToTicks(double meters)
+    public static double metersToTicks(double meters, double ratio)
     {
         double rotations = meters / Constants.DriveConstants.wheelCircumference;
-        return rotations * getGearRatio(DriveTrain.currGear)* Constants.DriveConstants.ticksPerRevolution;
+        return rotations * ratio * Constants.DriveConstants.ticksPerRevolution;
     }
 }

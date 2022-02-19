@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.kauailabs.navx.frc.AHRS;
 
 import org.team639.lib.Constants;
-import org.team639.lib.GearMode;
 import org.team639.lib.math.ConversionMath;
+import org.team639.lib.states.GearMode;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
@@ -49,12 +49,9 @@ public class DriveTrain extends SubsystemBase {
     public WPI_TalonFX rightMain = new WPI_TalonFX(Constants.Ports.Drive.rightMainID);
     public WPI_TalonFX rightFollower = new WPI_TalonFX(Constants.Ports.Drive.rightFollowerID);
 
-
-
-    private Solenoid shifter = new Solenoid(PneumaticsModuleType.REVPH, Constants.Ports.Drive.shifterID);
+    public Solenoid shifter = new Solenoid(PneumaticsModuleType.REVPH, Constants.Ports.Drive.shifterID);
     
 
-    public static GearMode currGear;
     public static boolean reversedHeading = false;
 
 
@@ -63,9 +60,9 @@ public class DriveTrain extends SubsystemBase {
         resetEncoders();
         resetOdometry(startPosition);
         motorConfig();
-       this.toggleGearHigh();
-       SmartDashboard.putData(leftPIDController);
-       SmartDashboard.putData(rightPIDController);
+        SmartDashboard.putData(leftPIDController);
+        SmartDashboard.putData(rightPIDController);
+        toggleGearHigh();
     }
 
     public void motorConfig() {
@@ -111,6 +108,7 @@ public class DriveTrain extends SubsystemBase {
         SmartDashboard.putNumber("Left Position", getLeftPostion());
 
         SmartDashboard.putBoolean("Swapcade Mode", reversedHeading);
+        SmartDashboard.putString("Current Gear", getGearMode().toString());
         odometry.update(gyro.getRotation2d(), getLeftPostion(), getRightPostion());
     }
 
@@ -182,8 +180,8 @@ public class DriveTrain extends SubsystemBase {
      * @return The current wheel speeds.
      */
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-        return new DifferentialDriveWheelSpeeds(ConversionMath.ticksToMeters(leftMain.getSelectedSensorVelocity()),
-                ConversionMath.ticksToMeters(rightMain.getSelectedSensorVelocity()));
+        return new DifferentialDriveWheelSpeeds(ConversionMath.ticksToMeters(leftMain.getSelectedSensorVelocity(), getRatio()),
+                ConversionMath.ticksToMeters(rightMain.getSelectedSensorVelocity(), getRatio()));
     }
 
     /**
@@ -203,7 +201,7 @@ public class DriveTrain extends SubsystemBase {
     public double getLeftPostion() {
         // return leftMain.getSelectedSensorPosition(0) * Constants.driveTrainGearRatio
         // * (Units.inchesToMeters(6)*Math.PI);
-        return ConversionMath.ticksToMeters(leftMain.getSelectedSensorPosition());
+        return ConversionMath.ticksToMeters(leftMain.getSelectedSensorPosition(), getRatio());
     }
 
     /**
@@ -214,7 +212,7 @@ public class DriveTrain extends SubsystemBase {
     public double getRightPostion() {
         // return rightMain.getSelectedSensorPosition(0) * Constants.driveTrainGearRatio
         // * (Units.inchesToMeters(6)*Math.PI);
-        return ConversionMath.ticksToMeters(rightMain.getSelectedSensorPosition());
+        return ConversionMath.ticksToMeters(rightMain.getSelectedSensorPosition(), getRatio());
 
     }
 
@@ -249,21 +247,24 @@ public class DriveTrain extends SubsystemBase {
      * Sets high gear
      */
     public void toggleGearHigh() {
-        shifter.set(true);
-        currGear = GearMode.high;
+        shifter.set(false);
     }
 
     /**
      * Sets low gear
      */
     public void toggleGearLow() {
-        shifter.set(false);
-        currGear = GearMode.low;
+        shifter.set(true);
     }
 
-    public static GearMode getGear()
+    public GearMode getGearMode()
     {
-        return currGear;
+        return shifter.get() ? GearMode.low : GearMode.high;
+    }
+
+    public double getRatio()
+    {
+        return getGearMode() == GearMode.high ? Constants.DriveConstants.highGearRatio : Constants.DriveConstants.lowGearRatio;
     }
     
 }
