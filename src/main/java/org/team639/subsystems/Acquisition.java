@@ -6,15 +6,16 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.team639.lib.Constants;
+import org.team639.lib.states.AcquisitionPosition;
 
 public class Acquisition extends SubsystemBase {
 
     CANSparkMax acquisitionMotorMain = new CANSparkMax(Constants.Ports.Acquisition.acquisitionPortMain, CANSparkMaxLowLevel.MotorType.kBrushless);
     CANSparkMax acquisitionMotorFollow = new CANSparkMax(Constants.Ports.Acquisition.acquisitionPortFollow, CANSparkMaxLowLevel.MotorType.kBrushless);
-    Solenoid rightPiston = new Solenoid(PneumaticsModuleType.REVPH,Constants.Ports.Acquisition.acquisitionRightPistonID); //don't know what kind of piston this is
-    Solenoid leftPiston = new Solenoid(PneumaticsModuleType.REVPH,Constants.Ports.Acquisition.acquisitionLeftPistonID); //idk if there are 2 pistons or not
+    Solenoid extend = new Solenoid(PneumaticsModuleType.REVPH,Constants.Ports.Acquisition.acquisitionExtend); //don't know what kind of piston this is
+    Solenoid retract = new Solenoid(PneumaticsModuleType.REVPH,Constants.Ports.Acquisition.acquisitionRetract); //idk if there are 2 pistons or not
 
-    boolean acquisitionDown = false;
+    AcquisitionPosition acqPos = AcquisitionPosition.down;
 
     public Acquisition() {
         acquisitionMotorMain.restoreFactoryDefaults();
@@ -25,7 +26,7 @@ public class Acquisition extends SubsystemBase {
 
         acquisitionMotorFollow.follow(acquisitionMotorMain);
 
-        acquisitionUp();
+       // acquisitionUp();
     }
 
     @Override
@@ -37,27 +38,35 @@ public class Acquisition extends SubsystemBase {
      * Puts acquisition down
      */
     public void acquisitionDown() {
-        leftPiston.set(true);
-        rightPiston.set(true);
-        acquisitionDown = true;
+        // if(!isAcquisitionDown())
+        // {
+        //     leftPiston.set(true);
+        //     rightPiston.set(true);
+        //     acquisitionDown = true;
+        // }
+        extend.set(true);
+        retract.set(false);
+
     }
 
     /**
      * Puts acquisition up
      */
     public void acquisitionUp() {
-        leftPiston.set(false);
-        rightPiston.set(false);
-        acquisitionDown = false;
+        // if(isAcquisitionDown())
+        // {
+        //     leftPiston.set(false);
+        //     rightPiston.set(false);
+        //     acquisitionDown = false;
+        // }
+        extend.set(false);
+        retract.set(true);
     }
 
-    /**
-     * Determines if the acquistion is deployed
-     * @return acquistionDown
-     */
-    public boolean isAcquisitionDown()
+    public void acquisitionNeutral()
     {
-        return acquisitionDown;
+        extend.set(false);
+        retract.set(false);
     }
 
     /**

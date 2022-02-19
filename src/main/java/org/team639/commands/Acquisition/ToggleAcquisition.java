@@ -23,10 +23,10 @@ public class ToggleAcquisition extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(acquisition.isAcquisitionDown())
-      acquisition.acquisitionUp();
-    else
-      acquisition.acquisitionDown();
+    // if(acquisition.isAcquisitionDown())
+    //   acquisition.acquisitionUp();
+    // else
+    //   acquisition.acquisitionDown();
   }
 
   
