@@ -35,7 +35,7 @@ public class ManualShooterAim extends CommandBase {
     //   position += -0.1;
     // }
 
-    shooter.setActuator(ControllerWrapper.DriverController.getLeftTriggerAxis());
+    shooter.setActuator(shooter.getSelectedHood());
   }
 
   // Called once the command ends or is interrupted.

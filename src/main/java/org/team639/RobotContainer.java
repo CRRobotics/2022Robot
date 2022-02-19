@@ -6,9 +6,11 @@ package org.team639;
 
 import org.team639.auto.DriveRamsete;
 import org.team639.auto.TrajectoryFactory;
+import org.team639.commands.Acquisition.RunAcquisition;
 import org.team639.commands.Acquisition.SpitCargo;
 import org.team639.commands.Acquisition.ToggleAcquisition;
 import org.team639.commands.Drive.*;
+import org.team639.commands.Indexer.AutoIndexer;
 import org.team639.commands.Indexer.ManualIndexer;
 import org.team639.commands.Shooter.ManualShooterAim;
 import org.team639.commands.Shooter.ShootOpenLoop;
@@ -50,6 +52,8 @@ public class RobotContainer {
   // Command Declaration
   AutonomousRoutines auton = new AutonomousRoutines();
   private final JoystickDrive joystickDrive = new JoystickDrive(driveTrain);
+  private final AutoIndexer autoIndexer = new AutoIndexer(indexer, acquisition, shooter);
+
   private final SpitShooter spitter = new SpitShooter(shooter, 0);
   private final ManualShooterAim manualAim = new ManualShooterAim(shooter);
   
@@ -126,11 +130,12 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    ControllerWrapper.DriverButtonA.whenHeld(new ManualIndexer(indexer, shooter));
-    ControllerWrapper.DriverButtonB.whenHeld(new SpitCargo(shooter, indexer, acquisition));
+    //ControllerWrapper.DriverButtonA.whenHeld(new ManualIndexer(indexer, shooter));
+    ControllerWrapper.ControlButtonA.whenHeld(new ManualIndexer(shooter, indexer, acquisition));
     ControllerWrapper.DriverButtonY.whenPressed(new ShootOpenLoop(indexer, shooter));
-    ControllerWrapper.DriverButtonX.whenPressed(new ToggleGears(driveTrain).withTimeout(0.2));
-    ControllerWrapper.DriverDPadDown.whenPressed(new ToggleAcquisition(acquisition));
+    ControllerWrapper.DriverButtonX.whenPressed(new ToggleGears(driveTrain).withTimeout(Constants.ControlboardConstants.defaultCommandTimeout));
+    ControllerWrapper.DriverDPadDown.whenHeld(new RunAcquisition(acquisition, .1));
+    ControllerWrapper.DriverDPadUp.whenPressed(new ReverseHeading(driveTrain).withTimeout(Constants.ControlboardConstants.defaultCommandTimeout));
   }
 
   /**

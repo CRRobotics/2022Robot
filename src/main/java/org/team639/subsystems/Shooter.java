@@ -13,11 +13,20 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import org.team639.lib.Constants;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Shooter extends SubsystemBase {
+  private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
+
+  private NetworkTableEntry shooterSpeed = tab.add("RPM", 5000).withWidget(BuiltInWidgets.kNumberSlider).getEntry();
+  private NetworkTableEntry hoodPositioNetworkTableEntry = tab.add("HoodAngle", 0).withWidget(BuiltInWidgets.kNumberSlider).getEntry();
+  private NetworkTableEntry shooterSpeedPercent = tab.add("ShootPercent", 0).withWidget(BuiltInWidgets.kNumberSlider).getEntry();
 
   //Motor Controllers
   private CANSparkMax mainMotor = new CANSparkMax(Constants.Ports.Shooter.mainID, CANSparkMax.MotorType.kBrushless);
@@ -74,6 +83,21 @@ public class Shooter extends SubsystemBase {
  */  
   public void setSpeed(double speed){
     mainMotor.set(speed);
+  }
+
+  public double getSelectedHood()
+  {
+    return hoodPositioNetworkTableEntry.getDouble(0);
+  }
+
+  public double getSelectedRPM()
+  {
+    return shooterSpeed.getDouble(5000);
+  }
+
+  public double getSelectedSpeed()
+  {
+    return shooterSpeedPercent.getDouble(0);
   }
 
   /**

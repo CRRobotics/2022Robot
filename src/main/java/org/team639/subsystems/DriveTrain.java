@@ -52,11 +52,12 @@ public class DriveTrain extends SubsystemBase {
     public Solenoid shifter = new Solenoid(PneumaticsModuleType.REVPH, Constants.Ports.Drive.shifterID);
     
 
-    public static boolean reversedHeading = false;
+    public boolean reversedHeading;
 
 
     /** Creates a new DriveTrain. */
     public DriveTrain() {
+        reversedHeading = false;
         resetEncoders();
         resetOdometry(startPosition);
         motorConfig();
@@ -199,8 +200,6 @@ public class DriveTrain extends SubsystemBase {
      * @return Meters displaced by left side of robot
      */
     public double getLeftPostion() {
-        // return leftMain.getSelectedSensorPosition(0) * Constants.driveTrainGearRatio
-        // * (Units.inchesToMeters(6)*Math.PI);
         return ConversionMath.ticksToMeters(leftMain.getSelectedSensorPosition(), getRatio());
     }
 
@@ -210,10 +209,7 @@ public class DriveTrain extends SubsystemBase {
      * @return Meters displaced by right side of robot
      */
     public double getRightPostion() {
-        // return rightMain.getSelectedSensorPosition(0) * Constants.driveTrainGearRatio
-        // * (Units.inchesToMeters(6)*Math.PI);
         return ConversionMath.ticksToMeters(rightMain.getSelectedSensorPosition(), getRatio());
-
     }
 
     /**
@@ -265,6 +261,16 @@ public class DriveTrain extends SubsystemBase {
     public double getRatio()
     {
         return getGearMode() == GearMode.high ? Constants.DriveConstants.highGearRatio : Constants.DriveConstants.lowGearRatio;
+    }
+
+    public boolean isReversedHeading()
+    {
+        return reversedHeading;
+    }
+
+    public void setHeading(boolean reversed)
+    {
+        reversedHeading = reversed;
     }
     
 }

@@ -4,6 +4,7 @@
 
 package org.team639.commands.Acquisition;
 
+import org.team639.lib.states.AcquisitionPosition;
 import org.team639.subsystems.Acquisition;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -17,16 +18,19 @@ public class ToggleAcquisition extends CommandBase {
     addRequirements(acquisition);
   }
 
-  private void addRequirements(Acquisition acquistion2) {
+  private void addRequirements(Acquisition acquistion) {
+    this.acquisition = acquisition;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // if(acquisition.isAcquisitionDown())
-    //   acquisition.acquisitionUp();
-    // else
-    //   acquisition.acquisitionDown();
+    if(acquisition.acqPos() == AcquisitionPosition.down)
+      acquisition.acquisitionNeutral();
+    else if(acquisition.acqPos() == AcquisitionPosition.neutral)
+      acquisition.acquisitionUp();
+    else
+      acquisition.acquisitionDown();
   }
 
   

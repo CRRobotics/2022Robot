@@ -35,11 +35,11 @@ public class ShootOpenLoop extends CommandBase {
         if(System.currentTimeMillis() >= startTime + Constants.ShooterConstants.reverseIndexWhenShootingTime)
         {
           indexer.setIndexMotor(0);
-          shooter.setSpeed(Constants.ShooterConstants.shootHighSpeed);
+          shooter.setSpeed(shooter.getSelectedSpeed());
         }
         if(System.currentTimeMillis() >= startTime + Constants.ShooterConstants.reverseIndexWhenShootingTime + Constants.ShooterConstants.spinUpTime)
         {
-          shooter.setSpeed(Constants.ShooterConstants.shootHighSpeed);
+          shooter.setSpeed(shooter.getSelectedSpeed());
           indexer.setIndexMotor(Constants.IndexerConstants.indexMotorSpeed);
         }
     }

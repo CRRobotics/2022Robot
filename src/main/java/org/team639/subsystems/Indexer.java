@@ -3,7 +3,6 @@ package org.team639.subsystems;
 
 import org.team639.lib.Constants;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -12,16 +11,10 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 public class Indexer extends SubsystemBase {
     private VictorSPX indexMotor = new VictorSPX(Constants.Ports.Indexer.indexMotorID);
-   // private DigitalInput bottomSensor = new DigitalInput(Constants.Ports.Indexer.indexBottomSensorID);
-   // private DigitalInput topSensor = new DigitalInput(Constants.Ports.Indexer.indexTopSensorID);
-
-    //TODO configure top sensor
-    //private ColorSensorV3 placeholderSensor = new ColorSensorV3(I2C.Port.kMXP);
 
     public Indexer() {
         indexMotor.configFactoryDefault();
         indexMotor.setNeutralMode(NeutralMode.Brake);
-        //bottomSensor.configureProximitySensor(ColorSensorV3.ProximitySensorResolution.kProxRes11bit, ColorSensorV3.ProximitySensorMeasurementRate.kProxRate50ms);
     }
 
     @Override
@@ -37,13 +30,4 @@ public class Indexer extends SubsystemBase {
         indexMotor.set(ControlMode.PercentOutput, speed);
     }
 
-    // public boolean bottomDetected()
-    // {
-    //     return bottomSensor.get();
-    // }
-
-    // public boolean topDetected()
-    // {
-    //     return topSensor.get();
-    // }
 }

@@ -5,6 +5,7 @@
 package org.team639.commands.Indexer;
 
 import org.team639.lib.Constants;
+import org.team639.subsystems.Acquisition;
 import org.team639.subsystems.Indexer;
 import org.team639.subsystems.Shooter;
 
@@ -13,13 +14,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ManualIndexer extends CommandBase {
   private Indexer indexer;
   private Shooter shooter;
+  private Acquisition acquisition;
 
   /** Creates a new ManualIndexer. */
-  public ManualIndexer(Indexer indexer, Shooter shooter) {
+  public ManualIndexer(Shooter shooter, Indexer indexer, Acquisition acquisition) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.indexer = indexer;
     this.shooter = shooter;
-    addRequirements(indexer, shooter);
+    this.acquisition = acquisition;
+    addRequirements(indexer, shooter, acquisition);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -27,6 +30,7 @@ public class ManualIndexer extends CommandBase {
   public void execute() {
     shooter.setSpeed(Constants.ShooterConstants.reverseIndexSpeed);
     indexer.setIndexMotor(Constants.IndexerConstants.indexMotorSpeed);
+    acquisition.spinAcquisitionIn(acquisition.getAcquisitionSpeed());
   }
 
   // Called once the command ends or is interrupted.
@@ -34,6 +38,7 @@ public class ManualIndexer extends CommandBase {
   public void end(boolean interrupted) {
     shooter.setSpeed(0);
     indexer.setIndexMotor(0);
+    acquisition.stopAcquisitionMotor();
   }
 
   // Returns true when the command should end.

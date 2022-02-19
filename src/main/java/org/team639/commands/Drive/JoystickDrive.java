@@ -37,7 +37,7 @@ public class JoystickDrive extends CommandBase {
   public void execute() {
     switch (RobotContainer.getDriveLayout()) {
       case Swapcade:
-        if(!DriveTrain.reversedHeading)
+        if(!driveTrain.isReversedHeading())
           arcadeDrive(handleDeadband(ControllerWrapper.DriverController.getLeftY(), Constants.ControlboardConstants.kJoystickThreshold), handleDeadband(ControllerWrapper.DriverController.getRightX(), Constants.ControlboardConstants.kJoystickThreshold));
         else
           arcadeReversed(handleDeadband(ControllerWrapper.DriverController.getLeftY(), Constants.ControlboardConstants.kJoystickThreshold), handleDeadband(ControllerWrapper.DriverController.getRightX(), Constants.ControlboardConstants.kJoystickThreshold));
@@ -107,8 +107,8 @@ public class JoystickDrive extends CommandBase {
       turnMultiplier = 2d / 3d;
     turnValue = turnValue * turnMultiplier;
  
-    double left = speed + turnValue;
-    double right = speed - turnValue;
+    double right = speed + turnValue;
+    double left = speed - turnValue;
 
     driveTrain.setSpeedsPercent(-left, -right);
   }

@@ -9,9 +9,15 @@ import org.team639.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ReverseHeading extends CommandBase {
+  private DriveTrain driveTrain;
+  public ReverseHeading(DriveTrain driveTrain)
+  {
+    this.driveTrain = driveTrain;
+    addRequirements(driveTrain);
+  }
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    DriveTrain.reversedHeading = !DriveTrain.reversedHeading;
+    driveTrain.setHeading(!driveTrain.isReversedHeading());
   }
 }
