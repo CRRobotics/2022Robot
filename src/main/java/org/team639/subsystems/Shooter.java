@@ -6,6 +6,8 @@ package org.team639.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import org.team639.lib.Constants;
@@ -26,7 +28,9 @@ public class Shooter extends SubsystemBase {
   public double mainRPM;
   public double secondaryRPM;
 
-  private PIDController shooterPID = new PIDController(0.0001, 0.001, 0);
+  //private PIDController shooterPID = new PIDController(0.0001, 0.001, 0);
+
+  private SparkMaxPIDController maxController;
 
   private Servo mainLinearActuator = new Servo(Constants.Ports.Shooter.mainActuatorID);
   private Servo followLinearActuator = new Servo(Constants.Ports.Shooter.followActuatorID);
@@ -39,14 +43,24 @@ public class Shooter extends SubsystemBase {
     mainMotor.setIdleMode(IdleMode.kCoast);
     followMotor.setIdleMode(IdleMode.kCoast);
 
-    mainMotor.follow(followMotor);
+    followMotor.follow(mainMotor, true);
 
-    mainLinearActuator.setBounds(2.0,1.8,1.5,1.2,1.0);
+    maxController = mainMotor.getPIDController();
+
+    maxController.setP(Constants.ShooterConstants.shooterP);
+    maxController.setI(Constants.ShooterConstants.shooterI);
+    maxController.setD(Constants.ShooterConstants.shooterD);
+
+    // mainMotor.burnFlash();
+    // followMotor.burnFlash();
+
+    mainLinearActuator.setBounds(1.8,1.8,1.5,1.2,1.0);
     mainLinearActuator.setSpeed(1);
 
-    followLinearActuator.setBounds(2.0,1.8,1.5,1.2,1.0);
+    followLinearActuator.setBounds(1.8,1.8,1.5,1.2,1.0);
     followLinearActuator.setSpeed(1);
 
+    setActuator(0);
   }
 
   @Override
@@ -67,7 +81,9 @@ public class Shooter extends SubsystemBase {
    * @param setpoint RPM to set shooter
    */
   public void setSpeedRPM(int setpoint){
-    mainMotor.set(shooterPID.calculate(mainEncoder.getPosition(), setpoint));
+    maxController.setReference(setpoint, ControlType.kVelocity);
+    
+
   }
 
   /**
@@ -111,10 +127,12 @@ public class Shooter extends SubsystemBase {
    */
   public void BangBangControl(double rpm)
   {
-      if(mainEncoder.getVelocity() > rpm)
-          setSpeed(0);
-      else
-          setSpeed(1);
+    if(mainMotor.getIdleMode().equals(IdleMode.kBrake))
+      setCoast();
+    if(mainEncoder.getVelocity() > rpm)
+        setSpeed(0);
+    else
+        setSpeed(1);
   }
 
   public void setBrake()
