@@ -20,4 +20,9 @@ public class ReverseHeading extends CommandBase {
   public void initialize() {
     driveTrain.setHeading(!driveTrain.isReversedHeading());
   }
+
+  public boolean isFinished()
+  {
+    return true;
+  }
 }
