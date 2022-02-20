@@ -108,7 +108,7 @@ public interface Constants
 
         public static final double driveMultiplier = 0.8; //tune this down a bit....maybe
 
-        public static final double kDriveRampSeconds = 0.3;
+        public static final double kDriveRampSeconds = 0.5;
         
         public static final double supplyCurrentLimiter = 30;
         public static final double supplyCurrentThreshHold = 35;

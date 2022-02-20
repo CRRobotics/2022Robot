@@ -6,8 +6,6 @@ package org.team639.lib.math;
 
 import org.team639.lib.Constants;
 import org.team639.lib.states.GearMode;
-import org.team639.subsystems.DriveTrain;
-
 
 /**
  * Conversion of drive constants
