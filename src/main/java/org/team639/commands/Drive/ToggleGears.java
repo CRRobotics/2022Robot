@@ -22,16 +22,21 @@ public class ToggleGears extends CommandBase {
   @Override
   public void initialize() {
     System.out.println("ToggleGears initialized");
-    if(driveTrain.getGearMode() == GearMode.low)
+    if(driveTrain.getGearMode().equals(GearMode.low))
       driveTrain.toggleGearHigh();
     else
       driveTrain.toggleGearLow();
 
   }
 
+  public boolean isFinished()
+  {
+    return true;
+  }
+
   public void end(boolean interrupted)
   {
-    System.out.println("Gear shift, shifting outta here");
+    System.out.println("Gears Shifted");
   }
 
 }

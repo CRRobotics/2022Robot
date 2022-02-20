@@ -259,7 +259,7 @@ public class DriveTrain extends SubsystemBase {
 
     public double getRatio()
     {
-        return getGearMode() == GearMode.high ? Constants.DriveConstants.highGearRatio : Constants.DriveConstants.lowGearRatio;
+        return getGearMode().equals(GearMode.high) ? Constants.DriveConstants.highGearRatio : Constants.DriveConstants.lowGearRatio;
     }
 
     public boolean isReversedHeading()

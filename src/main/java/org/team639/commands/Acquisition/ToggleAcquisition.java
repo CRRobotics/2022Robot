@@ -18,19 +18,18 @@ public class ToggleAcquisition extends CommandBase {
     addRequirements(acquisition);
   }
 
-  private void addRequirements(Acquisition acquistion) {
-    this.acquisition = acquisition;
-  }
-
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(acquisition.acqPos() == AcquisitionPosition.down)
+    if(acquisition.acqPos().equals(AcquisitionPosition.up))
       acquisition.acquisitionNeutral();
-    else if(acquisition.acqPos() == AcquisitionPosition.neutral)
-      acquisition.acquisitionUp();
     else
-      acquisition.acquisitionDown();
+      acquisition.acquisitionUp();
+  }
+
+  public boolean isFinished()
+  {
+    return true;
   }
 
   
