@@ -5,9 +5,8 @@
 package org.team639.lib.states;
 
 public enum DriveLayout {
-    Swapcade,
     Arcade,
-    ArcadeReversed,
-    CheesyDrive,
+    ArcadeInverseK,
+    CurvatureDrive,
     Tank   
 }

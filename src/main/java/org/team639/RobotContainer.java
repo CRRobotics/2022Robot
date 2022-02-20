@@ -66,11 +66,11 @@ public class RobotContainer {
   public static final TrajectoryFactory factory = new TrajectoryFactory("paths");
 
   static {
-    driveMode.setDefaultOption("Arcade Standard", DriveLayout.Arcade);
-    driveMode.addOption("Arcade Reversed", DriveLayout.ArcadeReversed);
-    driveMode.addOption("Swapcade", DriveLayout.Swapcade);
+    driveMode.addOption("Arcade Standard", DriveLayout.Arcade);
+    driveMode.addOption("Arcade InversedK", DriveLayout.ArcadeInverseK);
+    driveMode.addOption("Curvature", DriveLayout.CurvatureDrive);
     driveMode.addOption("Tank", DriveLayout.Tank);
-    driveMode.addOption("CheesyDrive", DriveLayout.CheesyDrive);
+
     SmartDashboard.putData("Drive Layout", driveMode);
   }
 
