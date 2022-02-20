@@ -133,9 +133,9 @@ public class RobotContainer {
     //ControllerWrapper.DriverButtonA.whenHeld(new ManualIndexer(indexer, shooter));
     ControllerWrapper.ControlButtonA.whenHeld(new ManualIndexer(shooter, indexer, acquisition));
     ControllerWrapper.DriverButtonY.whenPressed(new ShootOpenLoop(indexer, shooter));
-    ControllerWrapper.DriverButtonX.whenPressed(new ToggleGears(driveTrain).withTimeout(Constants.ControlboardConstants.defaultCommandTimeout));
+    ControllerWrapper.DriverButtonX.whenPressed(new ToggleGears(driveTrain));
     ControllerWrapper.DriverDPadDown.whenHeld(new RunAcquisition(acquisition, .1));
-    ControllerWrapper.DriverDPadUp.whenPressed(new ReverseHeading(driveTrain).withTimeout(Constants.ControlboardConstants.defaultCommandTimeout));
+    ControllerWrapper.DriverDPadUp.whenPressed(new ReverseHeading(driveTrain));
   }
 
   /**

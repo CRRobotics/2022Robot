@@ -153,8 +153,8 @@ public class JoystickDrive extends CommandBase {
       }
     }
 
-    double rightPwm = throttle - angularPower;
-    double leftPwm = throttle + angularPower;
+    double rightPwm = throttle + angularPower;
+    double leftPwm = throttle - angularPower;
     if (leftPwm > 1.0) {
       rightPwm -= overPower * (leftPwm - 1.0);
       leftPwm = 1.0;

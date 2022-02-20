@@ -26,4 +26,9 @@ public class ToggleActuator extends CommandBase {
       shooter.setActuator(1);
   }
 
+  public boolean isFinished()
+  {
+    return true;
+  }
+
 }
