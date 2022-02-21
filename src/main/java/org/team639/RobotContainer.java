@@ -4,8 +4,10 @@
 
 package org.team639;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import org.team639.auto.DriveRamsete;
 import org.team639.auto.TrajectoryFactory;
+import org.team639.commands.Acquisition.RunAcquisition;
 import org.team639.commands.Drive.*;
 import org.team639.commands.Shooter.ManualShooterAim;
 import org.team639.commands.Shooter.ShootOpenLoop;
@@ -162,7 +164,41 @@ public class RobotContainer {
       new DriveRamsete(driveTrain,"bounce1"), 
       new DriveRamsete(driveTrain,"bounce2"), 
       new DriveRamsete(driveTrain,"bounce1"), 
-      new DriveRamsete(driveTrain, "bounce3")); 
+      new DriveRamsete(driveTrain, "bounce3"));
+
+    final SequentialCommandGroup bottom4Ball = new SequentialCommandGroup( //18 points
+            new ParallelCommandGroup(
+                    new RunAcquisition(acquisition, 1),
+                    new DriveRamsete(driveTrain, "4ball 1")
+            ),
+            new ShootOpenLoop(indexer, shooter),
+            new ParallelCommandGroup(
+                    new DriveRamsete(driveTrain, "4ball 2")
+            ),
+                    new ShootOpenLoop(indexer, shooter)
+    );
+
+    final SequentialCommandGroup top2Ball = new SequentialCommandGroup( //10 points
+            new ParallelCommandGroup(
+                    new RunAcquisition(acquisition, 1),
+                    new DriveRamsete(driveTrain, "Top 2 ball")
+            ),
+            new ShootOpenLoop(indexer, shooter)
+    );
+
+    final SequentialCommandGroup bottom3Ball = new SequentialCommandGroup( //14 points
+            new ParallelCommandGroup(
+                    new RunAcquisition(acquisition, 1),
+                    new DriveRamsete(driveTrain, "Bottom 3 ball 1")
+            ),
+            new ShootOpenLoop(indexer, shooter),
+            new ParallelCommandGroup(
+                    new RunAcquisition(acquisition, 1),
+                    new DriveRamsete(driveTrain, "Bottom 3 ball 2")
+            ),
+            new ShootOpenLoop(indexer, shooter)
+
+    );
     //final SequentialCommandGroup threeBallFender = new SequentialCommandGroup(new ShootOpenLoop(indexer, shooter, rpm))
   }
 
