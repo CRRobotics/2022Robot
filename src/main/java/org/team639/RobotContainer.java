@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
@@ -65,9 +66,11 @@ public class RobotContainer {
   }
 
   static {
-    autoMode.setDefaultOption("AutoCross Line", AutonMode.crossLine);
-    autoMode.addOption("3BallFender", AutonMode.ThreeBallFender);
-    autoMode.addOption("BounceTest", AutonMode.bounceTest);
+    autoMode.setDefaultOption("AutoCross Line", AutonMode.ForwardTest);
+    autoMode.addOption("2BallAuto", AutonMode.TwoBall);
+    autoMode.addOption("4BallAuto", AutonMode.FourBall);
+    autoMode.addOption("Shoot", AutonMode.Shoot);
+    autoMode.addOption("BounceTest", AutonMode.BounceTest);
     SmartDashboard.putData("Auto Mode", autoMode);
   }
 
@@ -143,13 +146,25 @@ public class RobotContainer {
     switch(getAutonomousMode())
     {
       default:
-        auto = new AutoDriveForward(driveTrain, 2);
+        auto = auton.forwardTest;
         break;
-      case bounceTest:
+      case ForwardTest:
+        auto = auton.forwardTest;
+        break;
+      case Shoot:
+        auto = shootOpen;
+        break;
+      case TwoBall:
+        auto = auton.TwoBallAutonomous;
+        break;
+      case FourBall:
+        auto = auton.FourBallAutonomousAndRohitsJumper;
+        break;
+      case BounceTest:
         auto = auton.bounceTest;
         break;
     } 
-    return auton.bounceTest;
+    return auto;
   }
 
   /**
@@ -163,12 +178,39 @@ public class RobotContainer {
   
   class AutonomousRoutines
   {
+    //Testing commands
+    final SequentialCommandGroup forwardTest = new SequentialCommandGroup(
+      new DriveRamsete(driveTrain, "TestPath")
+    );
     final SequentialCommandGroup bounceTest = new SequentialCommandGroup(
       new DriveRamsete(driveTrain,"bounce1"), 
       new DriveRamsete(driveTrain,"bounce2"), 
       new DriveRamsete(driveTrain,"bounce1"), 
-      new DriveRamsete(driveTrain, "bounce3")); 
-    final SequentialCommandGroup threeBallFender = new SequentialCommandGroup(new ShootOpenLoop(indexer, shooter, acquisition));
+      new DriveRamsete(driveTrain, "bounce3")
+    ); 
+
+    //Start Position: 7.635, 1.786 - Facing bottom team ball, bumpers against the tarmac edge
+    final SequentialCommandGroup FourBallAutonomousAndRohitsJumper = new SequentialCommandGroup(
+      new ParallelCommandGroup(new DriveRamsete(driveTrain, "4BallPart1"), index),
+      //ShootCommand
+      new DriveRamsete(driveTrain, "4BallPart2"),
+      new ParallelCommandGroup(new DriveRamsete(driveTrain, "4BallPart3"), index),
+      new DriveRamsete(driveTrain, "4BallPart4")
+      //ShootVisions
+    );
+
+    //Start Position: Anywhere on the field - Bumpers pushed against tarmac, facing team ball
+    final SequentialCommandGroup TwoBallAutonomous = new SequentialCommandGroup(
+      new ParallelCommandGroup(new DriveRamsete(driveTrain, "2BallAutonomous"), index),
+      new DriveRamsete(driveTrain, "2BallAutonomousPart2")
+      //ShootVisions
+    );
+    final SequentialCommandGroup Shoot = new SequentialCommandGroup(
+      //ShootVisions
+    );
+
+
+
   }
 
 }

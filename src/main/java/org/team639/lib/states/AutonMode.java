@@ -5,8 +5,9 @@
 package org.team639.lib.states;
 
 public enum AutonMode {
-    crossLine,
-    weave,
-    bounceTest,
-    ThreeBallFender
+    FourBall,
+    TwoBall,
+    Shoot,
+    ForwardTest,
+    BounceTest
 }
