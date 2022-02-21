@@ -12,7 +12,6 @@ import com.revrobotics.CANSparkMax.IdleMode;
 
 import org.team639.lib.Constants;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Servo;
@@ -104,7 +103,7 @@ public class Shooter extends SubsystemBase {
    * Sets shooter to certain rpm
    * @param setpoint RPM to set shooter
    */
-  public void setSpeedRPM(int setpoint){
+  public void setSpeedRPM(double setpoint){
     maxController.setReference(setpoint, ControlType.kVelocity);
     
 

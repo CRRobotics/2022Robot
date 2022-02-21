@@ -113,7 +113,6 @@ public interface Constants
         public static final double supplyCurrentLimiter = 30;
         public static final double supplyCurrentThreshHold = 35;
            
-        //TODO: Find this
         public static final double lowGearRatio = 12.255;
         public static final double highGearRatio = 5.392;
 

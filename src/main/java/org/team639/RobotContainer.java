@@ -4,25 +4,16 @@
 
 package org.team639;
 
-import org.team639.auto.DriveRamsete;
-import org.team639.auto.TrajectoryFactory;
-import org.team639.commands.Acquisition.RunAcquisition;
-import org.team639.commands.Acquisition.SpitCargo;
-import org.team639.commands.Acquisition.ToggleAcquisition;
+import org.team639.auto.*;
+import org.team639.commands.Acquisition.*;
 import org.team639.commands.Drive.*;
-import org.team639.commands.Indexer.AutoIndexer;
-import org.team639.commands.Indexer.ManualIndexer;
-import org.team639.commands.Shooter.ManualShooterAim;
-import org.team639.commands.Shooter.ShootOpenLoop;
-import org.team639.commands.Shooter.SpitShooter;
-import org.team639.commands.Shooter.ToggleActuator;
+import org.team639.commands.Indexer.*;
+import org.team639.commands.Shooter.*;
 import org.team639.controlboard.ControllerWrapper;
 import org.team639.subsystems.*;
+import org.team639.lib.states.*;
 import org.team639.lib.Constants;
-import org.team639.lib.states.AutonMode;
-import org.team639.lib.states.DriveLayout;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -41,7 +32,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  //NetworkTableEntry shooter_test = new NetworkTableEntry("SmartDashboard", handle)
 
   // Subsystem declaration
   private final DriveTrain driveTrain = new DriveTrain();
@@ -52,16 +42,16 @@ public class RobotContainer {
   // Command Declaration
   AutonomousRoutines auton = new AutonomousRoutines();
   private final JoystickDrive joystickDrive = new JoystickDrive(driveTrain);
-  private final AutoIndexer autoIndexer = new AutoIndexer(indexer, acquisition, shooter);
-
-  private final SpitShooter spitter = new SpitShooter(shooter, 0);
   private final ManualShooterAim manualAim = new ManualShooterAim(shooter);
+  private final ToggleAcquisition toggleAcquisition = new ToggleAcquisition(acquisition);
+  private final ShootOpenLoop shootOpen = new ShootOpenLoop(indexer, shooter, acquisition);
+  private final ShootClosedLoop shootClosed = new ShootClosedLoop(indexer, shooter, acquisition, shooter.getSelectedRPM());
+  private final SpitCargo eject = new SpitCargo(shooter, indexer, acquisition);
+  private final ManualIndexer index = new ManualIndexer(shooter, indexer, acquisition);
   
-
   public static SendableChooser<DriveLayout> driveMode = new SendableChooser<>();
   public static SendableChooser<AutonMode> autoMode = new SendableChooser<>();
   public static SendableChooser<String> songChooser = new SendableChooser<>();
-
 
   public static final TrajectoryFactory factory = new TrajectoryFactory("paths");
 
@@ -130,12 +120,17 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    //ControllerWrapper.DriverButtonA.whenHeld(new ManualIndexer(indexer, shooter));
-    ControllerWrapper.ControlButtonA.whenHeld(new ManualIndexer(shooter, indexer, acquisition));
-    ControllerWrapper.DriverButtonY.whenPressed(new ShootOpenLoop(indexer, shooter));
-    ControllerWrapper.DriverButtonX.whenPressed(new ToggleGears(driveTrain));
-    ControllerWrapper.DriverDPadDown.whenHeld(new RunAcquisition(acquisition, .1));
-    ControllerWrapper.DriverDPadUp.whenPressed(new ReverseHeading(driveTrain));
+    //Driver
+    ControllerWrapper.DriverRightBumper.whenPressed(new ToggleGears(driveTrain));
+    ControllerWrapper.DriverLeftBumper.whenPressed(new ReverseHeading(driveTrain));
+
+    //Controller
+    ControllerWrapper.ControlRightBumper.whenHeld(index);
+    ControllerWrapper.ControlLeftBumper.whenHeld(eject);
+
+    ControllerWrapper.ControlButtonY.whenPressed(shootOpen);
+    ControllerWrapper.ControlButtonB.whenPressed(toggleAcquisition);
+    ControllerWrapper.ControlButtonA.whenPressed(shootClosed);
   }
 
   /**
@@ -164,6 +159,7 @@ public class RobotContainer {
    CommandScheduler.getInstance().setDefaultCommand(driveTrain, joystickDrive);
     CommandScheduler.getInstance().setDefaultCommand(shooter, manualAim);
   }
+
   
   class AutonomousRoutines
   {
@@ -172,7 +168,7 @@ public class RobotContainer {
       new DriveRamsete(driveTrain,"bounce2"), 
       new DriveRamsete(driveTrain,"bounce1"), 
       new DriveRamsete(driveTrain, "bounce3")); 
-    final SequentialCommandGroup threeBallFender = new SequentialCommandGroup(new ShootOpenLoop(indexer, shooter));
+    final SequentialCommandGroup threeBallFender = new SequentialCommandGroup(new ShootOpenLoop(indexer, shooter, acquisition));
   }
 
 }

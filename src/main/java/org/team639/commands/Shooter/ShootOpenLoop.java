@@ -6,20 +6,24 @@ package org.team639.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import org.team639.lib.Constants;
+import org.team639.subsystems.Acquisition;
 import org.team639.subsystems.Indexer;
 import org.team639.subsystems.Shooter;
 
 public class ShootOpenLoop extends CommandBase {
-    Indexer indexer;
-    Shooter shooter;
+    private Indexer indexer;
+    private Shooter shooter;
+    private Acquisition acquisition;
 
     long startTime;
 
-    public ShootOpenLoop(Indexer indexer, Shooter shooter) {
+    public ShootOpenLoop(Indexer indexer, Shooter shooter, Acquisition acquisition) {
         this.indexer = indexer;
         this.shooter = shooter;
-        addRequirements(indexer, shooter);
+        this.acquisition = acquisition;
+        addRequirements(indexer, shooter, acquisition);
 
+        acquisition.acquisitionNeutral();
     }
 
     @Override
@@ -41,6 +45,7 @@ public class ShootOpenLoop extends CommandBase {
         {
           shooter.setSpeed(shooter.getSelectedSpeed());
           indexer.setIndexMotor(Constants.IndexerConstants.indexMotorSpeed);
+          acquisition.spinAcquisition(acquisition.getAcquisitionSpeed());
         }
     }
 

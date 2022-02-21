@@ -3,6 +3,7 @@ package org.team639.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -44,35 +45,32 @@ public class Acquisition extends SubsystemBase {
      * Puts acquisition down
      */
     public void acquisitionNeutral() {
-        // if(!isAcquisitionDown())
-        // {
-        //     leftPiston.set(true);
-        //     rightPiston.set(true);
-        //     acquisitionDown = true;
-        // }
-        extend.set(true);
-        retract.set(false);
-
+        if(!(acqPos().equals(AcquisitionPosition.neutral)))
+        {
+            extend.set(true);
+            retract.set(false);
+        }
     }
 
     /**
      * Puts acquisition up
      */
     public void acquisitionDown() {
-        // if(isAcquisitionDown())
-        // {
-        //     leftPiston.set(false);
-        //     rightPiston.set(false);
-        //     acquisitionDown = false;
-        // }
-        extend.set(false);
-        retract.set(true);
+        if(!(acqPos().equals(AcquisitionPosition.down)))
+        {
+            extend.set(false);
+            retract.set(true);
+        }
+        
     }
 
     public void acquisitionUp()
     {
-        extend.set(false);
-        retract.set(false);
+        if(!(acqPos().equals(AcquisitionPosition.up)))
+        {
+            extend.set(false);
+            retract.set(false);
+        }
     }
 
     public AcquisitionPosition acqPos()
@@ -90,17 +88,11 @@ public class Acquisition extends SubsystemBase {
     }
 
     /**
-     * Spins cargo in
+     * Spins acquisition
+     * @param speed from -1.0 to 1.0
      */
-    public void spinAcquisitionIn(double speed) {
-        acquisitionMotorMain.set(speed);
-    }
-
-    /**
-     * Spins cargo out
-     */
-    public void spinAcquisitionOut(double speed) {
-        acquisitionMotorMain.set(speed*-1);
+    public void spinAcquisition(double speed) {
+        acquisitionMotorMain.set(MathUtil.clamp(speed,-1.0, 1.0));
     }
 
     public void stopAcquisitionMotor() {

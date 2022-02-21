@@ -6,21 +6,24 @@ package org.team639.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import org.team639.lib.Constants;
+import org.team639.subsystems.Acquisition;
 import org.team639.subsystems.Indexer;
 import org.team639.subsystems.Shooter;
 
 public class ShootClosedLoop extends CommandBase {
   private Indexer indexer;
   private Shooter shooter;
-  private int rpm;
+  private Acquisition acquisition;
+  private double rpm;
 
   private long startTime;
 
-  public ShootClosedLoop(Indexer indexer, Shooter shooter, int rpm) {
+  public ShootClosedLoop(Indexer indexer, Shooter shooter, Acquisition acquisition, double rpm) {
       this.indexer = indexer;
       this.shooter = shooter;
+      this.acquisition = acquisition;
       this.rpm = rpm;
-      addRequirements(indexer, shooter);
+      addRequirements(indexer, shooter, acquisition);
   }
 
   @Override
@@ -28,6 +31,8 @@ public class ShootClosedLoop extends CommandBase {
       startTime = System.currentTimeMillis();
       shooter.setSpeed(Constants.ShooterConstants.reverseIndexSpeed);
       indexer.setIndexMotor(-Constants.IndexerConstants.indexMotorSpeed);
+
+      acquisition.acquisitionNeutral();
   }
 
   @Override
@@ -38,8 +43,8 @@ public class ShootClosedLoop extends CommandBase {
       {
         shooter.setSpeedRPM(rpm);
         indexer.setIndexMotor(Constants.IndexerConstants.indexMotorSpeed);
-      }
-        
+        acquisition.spinAcquisition(acquisition.getAcquisitionSpeed());
+      }   
   }
 
   @Override

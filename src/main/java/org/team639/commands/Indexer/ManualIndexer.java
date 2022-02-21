@@ -30,7 +30,7 @@ public class ManualIndexer extends CommandBase {
   public void execute() {
     shooter.setSpeed(Constants.ShooterConstants.reverseIndexSpeed);
     indexer.setIndexMotor(Constants.IndexerConstants.indexMotorSpeed);
-    acquisition.spinAcquisitionIn(acquisition.getAcquisitionSpeed());
+    acquisition.spinAcquisition(acquisition.getAcquisitionSpeed());
   }
 
   // Called once the command ends or is interrupted.

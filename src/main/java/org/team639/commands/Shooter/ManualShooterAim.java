@@ -4,10 +4,8 @@
 
 package org.team639.commands.Shooter;
 
-import org.team639.controlboard.ControllerWrapper;
 import org.team639.subsystems.Shooter;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ManualShooterAim extends CommandBase {

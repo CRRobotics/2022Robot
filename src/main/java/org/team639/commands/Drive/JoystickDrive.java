@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  */
 public class JoystickDrive extends CommandBase {
   private DriveTrain driveTrain;
-  private double mQuickStopAccumulator;
 
   /** Creates a new JoystickDrive. */
   public JoystickDrive(DriveTrain driveTrain) {
