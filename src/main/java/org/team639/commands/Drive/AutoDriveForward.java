@@ -16,6 +16,8 @@ public class AutoDriveForward extends CommandBase {
   private PIDController leftController = new PIDController(Constants.AutoConstants.autoForwardP, Constants.AutoConstants.autoForwardI, Constants.AutoConstants.autoForwardD);
   private PIDController rightController = new PIDController(Constants.AutoConstants.autoForwardP, Constants.AutoConstants.autoForwardI, Constants.AutoConstants.autoForwardD);
 
+
+
   private double startLeft;
   private double startRight;
   private double targetLeft;
@@ -26,6 +28,9 @@ public class AutoDriveForward extends CommandBase {
 
   /** Creates a new AutoDriveForward. */
   public AutoDriveForward(DriveTrain driveTrain, double distance) {
+    leftController.setTolerance(Constants.AutoConstants.autoForwardThreshhold);
+    rightController.setTolerance(Constants.AutoConstants.autoForwardThreshhold);
+
     this.driveTrain = driveTrain;
     addRequirements(driveTrain);
 
@@ -66,7 +71,7 @@ public class AutoDriveForward extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(errorLeft <= 0.05 && errorRight <= 0.05)
+    if(leftController.atSetpoint() && rightController.atSetpoint())
       return true;
     return false;
   }

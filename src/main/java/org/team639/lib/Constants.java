@@ -91,7 +91,8 @@ public interface Constants
         public static final double autoForwardP = 0.00015;
         public static final double autoForwardI = 0.0;
         public static final double autoForwardD = 0.0;
-        public static final double autoRotateThreshHold = 4;
+        public static final double autoRotateThreshHold = 0.25;
+        public static final double autoForwardThreshhold = 0.25;
 
         public interface pathNames
         {

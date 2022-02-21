@@ -24,6 +24,8 @@ public class Autorotate extends CommandBase {
 
   /** Creates a new AutoRotate. */
   public Autorotate(DriveTrain driveTrain, double angle) {
+    turnController.setTolerance(Constants.AutoConstants.autoRotateThreshHold);
+    
     this.driveTrain = driveTrain;
     addRequirements(driveTrain);
     angle %= 360;
@@ -71,7 +73,7 @@ public class Autorotate extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (error < Constants.AutoConstants.autoRotateThreshHold)
+    if (turnController.atSetpoint())
       return true;
     return false;
   }
