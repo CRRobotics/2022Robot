@@ -20,5 +20,8 @@ public class ShootAtDistance extends CommandBase
         this.shooter = shooter;
     }
 
-
+    @Override
+    public void initialize() {
+        super.initialize();
+    }
 }

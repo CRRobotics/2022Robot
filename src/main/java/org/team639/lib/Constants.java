@@ -16,7 +16,7 @@ import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstrai
 /**
  * All robot constants
  */
-public interface Constants 
+public interface Constants
 {
     public interface Ports
     {
@@ -74,20 +74,20 @@ public interface Constants
 
         public static final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);
         public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.DriveConstants.chassisWidth);
-    
+
         public static final DifferentialDriveVoltageConstraint autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
             new SimpleMotorFeedforward(kS,
                 kV,
                 kA),
             kinematics,
             12);
-        
+
         public static final TrajectoryConfig config = new TrajectoryConfig(kMaxSpeedMetersPerSecond,
             kMaxAccelerationMetersPerSecondSquared)
                 .setKinematics(kinematics)
                 .addConstraint(autoVoltageConstraint);
 
-        
+
         public static final double autoRotateP = .035;
         public static final double autoRotateI = 0.0;
         public static final double autoRotateD = 0.055;
@@ -114,10 +114,10 @@ public interface Constants
         public static final double driveMultiplier = 0.8; //tune this down a bit....maybe
 
         public static final double kDriveRampSeconds = 0.3;
-        
+
         public static final double supplyCurrentLimiter = 30;
         public static final double supplyCurrentThreshHold = 35;
-           
+
         public static final double lowGearRatio = 12.255;
         public static final double highGearRatio = 5.392;
 
@@ -148,9 +148,10 @@ public interface Constants
 
         public static final TreeMap<Double, AngleSpeed> shootMap = new TreeMap<>();
 
+
     }
 
-    public interface IndexerConstants 
+    public interface IndexerConstants
     {
         public static final int indexSensorDistance = 10;
         public static final double indexMotorSpeed = 1;

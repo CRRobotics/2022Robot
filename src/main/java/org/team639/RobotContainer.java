@@ -57,6 +57,11 @@ public class RobotContainer {
 
   public static final TrajectoryFactory factory = new TrajectoryFactory("paths");
 
+  static
+  {
+    Constants.ShooterConstants.shootMap.put();
+  }
+
   static {
     driveMode.setDefaultOption("Arcade Standard", DriveLayout.Arcade);
     driveMode.addOption("Arcade InversedK", DriveLayout.ArcadeInverseK);
