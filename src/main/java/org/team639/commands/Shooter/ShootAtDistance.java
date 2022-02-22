@@ -12,10 +12,13 @@ import java.util.HashMap;
 
 public class ShootAtDistance extends CommandBase
 {
+    Indexer indexer;
+    Shooter shooter;
     public ShootAtDistance(Indexer indexer, Shooter shooter)
     {
-
-
+        this.indexer = indexer;
+        this.shooter = shooter;
     }
+
 
 }
