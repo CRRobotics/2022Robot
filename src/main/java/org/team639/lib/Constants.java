@@ -4,6 +4,10 @@
 
 package org.team639.lib;
 
+import java.util.TreeMap;
+
+import org.team639.lib.math.AngleSpeed;
+
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
@@ -141,6 +145,9 @@ public interface Constants
         public static final double shooterI = 0.00000003;
         public static final double shooterD = 0.0;
         public static final double shooterFF = 0.00017;
+
+        public static final TreeMap<Double, AngleSpeed> shootMap = new TreeMap<>();
+
     }
 
     public interface IndexerConstants 
