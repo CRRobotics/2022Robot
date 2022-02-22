@@ -109,7 +109,7 @@ public interface Constants
 
         public static final double driveMultiplier = 0.8; //tune this down a bit....maybe
 
-        public static final double kDriveRampSeconds = 0.5;
+        public static final double kDriveRampSeconds = 0.3;
         
         public static final double supplyCurrentLimiter = 30;
         public static final double supplyCurrentThreshHold = 35;
@@ -129,17 +129,18 @@ public interface Constants
     public interface ShooterConstants
     {
         public static final double reverseIndexSpeed = -0.2;
-        public static final double reverseIndexWhenShootingTime = 300;
-        public static final double spinUpTime = 100;
+        public static final double reverseIndexWhenShootingTime = 100;
+        public static final double spinUpTime = 700;
 
         public static final double pureShootingTime = spinUpTime + reverseIndexWhenShootingTime + 1500;
 
         public static final int shootHighRPM = 500;//5000;
         public static final double shootHighSpeed = 0.1;//1;
 
-        public static final double shooterP = 0.0015;
-        public static final double shooterI = 0.0;
+        public static final double shooterP = 0.0002;
+        public static final double shooterI = 0.00000003;
         public static final double shooterD = 0.0;
+        public static final double shooterFF = 0.00017;
     }
 
     public interface IndexerConstants 

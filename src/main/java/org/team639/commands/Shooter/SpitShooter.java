@@ -22,7 +22,7 @@ public class SpitShooter extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setSpeed(speed);
+    shooter.setSpeedRPM(shooter.getSelectedRPM());
   }
 
   // Called once the command ends or is interrupted.

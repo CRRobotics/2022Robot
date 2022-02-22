@@ -23,9 +23,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Shooter extends SubsystemBase {
   private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
 
-  private NetworkTableEntry shooterSpeed = tab.add("RPM", 5000).withWidget(BuiltInWidgets.kNumberSlider).getEntry();
-  private NetworkTableEntry hoodPositioNetworkTableEntry = tab.add("HoodAngle", 0).withWidget(BuiltInWidgets.kNumberSlider).getEntry();
+  private NetworkTableEntry shooterSpeed = tab.add("RPM", 5000).getEntry();
+  private NetworkTableEntry hoodPositioNetworkTableEntry = tab.add("HoodAngle", 0).getEntry();
   private NetworkTableEntry shooterSpeedPercent = tab.add("ShootPercent", 0).withWidget(BuiltInWidgets.kNumberSlider).getEntry();
+
+  private NetworkTableEntry FF = tab.add("FF",0).getEntry();
+  private NetworkTableEntry P = tab.add("P",0).getEntry();
+  private NetworkTableEntry I = tab.add("I",0).getEntry();
+
 
   //Motor Controllers
   private CANSparkMax mainMotor = new CANSparkMax(Constants.Ports.Shooter.mainID, CANSparkMax.MotorType.kBrushless);
@@ -48,8 +53,8 @@ public class Shooter extends SubsystemBase {
     mainMotor.restoreFactoryDefaults();
     followMotor.restoreFactoryDefaults();
 
-    mainMotor.setIdleMode(IdleMode.kCoast);
-    followMotor.setIdleMode(IdleMode.kCoast);
+    mainMotor.setIdleMode(IdleMode.kBrake);
+    followMotor.setIdleMode(IdleMode.kBrake);
 
     followMotor.follow(mainMotor, true);
 
@@ -58,9 +63,13 @@ public class Shooter extends SubsystemBase {
     maxController.setP(Constants.ShooterConstants.shooterP);
     maxController.setI(Constants.ShooterConstants.shooterI);
     maxController.setD(Constants.ShooterConstants.shooterD);
+    maxController.setFF(Constants.ShooterConstants.shooterFF);
+    // maxController.setP(0.0002);
+    // maxController.setI(0.0);
+    // maxController.setD(0);
+    // maxController.setFF(0.00017);
 
-    // mainMotor.burnFlash();
-    // followMotor.burnFlash();
+
 
     mainLinearActuator.setBounds(1.8,1.8,1.5,1.2,1.0);
     mainLinearActuator.setSpeed(1);
@@ -69,13 +78,18 @@ public class Shooter extends SubsystemBase {
     followLinearActuator.setSpeed(1);
 
     setActuator(0);
+    //SmartDashboard.putData(maxController);
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Shooter RPM", getVelocity());
-  }
 
+    // maxController.setP(P.getDouble(0));
+    // maxController.setFF(FF.getDouble(0));
+    // maxController.setI(I.getDouble(0));
+
+  }
 /**
  * Sets shooter at certain speed
  * @param speed speed in percent from 1 to -1
@@ -169,5 +183,6 @@ public class Shooter extends SubsystemBase {
     mainMotor.setIdleMode(IdleMode.kCoast);
     followMotor.setIdleMode(IdleMode.kCoast);
   }
+
 
 }

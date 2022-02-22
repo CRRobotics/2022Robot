@@ -6,10 +6,13 @@ package org.team639;
 
 import org.team639.lib.Constants;
 
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 //TODO: I MADE A TON OF CHANGES SO BE SURE TO TEST THE FOLLOWING:
@@ -28,12 +31,15 @@ public class Robot extends TimedRobot {
   Compressor phCompressor = new Compressor(Constants.Ports.PneumaticsModuleType.phCompressorID, PneumaticsModuleType.REVPH);
 
   private RobotContainer m_robotContainer;
-  public static double horizontalDistanceToTarget;
-  public static double horizontalAngleToTarget;
+  public static NetworkTableEntry llpython;
 
   public static double runningHorizontalAngle;
   public static double runningHorizontalDistance;
 
+  public static double lastHorizontalAngle;
+  public static double lastHorizontalDistance;
+
+  private static double[] defaultVals = {361.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
   
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -57,11 +63,11 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
+    llpython = NetworkTableInstance.getDefault().getTable("limelight").getEntry("llpython");
 
-   // System.out.println(NetworkTableInstance.getDefault().getTable("limelight").getEntry("HorizontalDistance").getDouble(-1.0));
-   // System.out.println(NetworkTableInstance.getDefault().getTable("limelight").getEntry("HorizontalAngle").getDouble(361.0));
-    horizontalAngleToTarget = NetworkTableInstance.getDefault().getTable("limelight").getEntry("HorizontalAngle").getDouble(-1.0);
-    horizontalDistanceToTarget = NetworkTableInstance.getDefault().getTable("limelight").getEntry("HorizontalDistance").getDouble(361.0);
+    SmartDashboard.putNumber("Angle to target", getAngleToTarget());
+    SmartDashboard.putNumber("Distance to target", getDistanceToTarget());
+
     CommandScheduler.getInstance().run();
   }
 
@@ -113,11 +119,11 @@ public class Robot extends TimedRobot {
    */
   public static double getAngleToTarget()
   {
-    if(horizontalAngleToTarget != 361.0)
-    {
-      runningHorizontalAngle = horizontalAngleToTarget;
-    }
+    runningHorizontalAngle = llpython.getDoubleArray(defaultVals)[0];
     return runningHorizontalAngle;
+    // runningHorizontalAngle = llpython.getDoubleArray(defaultVals)[0];
+    // lastHorizontalAngle = runningHorizontalAngle == -1.0 ? lastHorizontalAngle : runningHorizontalAngle;
+    // return Units.inchesToMeters(lastHorizontalAngle);
   }
 
   /**
@@ -126,10 +132,8 @@ public class Robot extends TimedRobot {
    */
   public static double getDistanceToTarget()
   {
-    if(horizontalDistanceToTarget != -1.0)
-    {
-      runningHorizontalDistance = horizontalDistanceToTarget;
-    }
-    return runningHorizontalDistance;
+    runningHorizontalDistance = llpython.getDoubleArray(defaultVals)[1];
+    // lastHorizontalDistance = runningHorizontalDistance == -1.0 ? lastHorizontalDistance : runningHorizontalDistance;
+    return Units.inchesToMeters(runningHorizontalDistance);
   }
 }

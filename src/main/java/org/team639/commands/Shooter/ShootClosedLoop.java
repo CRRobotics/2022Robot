@@ -14,15 +14,13 @@ public class ShootClosedLoop extends CommandBase {
   private Indexer indexer;
   private Shooter shooter;
   private Acquisition acquisition;
-  private double rpm;
 
   private long startTime;
 
-  public ShootClosedLoop(Indexer indexer, Shooter shooter, Acquisition acquisition, double rpm) {
+  public ShootClosedLoop(Indexer indexer, Shooter shooter, Acquisition acquisition) {
       this.indexer = indexer;
       this.shooter = shooter;
       this.acquisition = acquisition;
-      this.rpm = rpm;
       addRequirements(indexer, shooter, acquisition);
   }
 
@@ -38,10 +36,13 @@ public class ShootClosedLoop extends CommandBase {
   @Override
   public void execute() {
       if(System.currentTimeMillis() >= startTime + Constants.ShooterConstants.reverseIndexWhenShootingTime)
-        shooter.setSpeedRPM(rpm);
-      if(shooter.getVelocity() >= rpm)
       {
-        shooter.setSpeedRPM(rpm);
+        indexer.setIndexMotor(0);
+        shooter.setSpeedRPM(shooter.getSelectedRPM());
+      }
+     if(System.currentTimeMillis() >= startTime + Constants.ShooterConstants.reverseIndexWhenShootingTime + Constants.ShooterConstants.spinUpTime)
+      {
+        shooter.setSpeedRPM(shooter.getSelectedRPM());
         indexer.setIndexMotor(Constants.IndexerConstants.indexMotorSpeed);
         acquisition.spinAcquisition(acquisition.getAcquisitionSpeed());
       }   

@@ -27,6 +27,7 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveTrain extends SubsystemBase {
@@ -50,19 +51,17 @@ public class DriveTrain extends SubsystemBase {
 
     public Solenoid shifter = new Solenoid(PneumaticsModuleType.REVPH, Constants.Ports.Drive.shifterID);
     
-
     public boolean reversedHeading;
-
 
     /** Creates a new DriveTrain. */
     public DriveTrain() {
-        reversedHeading = false;
+        reversedHeading = true;
         resetEncoders();
         resetOdometry(startPosition);
         motorConfig();
         SmartDashboard.putData(leftPIDController);
         SmartDashboard.putData(rightPIDController);
-        toggleGearHigh();
+        toggleGearLow();
     }
 
     public void motorConfig() {
@@ -103,7 +102,7 @@ public class DriveTrain extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        SmartDashboard.putData("Gyro Angle", gyro);
+        SmartDashboard.putData("Gyro", gyro);
         SmartDashboard.putNumber("Right Position", getRightPostion());
         SmartDashboard.putNumber("Left Position", getLeftPostion());
 

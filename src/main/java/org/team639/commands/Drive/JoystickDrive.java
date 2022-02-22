@@ -49,15 +49,15 @@ public class JoystickDrive extends CommandBase {
         else
           arcadeDrive(
               -yValue,
-              -xValue);
+              xValue);
         break;
       case ArcadeInverseK:
         if (!driveTrain.isReversedHeading())
           arcadeInverseK(yValue, xValue, false);
         else
-          arcadeInverseK(
-              -yValue,
-              -xValue, false);
+          arcadeInverseKRev(
+              yValue,
+              xValue, false);
         break;
       case CurvatureDrive:
         if (!driveTrain.isReversedHeading())
@@ -90,7 +90,7 @@ public class JoystickDrive extends CommandBase {
    * @param turnValue Magnitude of turning
    */
   public void arcadeDrive(double speed, double turnValue) {
-    speed *= -Constants.DriveConstants.driveMultiplier;
+    speed *= Constants.DriveConstants.driveMultiplier;
     double turnMultiplier = 1 - speed;
     if (turnMultiplier < 1d / 3d)
       turnMultiplier = 1d / 3d;
@@ -159,6 +159,55 @@ public class JoystickDrive extends CommandBase {
         rightSpeed * Constants.DriveConstants.driveMultiplier);
   }
 
+    /**
+   * Arcade drive using inversed kinematics reversed
+   * 
+   * @param speed        Magnitude of speed
+   * @param turning      Magnitude of turning
+   * @param squareInputs Determines whether to square controller input
+   */
+  public void arcadeInverseKRev(double speed, double turning, boolean squareInputs) {
+    // speed = MathUtil.clamp(speed, -1.0, 1.0);
+    // turning = MathUtil.clamp(turning, -1.0, 1.0);
+
+    if (squareInputs) {
+      speed = Math.copySign(speed * speed, speed);
+      turning = Math.copySign(turning * turning, turning);
+    }
+
+    double leftSpeed;
+    double rightSpeed;
+
+    double maxInput = Math.copySign(Math.max(Math.abs(speed), Math.abs(turning)), speed);
+
+    // Case Forward translational movement
+    if (Math.signum(speed) >= 0) {
+      if (Math.signum(turning) >= 0) {
+        leftSpeed = maxInput;
+        rightSpeed = speed - turning;
+      } else {
+        leftSpeed = speed + turning;
+        rightSpeed = maxInput;
+      }
+
+      // Case Backwards translational movement
+    } else {
+      if (Math.signum(turning) >= 0) {
+        leftSpeed = speed + turning;
+        rightSpeed = maxInput;
+      } else {
+        leftSpeed = maxInput;
+        rightSpeed = speed - turning;
+      }
+    }
+
+    leftSpeed = MathUtil.clamp(leftSpeed, -1.0, 1.0);
+    rightSpeed = MathUtil.clamp(rightSpeed, -1.0, 1.0);
+
+    driveTrain.setSpeedsPercent(-rightSpeed * Constants.DriveConstants.driveMultiplier,
+        -leftSpeed * Constants.DriveConstants.driveMultiplier);
+  }
+
   /**
    * Implementation of WPILibs implementation of curvature drive which in turn is
    * an implementation of CheezyDrive
@@ -176,6 +225,7 @@ public class JoystickDrive extends CommandBase {
     } else {
       leftSpeed = speed + Math.abs(speed) * turning;
       rightSpeed = speed - Math.abs(speed) * turning;
+    driveTrain.setSpeedsPercent(leftSpeed, rightSpeed);
     }
 
     // Normalize wheel speeds

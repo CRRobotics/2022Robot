@@ -46,7 +46,6 @@ public class RobotContainer {
   private final ManualShooterAim manualAim = new ManualShooterAim(shooter);
   private final ToggleAcquisition toggleAcquisition = new ToggleAcquisition(acquisition);
   private final ShootOpenLoop shootOpen = new ShootOpenLoop(indexer, shooter, acquisition);
-  private final ShootClosedLoop shootClosed = new ShootClosedLoop(indexer, shooter, acquisition, shooter.getSelectedRPM());
   private final SpitCargo eject = new SpitCargo(shooter, indexer, acquisition);
   private final ManualIndexer index = new ManualIndexer(shooter, indexer, acquisition);
   
@@ -57,7 +56,7 @@ public class RobotContainer {
   public static final TrajectoryFactory factory = new TrajectoryFactory("paths");
 
   static {
-    driveMode.addOption("Arcade Standard", DriveLayout.Arcade);
+    driveMode.setDefaultOption("Arcade Standard", DriveLayout.Arcade);
     driveMode.addOption("Arcade InversedK", DriveLayout.ArcadeInverseK);
     driveMode.addOption("Curvature", DriveLayout.CurvatureDrive);
     driveMode.addOption("Tank", DriveLayout.Tank);
@@ -131,9 +130,10 @@ public class RobotContainer {
     ControllerWrapper.ControlRightBumper.whenHeld(index);
     ControllerWrapper.ControlLeftBumper.whenHeld(eject);
 
-    ControllerWrapper.ControlButtonY.whenPressed(shootOpen);
+    ControllerWrapper.ControlButtonY.whenHeld(new SpitShooter(shooter, 0));
     ControllerWrapper.ControlButtonB.whenPressed(toggleAcquisition);
-    ControllerWrapper.ControlButtonA.whenPressed(shootClosed);
+    ControllerWrapper.ControlButtonA.whenPressed(new ShootClosedLoop(indexer, shooter, acquisition));
+    ControllerWrapper.ControlButtonX.whenPressed(new Autorotate(driveTrain, -45));
   }
 
   /**
@@ -146,20 +146,20 @@ public class RobotContainer {
     switch(getAutonomousMode())
     {
       default:
-        auto = auton.forwardTest;
+            auto = auton.forwardTest;
         break;
       case ForwardTest:
         auto = auton.forwardTest;
         break;
-      case Shoot:
-        auto = shootOpen;
-        break;
-      case TwoBall:
-        auto = auton.TwoBallAutonomous;
-        break;
-      case FourBall:
-        auto = auton.FourBallAutonomousAndRohitsJumper;
-        break;
+      // case Shoot:
+      //   auto = shootOpen;
+      //   break;
+      // case TwoBall:
+      //   auto = auton.TwoBallAutonomous;
+      //   break;
+      // case FourBall:
+      //   auto = auton.FourBallAutonomousAndRohitsJumper;
+      //   break;
       case BounceTest:
         auto = auton.bounceTest;
         break;
@@ -189,25 +189,25 @@ public class RobotContainer {
       new DriveRamsete(driveTrain, "bounce3")
     ); 
 
-    //Start Position: 7.635, 1.786 - Facing bottom team ball, bumpers against the tarmac edge
-    final SequentialCommandGroup FourBallAutonomousAndRohitsJumper = new SequentialCommandGroup(
-      new ParallelCommandGroup(new DriveRamsete(driveTrain, "4BallPart1"), index),
-      //ShootCommand
-      new DriveRamsete(driveTrain, "4BallPart2"),
-      new ParallelCommandGroup(new DriveRamsete(driveTrain, "4BallPart3"), index),
-      new DriveRamsete(driveTrain, "4BallPart4")
-      //ShootVisions
-    );
+    // //Start Position: 7.635, 1.786 - Facing bottom team ball, bumpers against the tarmac edge
+    // final SequentialCommandGroup FourBallAutonomousAndRohitsJumper = new SequentialCommandGroup(
+    //   new ParallelCommandGroup(new DriveRamsete(driveTrain, "4BallPart1"), index),
+    //   //ShootCommand
+    //   new DriveRamsete(driveTrain, "4BallPart2"),
+    //   new ParallelCommandGroup(new DriveRamsete(driveTrain, "4BallPart3"), index),
+    //   new DriveRamsete(driveTrain, "4BallPart4")
+    //   //ShootVisions
+    // );
 
-    //Start Position: Anywhere on the field - Bumpers pushed against tarmac, facing team ball
-    final SequentialCommandGroup TwoBallAutonomous = new SequentialCommandGroup(
-      new ParallelCommandGroup(new DriveRamsete(driveTrain, "2BallAutonomous"), index),
-      new DriveRamsete(driveTrain, "2BallAutonomousPart2")
-      //ShootVisions
-    );
-    final SequentialCommandGroup Shoot = new SequentialCommandGroup(
-      //ShootVisions
-    );
+    // //Start Position: Anywhere on the field - Bumpers pushed against tarmac, facing team ball
+    // final SequentialCommandGroup TwoBallAutonomous = new SequentialCommandGroup(
+    //   new ParallelCommandGroup(new DriveRamsete(driveTrain, "2BallAutonomous"), index),
+    //   new DriveRamsete(driveTrain, "2BallAutonomousPart2")
+    //   //ShootVisions
+    // );
+    // final SequentialCommandGroup Shoot = new SequentialCommandGroup(
+    //   //ShootVisions
+    // );
 
 
 
