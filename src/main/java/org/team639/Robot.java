@@ -68,6 +68,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Angle to target", getAngleToTarget());
     SmartDashboard.putNumber("Distance to target", getDistanceToTarget());
 
+    //NetworkTableInstance.getDefault().flush();
     CommandScheduler.getInstance().run();
   }
 
@@ -134,6 +135,6 @@ public class Robot extends TimedRobot {
   {
     runningHorizontalDistance = llpython.getDoubleArray(defaultVals)[1];
     // lastHorizontalDistance = runningHorizontalDistance == -1.0 ? lastHorizontalDistance : runningHorizontalDistance;
-    return Units.inchesToMeters(runningHorizontalDistance);
+    return runningHorizontalDistance;
   }
 }

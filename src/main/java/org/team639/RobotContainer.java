@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
@@ -196,25 +197,26 @@ public class RobotContainer {
       new DriveRamsete(driveTrain, "bounce3")
     ); 
 
-    // //Start Position: 7.635, 1.786 - Facing bottom team ball, bumpers against the tarmac edge
-    // final SequentialCommandGroup FourBallAutonomousAndRohitsJumper = new SequentialCommandGroup(
-    //   new ParallelCommandGroup(new DriveRamsete(driveTrain, "4BallPart1"), index),
-    //   //ShootCommand
-    //   new DriveRamsete(driveTrain, "4BallPart2"),
-    //   new ParallelCommandGroup(new DriveRamsete(driveTrain, "4BallPart3"), index),
-    //   new DriveRamsete(driveTrain, "4BallPart4")
-    //   //ShootVisions
-    // );
 
-    // //Start Position: Anywhere on the field - Bumpers pushed against tarmac, facing team ball
-    // final SequentialCommandGroup TwoBallAutonomous = new SequentialCommandGroup(
-    //   new ParallelCommandGroup(new DriveRamsete(driveTrain, "2BallAutonomous"), index),
-    //   new DriveRamsete(driveTrain, "2BallAutonomousPart2")
-    //   //ShootVisions
-    // );
-    // final SequentialCommandGroup Shoot = new SequentialCommandGroup(
-    //   //ShootVisions
-    // );
+    //Start Position: 7.635, 1.786 - Facing bottom team ball, bumpers against the tarmac edge
+    final SequentialCommandGroup fourBallAutonomousAndRohitsJumper = new SequentialCommandGroup(
+      new ParallelRaceGroup(new DriveRamsete(driveTrain, "4BallPart1"), new ManualIndexer(shooter, indexer, acquisition)),
+      //ShootCommand
+      new DriveRamsete(driveTrain, "4BallPart2"),
+      new ParallelRaceGroup(new DriveRamsete(driveTrain, "4BallPart3"), new ManualIndexer(shooter, indexer, acquisition)),
+      new DriveRamsete(driveTrain, "4BallPart4")
+      //ShootVisions
+    );
+
+    //Start Position: Anywhere on the field - Bumpers pushed against tarmac, facing team ball
+    final SequentialCommandGroup TwoBallAutonomous = new SequentialCommandGroup(
+      new ParallelRaceGroup(new DriveRamsete(driveTrain, "2BallAutonomous"), new ManualIndexer(shooter, indexer, acquisition)),
+      new DriveRamsete(driveTrain, "2BallAutonomousPart2")
+      //ShootVisions
+    );
+    final SequentialCommandGroup Shoot = new SequentialCommandGroup(
+      //ShootVisions
+    );
 
 
 

@@ -4,6 +4,7 @@
 
 package org.team639.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -31,6 +32,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveTrain extends SubsystemBase {
+    private final Field2d simField = new Field2d();
 
     // Gyroscope and initial pose
     AHRS gyro = new AHRS(SPI.Port.kMXP);
@@ -61,6 +63,7 @@ public class DriveTrain extends SubsystemBase {
         motorConfig();
         SmartDashboard.putData(leftPIDController);
         SmartDashboard.putData(rightPIDController);
+        SmartDashboard.putData("Field", simField);
         toggleGearLow();
     }
 
@@ -109,6 +112,10 @@ public class DriveTrain extends SubsystemBase {
         SmartDashboard.putBoolean("Swapcade Mode", reversedHeading);
         SmartDashboard.putString("Current Gear", getGearMode().toString());
         odometry.update(gyro.getRotation2d(), getLeftPostion(), getRightPostion());
+        simField.setRobotPose(odometry.getPoseMeters());
+
+
+
     }
 
     /**

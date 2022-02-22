@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  */
 public class JoystickDrive extends CommandBase {
   private DriveTrain driveTrain;
+  private double mQuickStopAccumulator;
 
   /** Creates a new JoystickDrive. */
   public JoystickDrive(DriveTrain driveTrain) {
@@ -61,9 +62,9 @@ public class JoystickDrive extends CommandBase {
         break;
       case CurvatureDrive:
         if (!driveTrain.isReversedHeading())
-          curvatureDrive(yValue, xValue, quickTurnOverride(yValue));
+          cheezyDrive(yValue, xValue, quickTurnOverride(yValue));
         else
-          curvatureDrive(-yValue, -xValue, quickTurnOverride(yValue));
+          cheezyDrive(-yValue, xValue, quickTurnOverride(yValue));
         break;
       case Tank:
         tankDrive(ControllerWrapper.DriverController.getLeftY(), ControllerWrapper.DriverController.getRightY());
@@ -207,34 +208,130 @@ public class JoystickDrive extends CommandBase {
     driveTrain.setSpeedsPercent(-rightSpeed * Constants.DriveConstants.driveMultiplier,
         -leftSpeed * Constants.DriveConstants.driveMultiplier);
   }
-
   /**
-   * Implementation of WPILibs implementation of curvature drive which in turn is
-   * an implementation of CheezyDrive
+   * Implementation of FRC 254's 'Cheezy Drive'
+   * 
+   * @param throttle    Magnitude of throttle
+   * @param wheel       Magnitude of turning
+   * @param isQuickTurn Override in order to turn in place or at slow speeds
    */
-  public void curvatureDrive(double speed, double turning, boolean quickTurn) {
-    speed = MathUtil.clamp(speed, -1.0, 1.0);
-    turning = MathUtil.clamp(turning, -1.0, 1.0);
+  public void cheezyDrive(double throttle, double wheel, boolean isQuickTurn) {
+    wheel = -handleDeadband(wheel, Constants.DriveConstants.kWheelDeadband);
+    throttle = handleDeadband(throttle, Constants.DriveConstants.kThrottleDeadband);
 
-    double leftSpeed;
-    double rightSpeed;
+    double overPower;
+    double angularPower;
 
-    if (quickTurn) {
-      leftSpeed = speed + turning;
-      rightSpeed = speed - turning;
+    if (this.quickTurnOverride(throttle)) {
+      if (Math.abs(throttle) < 0.2) {
+        double alpha = 0.1;
+        mQuickStopAccumulator = (1 - alpha) * mQuickStopAccumulator + alpha * limit(wheel, 1.0) * 2;
+      }
+      overPower = 1.0;
+      angularPower = wheel;
     } else {
-      leftSpeed = speed + Math.abs(speed) * turning;
-      rightSpeed = speed - Math.abs(speed) * turning;
-    driveTrain.setSpeedsPercent(leftSpeed, rightSpeed);
+      overPower = 0.0;
+      angularPower = Math.abs(throttle) * wheel * Constants.DriveConstants.kTurnSensitivity - mQuickStopAccumulator;
+      if (mQuickStopAccumulator > 1) {
+        mQuickStopAccumulator -= 1;
+      } else if (mQuickStopAccumulator < -1) {
+        mQuickStopAccumulator += 1;
+      } else {
+        mQuickStopAccumulator = 0.0;
+      }
     }
 
-    // Normalize wheel speeds
-    double maxMagnitude = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
-    if (maxMagnitude > 1.0) {
-      leftSpeed /= maxMagnitude;
-      rightSpeed /= maxMagnitude;
+    double rightPwm = throttle + angularPower;
+    double leftPwm = throttle - angularPower;
+    if (leftPwm > 1.0) {
+      rightPwm -= overPower * (leftPwm - 1.0);
+      leftPwm = 1.0;
+    } else if (rightPwm > 1.0) {
+      leftPwm -= overPower * (rightPwm - 1.0);
+      rightPwm = 1.0;
+    } else if (leftPwm < -1.0) {
+      rightPwm += overPower * (-1.0 - leftPwm);
+      leftPwm = -1.0;
+    } else if (rightPwm < -1.0) {
+      leftPwm += overPower * (-1.0 - rightPwm);
+      rightPwm = -1.0;
     }
+    driveTrain.setSpeedsPercent(leftPwm * Constants.DriveConstants.driveMultiplier,
+        rightPwm * Constants.DriveConstants.driveMultiplier);
   }
+
+  public void cheezyReversed(double throttle, double wheel, boolean isQuickTurn) {
+    wheel = -handleDeadband(wheel, Constants.DriveConstants.kWheelDeadband);
+    throttle = handleDeadband(throttle, Constants.DriveConstants.kThrottleDeadband);
+
+    double overPower;
+    double angularPower;
+
+    if (this.quickTurnOverride(throttle)) {
+      if (Math.abs(throttle) < 0.2) {
+        double alpha = 0.1;
+        mQuickStopAccumulator = (1 - alpha) * mQuickStopAccumulator + alpha * limit(wheel, 1.0) * 2;
+      }
+      overPower = 1.0;
+      angularPower = wheel;
+    } else {
+      overPower = 0.0;
+      angularPower = Math.abs(throttle) * wheel * Constants.DriveConstants.kTurnSensitivity - mQuickStopAccumulator;
+      if (mQuickStopAccumulator > 1) {
+        mQuickStopAccumulator -= 1;
+      } else if (mQuickStopAccumulator < -1) {
+        mQuickStopAccumulator += 1;
+      } else {
+        mQuickStopAccumulator = 0.0;
+      }
+    }
+
+    double leftPwm = throttle - angularPower;
+    double rightPwm = throttle + angularPower;
+    if (leftPwm > 1.0) {
+      rightPwm -= overPower * (leftPwm - 1.0);
+      leftPwm = 1.0;
+    } else if (rightPwm > 1.0) {
+      leftPwm -= overPower * (rightPwm - 1.0);
+      rightPwm = 1.0;
+    } else if (leftPwm < -1.0) {
+      rightPwm += overPower * (-1.0 - leftPwm);
+      leftPwm = -1.0;
+    } else if (rightPwm < -1.0) {
+      leftPwm += overPower * (-1.0 - rightPwm);
+      rightPwm = -1.0;
+    }
+    driveTrain.setSpeedsPercent(-leftPwm * Constants.DriveConstants.driveMultiplier,
+        -rightPwm * Constants.DriveConstants.driveMultiplier);
+  }
+
+  // /**
+  //  * Implementation of WPILibs implementation of curvature drive which in turn is
+  //  * an implementation of CheezyDrive
+  //  */
+  // public void curvatureDrive(double speed, double turning, boolean quickTurn) {
+  //   speed = MathUtil.clamp(speed, -1.0, 1.0);
+  //   turning = MathUtil.clamp(turning, -1.0, 1.0);
+
+  //   double leftSpeed;
+  //   double rightSpeed;
+
+  //   if (quickTurn) {
+  //     leftSpeed = speed + turning;
+  //     rightSpeed = speed - turning;
+  //   } else {
+  //     leftSpeed = speed + Math.abs(speed) * turning;
+  //     rightSpeed = speed - Math.abs(speed) * turning;
+  //   driveTrain.setSpeedsPercent(leftSpeed, rightSpeed);
+  //   }
+
+  //   // Normalize wheel speeds
+  //   double maxMagnitude = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
+  //   if (maxMagnitude > 1.0) {
+  //     leftSpeed /= maxMagnitude;
+  //     rightSpeed /= maxMagnitude;
+  //   }
+  // }
 
   public double handleDeadband(double val, double deadband) {
     return (Math.abs(val) > Math.abs(deadband)) ? val : 0.0;

@@ -159,7 +159,7 @@ public interface Constants
 
     public interface ControlboardConstants
     {
-        public static final double kJoystickThreshold = 0.1;
+        public static final double kJoystickThreshold = 0.05;
         public static final double defaultCommandTimeout = 0.2;
     }
 
