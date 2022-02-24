@@ -12,6 +12,8 @@ import com.revrobotics.CANSparkMax.IdleMode;
 
 import org.team639.lib.Constants;
 
+import edu.wpi.first.math.controller.BangBangController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Servo;
@@ -30,7 +32,7 @@ public class Shooter extends SubsystemBase {
   private NetworkTableEntry FF = tab.add("FF",0).getEntry();
   private NetworkTableEntry P = tab.add("P",0).getEntry();
   private NetworkTableEntry I = tab.add("I",0).getEntry();
-
+  private NetworkTableEntry D = tab.add("D",0).getEntry();
 
   //Motor Controllers
   private CANSparkMax mainMotor = new CANSparkMax(Constants.Ports.Shooter.mainID, CANSparkMax.MotorType.kBrushless);
@@ -44,6 +46,8 @@ public class Shooter extends SubsystemBase {
   //private PIDController shooterPID = new PIDController(0.0001, 0.001, 0);
 
   private SparkMaxPIDController maxController;
+  private BangBangController bang = new BangBangController();
+  private SimpleMotorFeedforward feeder = new SimpleMotorFeedforward(.523, 1.4);
 
   private Servo mainLinearActuator = new Servo(Constants.Ports.Shooter.mainActuatorID);
   private Servo followLinearActuator = new Servo(Constants.Ports.Shooter.followActuatorID);
@@ -78,16 +82,17 @@ public class Shooter extends SubsystemBase {
     followLinearActuator.setSpeed(1);
 
     setActuator(0);
-    //SmartDashboard.putData(maxController);
+    SmartDashboard.putString("Shooter IdleMode", mainMotor.getIdleMode().toString());
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Shooter RPM", getVelocity());
 
-    // maxController.setP(P.getDouble(0));
-    // maxController.setFF(FF.getDouble(0));
-    // maxController.setI(I.getDouble(0));
+    maxController.setP(P.getDouble(Constants.ShooterConstants.shooterP));
+    maxController.setFF(FF.getDouble(Constants.ShooterConstants.shooterFF));
+    maxController.setI(I.getDouble(Constants.ShooterConstants.shooterI));
+    maxController.setD(D.getDouble(Constants.ShooterConstants.shooterD));
 
   }
 /**
@@ -119,8 +124,6 @@ public class Shooter extends SubsystemBase {
    */
   public void setSpeedRPM(double setpoint){
     maxController.setReference(setpoint, ControlType.kVelocity);
-    
-
   }
 
   /**
@@ -164,24 +167,26 @@ public class Shooter extends SubsystemBase {
    */
   public void BangBangControl(double rpm)
   {
-    if(mainMotor.getIdleMode().equals(IdleMode.kBrake))
-      setCoast();
-    if(mainEncoder.getVelocity() > rpm)
-        setSpeed(0);
-    else
-        setSpeed(1);
+    //0.9 is to shrink the feedforward, avoiding an overshoot
+    mainMotor.set(bang.calculate(getVelocity(), rpm) + 0.9 * feeder.calculate(rpm));
   }
 
   public void setBrake()
   {
-    mainMotor.setIdleMode(IdleMode.kBrake);
-    followMotor.setIdleMode(IdleMode.kBrake);
+    if(mainMotor.getIdleMode().equals(IdleMode.kCoast))
+    {
+      mainMotor.setIdleMode(IdleMode.kBrake);
+      followMotor.setIdleMode(IdleMode.kBrake);
+    }
   }
 
   public void setCoast()
   {
-    mainMotor.setIdleMode(IdleMode.kCoast);
-    followMotor.setIdleMode(IdleMode.kCoast);
+    if(mainMotor.getIdleMode().equals(IdleMode.kBrake))
+    {
+      mainMotor.setIdleMode(IdleMode.kCoast);
+      followMotor.setIdleMode(IdleMode.kCoast);
+    }
   }
 
 

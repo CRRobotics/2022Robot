@@ -6,33 +6,30 @@ package org.team639.commands.Drive;
 
 import org.team639.subsystems.DriveTrain;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class Autorotate extends CommandBase {
-
-
-      
+public class TurnToAngle extends CommandBase {
   private DriveTrain driveTrain;
-
-  private double target;
-  private double error;
+  private PIDController turnController;
+  private double setpoint;
   private boolean clockwise;
 
-  /** Creates a new AutoRotate. */
-  public Autorotate(DriveTrain driveTrain, double angle) {
-    
+  /** Creates a new TurnToAngle. */
+  public TurnToAngle(DriveTrain driveTrain, double angle) {
+    // Use addRequirements() here to declare subsystem dependencies.
     this.driveTrain = driveTrain;
+    this.turnController = driveTrain.getTurnController();
     addRequirements(driveTrain);
     angle %= 360;
 
     this.clockwise = Math.signum(angle) > 0 ? true : false;
-    target = Math.abs(angle) + driveTrain.getHeading();
-    driveTrain.getTurnController().setSetpoint(target);
-    //target = (Math.signum(angle) > 0) ? Math.abs(angle) + driveTrain.getHeading().getDegrees() : driveTrain.getHeading().getDegrees() - Math.abs(angle);
+    setpoint = Math.abs(angle) + driveTrain.getHeading();
+    driveTrain.getTurnController().setSetpoint(setpoint);
+
+    turnController.setTolerance(0.05);
+    turnController.setSetpoint(setpoint);
   }
-
-
-
 
   // Called when the command is initially scheduled.
   @Override
@@ -44,16 +41,13 @@ public class Autorotate extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double currMultiplier = turnController.calculate(driveTrain.getHeading(), setpoint);
     if(clockwise)
     {
-      error = target - driveTrain.getHeading();
-      double currMultiplier = driveTrain.getTurnController().calculate(error);
       driveTrain.setSpeedsPercent(-1 * currMultiplier, 1 * currMultiplier);
     }
     else
     {
-      error = Math.abs(target) - Math.abs(driveTrain.getHeading());
-      double currMultiplier = driveTrain.getTurnController().calculate(error);
       driveTrain.setSpeedsPercent(currMultiplier, -1 * currMultiplier);
     }
   }
@@ -62,16 +56,13 @@ public class Autorotate extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     driveTrain.setSpeedsPercent(0, 0);
-    System.out.println("Auto rotate headed out");
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (driveTrain.getTurnController().atSetpoint())
+    if(turnController.atSetpoint())
       return true;
     return false;
   }
-
 }
- 

@@ -24,7 +24,7 @@ public class Acquisition extends SubsystemBase {
     Solenoid extend = new Solenoid(PneumaticsModuleType.REVPH,Constants.Ports.Acquisition.acquisitionExtend); //don't know what kind of piston this is
     Solenoid retract = new Solenoid(PneumaticsModuleType.REVPH,Constants.Ports.Acquisition.acquisitionRetract); //idk if there are 2 pistons or not
 
-    AcquisitionPosition acqPos = AcquisitionPosition.down;
+    AcquisitionPosition acqPos = AcquisitionPosition.up;
 
     public Acquisition() {
         acquisitionMotorMain.restoreFactoryDefaults();
@@ -50,6 +50,7 @@ public class Acquisition extends SubsystemBase {
             extend.set(true);
             retract.set(false);
         }
+        acqPos = AcquisitionPosition.neutral;
     }
 
     /**
@@ -61,6 +62,8 @@ public class Acquisition extends SubsystemBase {
             extend.set(false);
             retract.set(true);
         }
+        acqPos = AcquisitionPosition.down;
+
         
     }
 
@@ -71,15 +74,18 @@ public class Acquisition extends SubsystemBase {
             extend.set(false);
             retract.set(false);
         }
+        acqPos = AcquisitionPosition.up;
+
     }
 
     public AcquisitionPosition acqPos()
     {
-        if(extend.get() == false && retract.get() == true)
-            return AcquisitionPosition.down;
-        else if(extend.get() == true && retract.get() == false)
-            return AcquisitionPosition.up;
-        return AcquisitionPosition.neutral;
+        // if(extend.get() == false && retract.get() == true)
+        //     return AcquisitionPosition.down;
+        // else if(extend.get() == true && retract.get() == false)
+        //     return AcquisitionPosition.up;
+        // return AcquisitionPosition.neutral;
+        return acqPos;
     }
 
     public double getAcquisitionSpeed()
