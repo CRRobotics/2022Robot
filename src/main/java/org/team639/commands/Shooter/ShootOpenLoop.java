@@ -24,6 +24,7 @@ public class ShootOpenLoop extends CommandBase {
         addRequirements(indexer, shooter, acquisition);
 
         acquisition.acquisitionNeutral();
+        shooter.setCoast();
     }
 
     @Override
@@ -54,6 +55,7 @@ public class ShootOpenLoop extends CommandBase {
       shooter.setSpeed(0);
       indexer.setIndexMotor(0);
       acquisition.stopAcquisitionMotor();
+      shooter.setBrake();
     }
 
     @Override

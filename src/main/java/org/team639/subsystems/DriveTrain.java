@@ -42,8 +42,10 @@ public class DriveTrain extends SubsystemBase {
     DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
 
     // Independent left and right PID controllers
-    public PIDController leftPIDController = new PIDController(0.00027328, 0, 0);
-    public PIDController rightPIDController = new PIDController(0.00027328, 0, 0);
+    public PIDController leftPIDController = new PIDController(0.00012078, 0, 0);
+    public PIDController rightPIDController = new PIDController(0.00012078, 0, 0);
+    public PIDController turnController = new PIDController(.004783, 0.0,
+    0.0);
 
     // Talon motor controllers
     public WPI_TalonFX leftMain = new WPI_TalonFX(Constants.Ports.Drive.leftMainID);
@@ -56,13 +58,16 @@ public class DriveTrain extends SubsystemBase {
     public boolean reversedHeading;
 
     /** Creates a new DriveTrain. */
-    public DriveTrain() {
+    public DriveTrain(){
+        turnController.setTolerance(Constants.AutoConstants.autoRotateThreshHold);
+
         reversedHeading = true;
         resetEncoders();
         resetOdometry(startPosition);
         motorConfig();
         SmartDashboard.putData(leftPIDController);
         SmartDashboard.putData(rightPIDController);
+        SmartDashboard.putData(turnController);
         SmartDashboard.putData("Field", simField);
         toggleGearLow();
     }
@@ -113,8 +118,6 @@ public class DriveTrain extends SubsystemBase {
         SmartDashboard.putString("Current Gear", getGearMode().toString());
         odometry.update(gyro.getRotation2d(), getLeftPostion(), getRightPostion());
         simField.setRobotPose(odometry.getPoseMeters());
-
-
 
     }
 
@@ -224,7 +227,7 @@ public class DriveTrain extends SubsystemBase {
      */
     public PIDController getLeftPIDController() {
         return leftPIDController;
-    }
+    }  
 
     /**
      * Gets PID controller for right side of the robot.
@@ -233,6 +236,10 @@ public class DriveTrain extends SubsystemBase {
      */
     public PIDController getRightPIDController() {
         return rightPIDController;
+    }
+
+    public PIDController getTurnController(){
+        return turnController;
     }
 
     /**
@@ -248,19 +255,19 @@ public class DriveTrain extends SubsystemBase {
      * Sets high gear
      */
     public void toggleGearHigh() {
-        shifter.set(false);
+        shifter.set(true);
     }
 
     /**
      * Sets low gear
      */
     public void toggleGearLow() {
-        shifter.set(true);
+        shifter.set(false);
     }
 
     public GearMode getGearMode()
     {
-        return shifter.get() ? GearMode.low : GearMode.high;
+        return shifter.get() ? GearMode.high : GearMode.low;
     }
 
     public double getRatio()

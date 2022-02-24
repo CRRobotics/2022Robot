@@ -4,17 +4,13 @@
 
 package org.team639.commands.Drive;
 
-import org.team639.lib.Constants;
 import org.team639.subsystems.DriveTrain;
 
-
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class Autorotate extends CommandBase {
 
-  private PIDController turnController = new PIDController(Constants.AutoConstants.autoRotateP, Constants.AutoConstants.autoRotateI,
-      Constants.AutoConstants.autoRotateD);
+
       
   private DriveTrain driveTrain;
 
@@ -24,7 +20,6 @@ public class Autorotate extends CommandBase {
 
   /** Creates a new AutoRotate. */
   public Autorotate(DriveTrain driveTrain, double angle) {
-    turnController.setTolerance(Constants.AutoConstants.autoRotateThreshHold);
     
     this.driveTrain = driveTrain;
     addRequirements(driveTrain);
@@ -32,7 +27,7 @@ public class Autorotate extends CommandBase {
 
     this.clockwise = Math.signum(angle) > 0 ? true : false;
     target = Math.abs(angle) + driveTrain.getHeading();
-    
+    driveTrain.getTurnController().setSetpoint(target);
     //target = (Math.signum(angle) > 0) ? Math.abs(angle) + driveTrain.getHeading().getDegrees() : driveTrain.getHeading().getDegrees() - Math.abs(angle);
   }
 
@@ -52,13 +47,13 @@ public class Autorotate extends CommandBase {
     if(clockwise)
     {
       error = target - driveTrain.getHeading();
-      double currMultiplier = turnController.calculate(error);
+      double currMultiplier = driveTrain.getTurnController().calculate(error);
       driveTrain.setSpeedsPercent(-1 * currMultiplier, 1 * currMultiplier);
     }
     else
     {
       error = Math.abs(target) - Math.abs(driveTrain.getHeading());
-      double currMultiplier = turnController.calculate(error);
+      double currMultiplier = driveTrain.getTurnController().calculate(error);
       driveTrain.setSpeedsPercent(currMultiplier, -1 * currMultiplier);
     }
   }
@@ -73,7 +68,7 @@ public class Autorotate extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (turnController.atSetpoint())
+    if (driveTrain.getTurnController().atSetpoint())
       return true;
     return false;
   }

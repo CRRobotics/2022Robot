@@ -151,17 +151,6 @@
               "Visuals/Show text": true
             }
           },
-          "8,2": {
-            "size": [
-              2,
-              2
-            ],
-            "content": {
-              "_type": "PID Controller",
-              "_source0": "network_table:///SmartDashboard/PIDController[1]",
-              "_title": "PIDController[1]"
-            }
-          },
           "6,2": {
             "size": [
               2,
@@ -171,6 +160,17 @@
               "_type": "PID Controller",
               "_source0": "network_table:///SmartDashboard/PIDController[2]",
               "_title": "PIDController[2]"
+            }
+          },
+          "8,2": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "PID Controller",
+              "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[3]",
+              "_title": "/LiveWindow/Ungrouped/PIDController[3]"
             }
           }
         }
@@ -361,8 +361,8 @@
     }
   ],
   "windowGeometry": {
-    "x": 0.0,
-    "y": 0.0,
+    "x": 16.0,
+    "y": 135.1999969482422,
     "width": 1536.0,
     "height": 864.0
   }

@@ -25,6 +25,11 @@ public class ManualIndexer extends CommandBase {
     addRequirements(indexer, shooter, acquisition);
   }
 
+  public void initialize()
+  {
+    shooter.setBrake();
+  }
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {

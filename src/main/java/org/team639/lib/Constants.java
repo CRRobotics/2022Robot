@@ -65,9 +65,12 @@ public interface Constants
 
     public interface AutoConstants
     {
-        public static final double kS = 0.52484;
-        public static final double kV = 6.1517;
-        public static final double kA = 0.22645;
+        // public static final double kS = 0.52484;
+        // public static final double kV = 6.1517;
+        // public static final double kA = 0.22645;
+        public static final double kS = .66379;
+        public static final double kV = 4.0693;
+        public static final double kA = 0.3922;
 
         public static final double kMaxAccelerationMetersPerSecondSquared = 2;
         public static final double kMaxSpeedMetersPerSecond = 2;
@@ -87,10 +90,13 @@ public interface Constants
                 .setKinematics(kinematics)
                 .addConstraint(autoVoltageConstraint);
 
-
-        public static final double autoRotateP = .035;
+        
+        // public static final double autoRotateP = .035;
+        // public static final double autoRotateI = 0.0;
+        // public static final double autoRotateD = 0.055;
+        public static final double autoRotateP = .004783;
         public static final double autoRotateI = 0.0;
-        public static final double autoRotateD = 0.055;
+        public static final double autoRotateD = 0.0;
 
         public static final double autoForwardP = 0.00015;
         public static final double autoForwardI = 0.0;
@@ -107,7 +113,8 @@ public interface Constants
 
     public interface DriveConstants
     {
-        public static final double chassisWidth = 0.44;
+       // public static final double chassisWidth = 0.74695;
+       public static final double chassisWidth = 0.54695;
         public static final double wheelDiameter = .1016;
         public static final double wheelCircumference = wheelDiameter * Math.PI;
 
@@ -133,18 +140,18 @@ public interface Constants
     public interface ShooterConstants
     {
         public static final double reverseIndexSpeed = -0.2;
-        public static final double reverseIndexWhenShootingTime = 100;
-        public static final double spinUpTime = 700;
+        public static final double reverseIndexWhenShootingTime = 150;
+        public static final double spinUpTime = 1400;
 
-        public static final double pureShootingTime = spinUpTime + reverseIndexWhenShootingTime + 1500;
+        public static final double pureShootingTime = spinUpTime + reverseIndexWhenShootingTime + 1400;
 
         public static final int shootHighRPM = 500;//5000;
         public static final double shootHighSpeed = 0.1;//1;
 
         public static final double shooterP = 0.0002;
-        public static final double shooterI = 0.00000003;
-        public static final double shooterD = 0.0;
-        public static final double shooterFF = 0.00017;
+        public static final double shooterI = 0.0;
+        public static final double shooterD = 0.0002;
+        public static final double shooterFF = 0.00018;
 
         public static final TreeMap<Double, AngleSpeed> shootMap = new TreeMap<>();
 

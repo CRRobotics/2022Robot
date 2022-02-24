@@ -138,10 +138,10 @@ public class RobotContainer {
     ControllerWrapper.ControlRightBumper.whenHeld(index);
     ControllerWrapper.ControlLeftBumper.whenHeld(eject);
 
-    ControllerWrapper.ControlButtonY.whenHeld(new SpitShooter(shooter, 0));
+    ControllerWrapper.ControlButtonY.whenHeld(new SpitShooter(shooter, indexer, acquisition, 0));
     ControllerWrapper.ControlButtonB.whenPressed(toggleAcquisition);
     ControllerWrapper.ControlButtonA.whenPressed(new ShootClosedLoop(indexer, shooter, acquisition));
-    ControllerWrapper.ControlButtonX.whenPressed(new Autorotate(driveTrain, -45));
+    ControllerWrapper.ControlButtonX.whenPressed(new TurnToAngle(driveTrain, -90));
   }
 
   /**
