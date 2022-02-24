@@ -146,7 +146,7 @@ public interface Constants
         public static final double shooterD = 0.0;
         public static final double shooterFF = 0.00017;
 
-        public static final TreeMap<Double, AngleSpeed> shootMap = new TreeMap<>();
+        public static final TreeMap<Integer, AngleSpeed> shootMap = new TreeMap<>();
 
 
     }

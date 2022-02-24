@@ -48,7 +48,7 @@ public class RobotContainer {
   private final ToggleAcquisition toggleAcquisition = new ToggleAcquisition(acquisition);
   private final ShootOpenLoop shootOpen = new ShootOpenLoop(indexer, shooter, acquisition);
   private final ShootClosedLoop shootClosed = new ShootClosedLoop(indexer, shooter, acquisition);
-  private final ShootAtDistance shootAtDistance = new ShootAtDistance(indexer, shooter);
+  private final ShootAtDistance shootAtDistance = new ShootAtDistance(indexer, shooter, acquisition);
   private final SpitCargo eject = new SpitCargo(shooter, indexer, acquisition);
   private final ManualIndexer index = new ManualIndexer(shooter, indexer, acquisition);
   
