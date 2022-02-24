@@ -3,15 +3,23 @@ package org.team639.lib.math;
 import org.team639.lib.Constants;
 
 public class ValueFromDistance {
-    public static AngleSpeed getAngleSpeed(double distance) {
-        double linearInterpolation = distance % 1.0;
-        return new AngleSpeed(
-                Constants.ShooterConstants.shootMap.get((int) distance).getAngle()
-                        + linearInterpolation * (Constants.ShooterConstants.shootMap.get((int) distance + 1).getAngle()
-                                - Constants.ShooterConstants.shootMap.get((int) distance).getAngle()),
-                Constants.ShooterConstants.shootMap.get((int) distance).getSpeed()
-                        + linearInterpolation * (Constants.ShooterConstants.shootMap.get((int) distance + 1).getSpeed()
-                                - Constants.ShooterConstants.shootMap.get((int) distance).getSpeed()));
+    public static AngleSpeed getAngleSpeed(double distance)
+    {
+        if(distance > Constants.ShooterConstants.shootMap.firstKey() && distance < Constants.ShooterConstants.shootMap.lastKey()) {
+            double floorDistance = Constants.ShooterConstants.shootMap.floorKey(distance);
+            double ceilingDistance = Constants.ShooterConstants.shootMap.ceilingKey(distance);
+            double remainder = distance % floorDistance;
+
+            double speed = remainder * Math.abs(Constants.ShooterConstants.shootMap.get(ceilingDistance).getSpeed() - Constants.ShooterConstants.shootMap.get(floorDistance).getSpeed());
+            double angle = remainder * Math.abs(Constants.ShooterConstants.shootMap.get(ceilingDistance).getAngle() - Constants.ShooterConstants.shootMap.get(floorDistance).getAngle());
+
+            return new AngleSpeed(angle, speed);
+        }
+        else return (distance < Constants.ShooterConstants.shootMap.firstKey())?
+                //THIS WORKS DONT THINK TOO HARD ABOUT IT
+                //gets the angle speed of the floor or ceiling key
+                new AngleSpeed(Constants.ShooterConstants.shootMap.get(Constants.ShooterConstants.shootMap.firstKey()).getAngle(),Constants.ShooterConstants.shootMap.get(Constants.ShooterConstants.shootMap.firstKey()).getSpeed()):
+                new AngleSpeed(Constants.ShooterConstants.shootMap.get(Constants.ShooterConstants.shootMap.lastKey()).getAngle(),Constants.ShooterConstants.shootMap.get(Constants.ShooterConstants.shootMap.lastKey()).getSpeed());
     }
 
     public static AngleSpeed linearize(double distance) {

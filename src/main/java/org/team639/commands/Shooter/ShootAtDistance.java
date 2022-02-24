@@ -5,7 +5,10 @@
 package org.team639.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import org.team639.Robot;
 import org.team639.lib.Constants;
+import org.team639.lib.math.AngleSpeed;
+import org.team639.lib.math.ValueFromDistance;
 import org.team639.subsystems.Acquisition;
 import org.team639.subsystems.Indexer;
 import org.team639.subsystems.Shooter;
@@ -16,6 +19,7 @@ public class ShootAtDistance extends CommandBase {
     private Acquisition acquisition;
 
     private long startTime;
+    private AngleSpeed shootAngleSpeed = ValueFromDistance.getAngleSpeed(Robot.getDistanceToTarget());
 
     public ShootAtDistance(Indexer indexer, Shooter shooter, Acquisition acquisition) {
         this.indexer = indexer;
@@ -26,9 +30,10 @@ public class ShootAtDistance extends CommandBase {
 
     @Override
     public void initialize() {
+        shooter.setCoast();
         startTime = System.currentTimeMillis();
+        shooter.setActuator(shootAngleSpeed.getAngle());
         shooter.setSpeed(Constants.ShooterConstants.reverseIndexSpeed);
-        shooter.
         indexer.setIndexMotor(-Constants.IndexerConstants.indexMotorSpeed);
 
         acquisition.acquisitionNeutral();
@@ -39,11 +44,11 @@ public class ShootAtDistance extends CommandBase {
         if(System.currentTimeMillis() >= startTime + Constants.ShooterConstants.reverseIndexWhenShootingTime)
         {
             indexer.setIndexMotor(0);
-            shooter.setSpeedRPM(shooter.getSelectedRPM());
+            shooter.setSpeedRPM(shootAngleSpeed.getSpeed());
         }
         if(System.currentTimeMillis() >= startTime + Constants.ShooterConstants.reverseIndexWhenShootingTime + Constants.ShooterConstants.spinUpTime)
         {
-            shooter.setSpeedRPM();
+            shooter.setSpeedRPM(shootAngleSpeed.getSpeed());
             indexer.setIndexMotor(Constants.IndexerConstants.indexMotorSpeed);
             acquisition.spinAcquisition(acquisition.getAcquisitionSpeed());
         }
@@ -54,6 +59,7 @@ public class ShootAtDistance extends CommandBase {
         shooter.setSpeed(0);
         indexer.setIndexMotor(0);
         acquisition.stopAcquisitionMotor();
+        shooter.setBrake();
     }
 
     @Override

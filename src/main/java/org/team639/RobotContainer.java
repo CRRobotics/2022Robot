@@ -60,7 +60,7 @@ public class RobotContainer {
 
   static
   {
-    Constants.ShooterConstants.shootMap.put();
+//    Constants.ShooterConstants.shootMap.put();
   }
 
   static {
