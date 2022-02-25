@@ -186,7 +186,7 @@ public class RobotContainer {
    */
   public void defaultCommands() {
    CommandScheduler.getInstance().setDefaultCommand(driveTrain, joystickDrive);
-    CommandScheduler.getInstance().setDefaultCommand(shooter, manualAim);
+  //CommandScheduler.getInstance().setDefaultCommand(shooter, manualAim);
   }
 
   
