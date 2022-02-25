@@ -10,6 +10,7 @@ import org.team639.commands.Drive.*;
 import org.team639.commands.Indexer.*;
 import org.team639.commands.Shooter.*;
 import org.team639.controlboard.ControllerWrapper;
+import org.team639.lib.math.AngleSpeed;
 import org.team639.subsystems.*;
 import org.team639.lib.states.*;
 import org.team639.lib.Constants;
@@ -48,7 +49,6 @@ public class RobotContainer {
   private final ToggleAcquisition toggleAcquisition = new ToggleAcquisition(acquisition);
   private final ShootOpenLoop shootOpen = new ShootOpenLoop(indexer, shooter, acquisition);
   private final ShootClosedLoop shootClosed = new ShootClosedLoop(indexer, shooter, acquisition);
-  private final ShootAtDistance shootAtDistance = new ShootAtDistance(indexer, shooter);
   private final SpitCargo eject = new SpitCargo(shooter, indexer, acquisition);
   private final ManualIndexer index = new ManualIndexer(shooter, indexer, acquisition);
   
@@ -58,6 +58,15 @@ public class RobotContainer {
 
   public static final TrajectoryFactory factory = new TrajectoryFactory("paths");
 
+  static
+  {
+//    Constants.ShooterConstants.shootMap.put(,new AngleSpeed(.9,3000));
+    Constants.ShooterConstants.shootMap.put(1.92, new AngleSpeed(.7,3200));
+    Constants.ShooterConstants.shootMap.put(2.77, new AngleSpeed(.65, 3400));
+    Constants.ShooterConstants.shootMap.put(4.27, new AngleSpeed(.5, 3800));
+    Constants.ShooterConstants.shootMap.put(5.46, new AngleSpeed(.4, 4150));
+    Constants.ShooterConstants.shootMap.put(6.85, new AngleSpeed(.15, 4600));
+  }
 
   static {
     driveMode.setDefaultOption("Arcade Standard", DriveLayout.Arcade);
@@ -137,7 +146,8 @@ public class RobotContainer {
     ControllerWrapper.ControlButtonY.whenHeld(new SpitShooter(shooter, indexer, acquisition, 0));
     ControllerWrapper.ControlButtonB.whenPressed(toggleAcquisition);
     ControllerWrapper.ControlButtonA.whenPressed(new ShootClosedLoop(indexer, shooter, acquisition));
-    ControllerWrapper.ControlButtonX.whenPressed(new TurnToAngle(driveTrain, Robot.getAngleToTarget()).withTimeout(1.5));
+    ControllerWrapper.ControlButtonX.whenPressed(new TurnToAngle(driveTrain, -90));
+    ControllerWrapper.ControlDPadUp.whenPressed(new ShootAtDistance(indexer, shooter, acquisition));
   }
 
   /**
