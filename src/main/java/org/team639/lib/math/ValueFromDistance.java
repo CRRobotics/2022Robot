@@ -10,8 +10,8 @@ public class ValueFromDistance {
             double ceilingDistance = Constants.ShooterConstants.shootMap.ceilingKey(distance);
             double remainder = distance % floorDistance;
 
-            double speed = remainder * Math.abs(Constants.ShooterConstants.shootMap.get(ceilingDistance).getSpeed() - Constants.ShooterConstants.shootMap.get(floorDistance).getSpeed());
-            double angle = remainder * Math.abs(Constants.ShooterConstants.shootMap.get(ceilingDistance).getAngle() - Constants.ShooterConstants.shootMap.get(floorDistance).getAngle());
+            double speed = Constants.ShooterConstants.shootMap.get(floorDistance).getSpeed() + remainder * Math.abs(Constants.ShooterConstants.shootMap.get(ceilingDistance).getSpeed() - Constants.ShooterConstants.shootMap.get(floorDistance).getSpeed());
+            double angle = Constants.ShooterConstants.shootMap.get(floorDistance).getAngle() + remainder * Math.abs(Constants.ShooterConstants.shootMap.get(ceilingDistance).getAngle() - Constants.ShooterConstants.shootMap.get(floorDistance).getAngle());
 
             return new AngleSpeed(angle, speed);
         }
