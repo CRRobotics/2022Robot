@@ -6,8 +6,6 @@ package org.team639.commands.Drive;
 
 import org.team639.subsystems.DriveTrain;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class TurnToAngle extends CommandBase {
@@ -26,7 +24,7 @@ public class TurnToAngle extends CommandBase {
     setpoint = Math.abs(angle) + driveTrain.getHeading();
 
     driveTrain.turnController.setTolerance(2);
-    driveTrain.turnController.setTolerance(setpoint, .003);
+    driveTrain.turnController.setSetpoint(setpoint);
   }
 
   // Called when the command is initially scheduled.

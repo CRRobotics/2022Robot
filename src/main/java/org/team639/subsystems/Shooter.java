@@ -70,12 +70,6 @@ public class Shooter extends SubsystemBase {
     maxController.setI(Constants.ShooterConstants.shooterI);
     maxController.setD(Constants.ShooterConstants.shooterD);
     maxController.setFF(Constants.ShooterConstants.shooterFF);
-    // maxController.setP(0.0002);
-    // maxController.setI(0.0);
-    // maxController.setD(0);
-    // maxController.setFF(0.00017);
-
-
 
     mainLinearActuator.setBounds(1.8,1.8,1.5,1.2,1.0);
     mainLinearActuator.setSpeed(1);
@@ -163,16 +157,6 @@ public class Shooter extends SubsystemBase {
   {
         mainMotor.set(0);
         followMotor.set(0);
-  }
-
-  /**
-   * Bang bang control at a certain rpm. Make sure motors are on kCoast
-   * @param rpm RPM Setpoint to be set
-   */
-  public void BangBangControl(double rpm)
-  {
-    //0.9 is to shrink the feedforward, avoiding an overshoot
-    mainMotor.set(bang.calculate(getVelocity(), rpm) + 0.9 * feeder.calculate(rpm));
   }
 
   public void setBrake()
