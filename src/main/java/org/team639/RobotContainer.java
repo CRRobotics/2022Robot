@@ -58,10 +58,6 @@ public class RobotContainer {
 
   public static final TrajectoryFactory factory = new TrajectoryFactory("paths");
 
-  static
-  {
-    Constants.ShooterConstants.shootMap.put();
-  }
 
   static {
     driveMode.setDefaultOption("Arcade Standard", DriveLayout.Arcade);
@@ -141,7 +137,7 @@ public class RobotContainer {
     ControllerWrapper.ControlButtonY.whenHeld(new SpitShooter(shooter, indexer, acquisition, 0));
     ControllerWrapper.ControlButtonB.whenPressed(toggleAcquisition);
     ControllerWrapper.ControlButtonA.whenPressed(new ShootClosedLoop(indexer, shooter, acquisition));
-    ControllerWrapper.ControlButtonX.whenPressed(new TurnToAngle(driveTrain, -90));
+    ControllerWrapper.ControlButtonX.whenPressed(new TurnToAngle(driveTrain, Robot.getAngleToTarget()).withTimeout(1.5));
   }
 
   /**

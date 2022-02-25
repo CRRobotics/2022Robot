@@ -7,11 +7,11 @@ package org.team639.commands.Drive;
 import org.team639.subsystems.DriveTrain;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class TurnToAngle extends CommandBase {
   private DriveTrain driveTrain;
-  private PIDController turnController;
   private double setpoint;
   private boolean clockwise;
 
@@ -19,16 +19,14 @@ public class TurnToAngle extends CommandBase {
   public TurnToAngle(DriveTrain driveTrain, double angle) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.driveTrain = driveTrain;
-    this.turnController = driveTrain.getTurnController();
     addRequirements(driveTrain);
     angle %= 360;
 
     this.clockwise = Math.signum(angle) > 0 ? true : false;
     setpoint = Math.abs(angle) + driveTrain.getHeading();
-    driveTrain.getTurnController().setSetpoint(setpoint);
 
-    turnController.setTolerance(0.05);
-    turnController.setSetpoint(setpoint);
+    driveTrain.turnController.setTolerance(2);
+    driveTrain.turnController.setTolerance(setpoint, .003);
   }
 
   // Called when the command is initially scheduled.
@@ -41,14 +39,14 @@ public class TurnToAngle extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double currMultiplier = turnController.calculate(driveTrain.getHeading(), setpoint);
+    double currMultiplier = driveTrain.turnController.calculate(driveTrain.getHeading(), setpoint);
     if(clockwise)
     {
-      driveTrain.setSpeedsPercent(-1 * currMultiplier, 1 * currMultiplier);
+      driveTrain.setSpeedsPercent(1 * currMultiplier, -1 * currMultiplier);
     }
     else
     {
-      driveTrain.setSpeedsPercent(currMultiplier, -1 * currMultiplier);
+      driveTrain.setSpeedsPercent(-currMultiplier, 1 * currMultiplier);
     }
   }
 
@@ -61,7 +59,7 @@ public class TurnToAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(turnController.atSetpoint())
+    if(driveTrain.turnController.atSetpoint())
       return true;
     return false;
   }

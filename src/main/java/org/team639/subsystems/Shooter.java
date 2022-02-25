@@ -34,6 +34,8 @@ public class Shooter extends SubsystemBase {
   private NetworkTableEntry I = tab.add("I",0).getEntry();
   private NetworkTableEntry D = tab.add("D",0).getEntry();
 
+
+
   //Motor Controllers
   private CANSparkMax mainMotor = new CANSparkMax(Constants.Ports.Shooter.mainID, CANSparkMax.MotorType.kBrushless);
   private CANSparkMax followMotor = new CANSparkMax(Constants.Ports.Shooter.followID, CANSparkMax.MotorType.kBrushless);
@@ -89,10 +91,10 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Shooter RPM", getVelocity());
 
-    maxController.setP(P.getDouble(Constants.ShooterConstants.shooterP));
-    maxController.setFF(FF.getDouble(Constants.ShooterConstants.shooterFF));
-    maxController.setI(I.getDouble(Constants.ShooterConstants.shooterI));
-    maxController.setD(D.getDouble(Constants.ShooterConstants.shooterD));
+    // maxController.setP(P.getDouble(Constants.ShooterConstants.shooterP));
+    // maxController.setFF(FF.getDouble(Constants.ShooterConstants.shooterFF));
+    // maxController.setI(I.getDouble(Constants.ShooterConstants.shooterI));
+    // maxController.setD(D.getDouble(Constants.ShooterConstants.shooterD));
 
   }
 /**
@@ -117,6 +119,8 @@ public class Shooter extends SubsystemBase {
   {
     return shooterSpeedPercent.getDouble(0);
   }
+
+
 
   /**
    * Sets shooter to certain rpm

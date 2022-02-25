@@ -94,9 +94,9 @@ public interface Constants
         // public static final double autoRotateP = .035;
         // public static final double autoRotateI = 0.0;
         // public static final double autoRotateD = 0.055;
-        public static final double autoRotateP = .004783;
+        public static final double autoRotateP = .010783;
         public static final double autoRotateI = 0.0;
-        public static final double autoRotateD = 0.0;
+        public static final double autoRotateD = 0.00026;
 
         public static final double autoForwardP = 0.00015;
         public static final double autoForwardI = 0.0;
@@ -143,7 +143,7 @@ public interface Constants
         public static final double reverseIndexWhenShootingTime = 150;
         public static final double spinUpTime = 1400;
 
-        public static final double pureShootingTime = spinUpTime + reverseIndexWhenShootingTime + 1400;
+        public static final double pureShootingTime = spinUpTime + reverseIndexWhenShootingTime + 1700;
 
         public static final int shootHighRPM = 500;//5000;
         public static final double shootHighSpeed = 0.1;//1;
@@ -162,6 +162,7 @@ public interface Constants
     {
         public static final int indexSensorDistance = 10;
         public static final double indexMotorSpeed = 1;
+        public static final double indexFeedSpeed = 0.8;
     }
 
     public interface ControlboardConstants
