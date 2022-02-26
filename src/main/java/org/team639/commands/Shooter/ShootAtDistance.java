@@ -19,12 +19,14 @@ public class ShootAtDistance extends CommandBase {
     private Acquisition acquisition;
 
     private long startTime;
-    private AngleSpeed shootAngleSpeed = ValueFromDistance.getAngleSpeed(Robot.getDistanceToTarget());
+    private AngleSpeed shootAngleSpeed;
 
-    public ShootAtDistance(Indexer indexer, Shooter shooter, Acquisition acquisition) {
+
+    public ShootAtDistance(Indexer indexer, Shooter shooter, Acquisition acquisition, double distance) {
         this.indexer = indexer;
         this.shooter = shooter;
         this.acquisition = acquisition;
+        shootAngleSpeed = ValueFromDistance.getAngleSpeed(distance);
         addRequirements(indexer, shooter, acquisition);
     }
 
@@ -50,7 +52,7 @@ public class ShootAtDistance extends CommandBase {
         {
             shooter.setSpeedRPM(shootAngleSpeed.getSpeed());
             indexer.setIndexMotor(Constants.IndexerConstants.indexMotorSpeed);
-            acquisition.spinAcquisition(acquisition.getAcquisitionSpeed());
+            acquisition.spinAcquisition(Constants.AcquisitionConstants.acquisitionSpeedSlow);
         }
     }
 

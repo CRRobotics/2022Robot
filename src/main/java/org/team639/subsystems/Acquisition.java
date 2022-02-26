@@ -4,20 +4,14 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.team639.lib.Constants;
 import org.team639.lib.states.AcquisitionPosition;
 
 public class Acquisition extends SubsystemBase {
-    private ShuffleboardTab tab = Shuffleboard.getTab("Acquisition");
-    private NetworkTableEntry acquisitionSpeed = tab.add("AcqSpeed", 0.5).withWidget(BuiltInWidgets.kNumberSlider).getEntry();
 
     CANSparkMax acquisitionMotorMain = new CANSparkMax(Constants.Ports.Acquisition.acquisitionPortMain, CANSparkMaxLowLevel.MotorType.kBrushless);
     CANSparkMax acquisitionMotorFollow = new CANSparkMax(Constants.Ports.Acquisition.acquisitionPortFollow, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -88,10 +82,6 @@ public class Acquisition extends SubsystemBase {
         return acqPos;
     }
 
-    public double getAcquisitionSpeed()
-    {
-        return acquisitionSpeed.getDouble(0.5);
-    }
 
     /**
      * Spins acquisition

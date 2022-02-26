@@ -139,8 +139,14 @@ public class Robot extends TimedRobot {
    */
   public static double getDistanceToTarget()
   {
+    try{
     runningHorizontalDistance = llpython.getDoubleArray(defaultVals)[1];
     // lastHorizontalDistance = runningHorizontalDistance == -1.0 ? lastHorizontalDistance : runningHorizontalDistance;
     return runningHorizontalDistance / 39.37;
+    }
+    catch(Exception e)
+    {
+      return -1;
+    }
   }
 }

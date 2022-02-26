@@ -22,6 +22,9 @@
       "open": true
     },
     "SmartDashboard": {
+      "Field": {
+        "open": true
+      },
       "Gyro": {
         "open": true
       },
@@ -31,6 +34,7 @@
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/DriveTrain": "Subsystem",
       "/LiveWindow/Indexer": "Subsystem",
+      "/LiveWindow/Shooter": "Subsystem",
       "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
@@ -44,6 +48,13 @@
       "/SmartDashboard/PIDController[2]": "PIDController",
       "/SmartDashboard/PIDController[3]": "PIDController",
       "/SmartDashboard/TurnControl": "PIDController"
+    },
+    "windows": {
+      "/SmartDashboard/Field": {
+        "window": {
+          "visible": true
+        }
+      }
     }
   },
   "NetworkTables Settings": {

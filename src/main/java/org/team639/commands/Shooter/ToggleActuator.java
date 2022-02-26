@@ -20,10 +20,7 @@ public class ToggleActuator extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(shooter.getActuatorPosition() == 1.0)
       shooter.setActuator(0);
-    else
-      shooter.setActuator(1);
   }
 
   public boolean isFinished()

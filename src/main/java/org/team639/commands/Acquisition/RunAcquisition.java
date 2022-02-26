@@ -1,6 +1,8 @@
 package org.team639.commands.Acquisition;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+
+import org.team639.lib.Constants;
 import org.team639.subsystems.Acquisition;
 
 /**
@@ -27,7 +29,7 @@ public class RunAcquisition extends CommandBase {
 
     @Override
     public void execute() {
-        acquisition.spinAcquisition(acquisition.getAcquisitionSpeed());
+        acquisition.spinAcquisition(Constants.AcquisitionConstants.acquisitionSpeed);
     }
 
     @Override

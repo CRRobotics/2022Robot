@@ -14,19 +14,25 @@ public class ShootClosedLoop extends CommandBase {
   private Indexer indexer;
   private Shooter shooter;
   private Acquisition acquisition;
+  private double rpm;
+  private double hoodAngle;
 
   private long startTime;
 
-  public ShootClosedLoop(Indexer indexer, Shooter shooter, Acquisition acquisition) {
+  public ShootClosedLoop(Indexer indexer, Shooter shooter, Acquisition acquisition, double rpm, double hoodAngle) {
       this.indexer = indexer;
       this.shooter = shooter;
       this.acquisition = acquisition;
+
+      this.rpm = rpm;
+      this.hoodAngle = hoodAngle;
       addRequirements(indexer, shooter, acquisition);
   }
 
   @Override
   public void initialize() {
       startTime = System.currentTimeMillis();
+      shooter.setActuator(hoodAngle);
       shooter.setSpeed(Constants.ShooterConstants.reverseIndexSpeed);
       indexer.setIndexMotor(-Constants.IndexerConstants.indexMotorSpeed);
 
@@ -39,13 +45,13 @@ public class ShootClosedLoop extends CommandBase {
       if(System.currentTimeMillis() >= startTime + Constants.ShooterConstants.reverseIndexWhenShootingTime)
       {
         indexer.setIndexMotor(0);
-        shooter.setSpeedRPM(shooter.getSelectedRPM());
+        shooter.setSpeedRPM(rpm);
       }
      if(System.currentTimeMillis() >= startTime + Constants.ShooterConstants.reverseIndexWhenShootingTime + Constants.ShooterConstants.spinUpTime)
       {
-        shooter.setSpeedRPM(shooter.getSelectedRPM());
+        shooter.setSpeedRPM(rpm);
         indexer.setIndexMotor(Constants.IndexerConstants.indexFeedSpeed);
-        acquisition.spinAcquisition(acquisition.getAcquisitionSpeed());
+        acquisition.spinAcquisition(Constants.AcquisitionConstants.acquisitionSpeedSlow);
       }   
   }
 

@@ -16,6 +16,6 @@ public class AimbotShot extends SequentialCommandGroup {
   /** Creates a new AimbotShot. */
   public AimbotShot(DriveTrain driveTrain, Indexer indexer, Shooter shooter, Acquisition acquisition) {
 
-    addCommands(new RotateToTarget(driveTrain), new ShootAtDistance(indexer, shooter, acquisition));
+    addCommands(new RotateToTarget(driveTrain), new AutoShootAtDistance(indexer, shooter, acquisition));
   }
 }

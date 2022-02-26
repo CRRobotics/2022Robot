@@ -31,7 +31,7 @@ public class SpitShooter extends CommandBase {
   public void initialize() {
     shooter.setSpeedRPM(shooter.getSelectedRPM());
     shooter.setCoast();
-    acquisition.spinAcquisition(acquisition.getAcquisitionSpeed());
+    acquisition.spinAcquisition(Constants.AcquisitionConstants.acquisitionSpeedSlow);
     index.setIndexMotor(Constants.IndexerConstants.indexMotorSpeed);
   }
 
