@@ -30,7 +30,8 @@ public class Autorotate extends PIDCommand {
 
   @Override
   public void initialize() {
-    driveTrain.toggleGearLow();
+    if(driveTrain.getGearMode().equals(GearMode.high))
+      driveTrain.toggleGearLow();
   }
 
   @Override

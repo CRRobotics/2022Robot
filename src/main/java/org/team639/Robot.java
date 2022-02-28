@@ -29,8 +29,8 @@ public class Robot extends TimedRobot {
   public static double runningHorizontalAngle;
   public static double runningHorizontalDistance;
 
-  public static double lastHorizontalAngle;
-  public static double lastHorizontalDistance;
+  public static double lastHorizontalAngle = 0;
+  public static double lastHorizontalDistance = 1;
 
   private static double[] defaultVals = {361.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
   
@@ -108,14 +108,17 @@ public class Robot extends TimedRobot {
 
 
   /**
-   * Returns the running horizontal angle. This makes sure that the last value is not undefined
-   * @return runningHorizontalAngle of horizontal angle
+   * Returns the last horizontal angle. This makes sure that the running value is not undefined
+   * @return lastHorizontalAngle of horizontal angle
    */
   public static double getAngleToTarget()
   {
     try{
-    runningHorizontalAngle = llpython.getDoubleArray(defaultVals)[0];
-    return runningHorizontalAngle;
+        // runningHorizontalAngle = llpython.getDoubleArray(defaultVals)[0];
+        // return runningHorizontalAngle;
+        runningHorizontalAngle = llpython.getDoubleArray(defaultVals)[0];
+        lastHorizontalAngle = runningHorizontalAngle == 361.0 ? lastHorizontalAngle : runningHorizontalAngle;
+        return lastHorizontalAngle;
     }
     catch(Exception e)
     {
@@ -127,15 +130,17 @@ public class Robot extends TimedRobot {
   }
 
   /**
-   * Returns the running horizontal distance. This makes sure that the last value is not undefined
-   * @return runningHorizontalDistance of horizontal distance
+   * Returns the last horizontal distance. This makes sure that the running value is not undefined
+   * @return lastHorizontalDistance of horizontal distance
    */
   public static double getDistanceToTarget()
   {
     try{
-    runningHorizontalDistance = llpython.getDoubleArray(defaultVals)[1];
-    // lastHorizontalDistance = runningHorizontalDistance == -1.0 ? lastHorizontalDistance : runningHorizontalDistance;
-    return runningHorizontalDistance / 39.37;
+      // runningHorizontalDistance = llpython.getDoubleArray(defaultVals)[1];
+      // return runningHorizontalDistance / 39.37;
+      runningHorizontalDistance = llpython.getDoubleArray(defaultVals)[1];
+      lastHorizontalDistance = runningHorizontalDistance == -1.0 ? lastHorizontalDistance : runningHorizontalDistance;
+      return lastHorizontalDistance / 39.37;
     }
     catch(Exception e)
     {

@@ -4,6 +4,8 @@
 
 package org.team639;
 
+import java.util.TreeMap;
+
 import org.team639.auto.*;
 import org.team639.commands.Acquisition.*;
 import org.team639.commands.Drive.*;
@@ -41,6 +43,7 @@ public class RobotContainer {
   private final Shooter shooter = new Shooter();
   private final Indexer indexer = new Indexer();
   private final Acquisition acquisition = new Acquisition();
+  private final LED candle = new LED();
 
   // Command Declaration
   AutonomousRoutines auton = new AutonomousRoutines();
@@ -64,17 +67,19 @@ public class RobotContainer {
   public static SendableChooser<DriveLayout> driveMode = new SendableChooser<>();
   public static SendableChooser<AutonMode> autoMode = new SendableChooser<>();
   public static SendableChooser<String> songChooser = new SendableChooser<>();
+  public static SendableChooser<AllianceColor> allianceChooser = new SendableChooser<>();
 
   public static final TrajectoryFactory factory = new TrajectoryFactory("paths");
 
+  public static TreeMap<Double, AngleSpeed> shootMap = new TreeMap<>();
+
   static
   {
-//    Constants.ShooterConstants.shootMap.put(,new AngleSpeed(.9,3000));
-    Constants.ShooterConstants.shootMap.put(1.92, new AngleSpeed(.7,3200));
-    Constants.ShooterConstants.shootMap.put(2.77, new AngleSpeed(.65, 3400));
-    Constants.ShooterConstants.shootMap.put(4.27, new AngleSpeed(.5, 3800));
-    Constants.ShooterConstants.shootMap.put(5.46, new AngleSpeed(.4, 4150));
-    Constants.ShooterConstants.shootMap.put(6.85, new AngleSpeed(.15, 4600));
+    shootMap.put(1.92, new AngleSpeed(.7,3200));
+    shootMap.put(2.77, new AngleSpeed(.65, 3400));
+    shootMap.put(4.27, new AngleSpeed(.5, 3800));
+    shootMap.put(5.46, new AngleSpeed(.4, 4150));
+    shootMap.put(6.85, new AngleSpeed(.15, 4600));
   }
 
   static {
@@ -98,6 +103,13 @@ public class RobotContainer {
   static {
     songChooser.setDefaultOption("Old Town Road", Constants.DJConstants.old_town_road);
     songChooser.addOption("Industry Baby", Constants.DJConstants.industry_baby);
+  }
+
+  static
+  {
+    allianceChooser.setDefaultOption("RED", AllianceColor.red);
+    allianceChooser.addOption("BLUE", AllianceColor.blue);
+    SmartDashboard.putData("Alliance", allianceChooser);
   }
 
   /**
@@ -148,6 +160,7 @@ public class RobotContainer {
     ControllerWrapper.DriverRightBumper.whenPressed(shiftGears);
     ControllerWrapper.DriverLeftBumper.whenPressed(swap);
     ControllerWrapper.DriverButtonX.whenPressed(autoAim);
+    ControllerWrapper.DriverButtonA.whenHeld(new DJRobot(driveTrain, 10));
 
     //Controller
     ControllerWrapper.ControlRightBumper.whenHeld(index);
@@ -159,7 +172,7 @@ public class RobotContainer {
 
     //RESET BUTTONS
     ControllerWrapper.ControlDPadUp.whenPressed(new ToggleActuator(shooter));
-    ControllerWrapper.ControlDPadDown.whenPressed(new Autorotate(driveTrain, 90, true));
+    ControllerWrapper.ControlDPadDown.whenPressed(new Autorotate(driveTrain, 90, false));
   }
 
   /**
@@ -177,9 +190,6 @@ public class RobotContainer {
       case ForwardTest:
         auto = auton.forwardTest;
         break;
-      // case Shoot:
-      //   auto = shootOpen;
-      //   break;
       case TwoBall:
         auto = auton.twoBallAutonomous;
         break;
@@ -219,7 +229,9 @@ public class RobotContainer {
       new DriveRamsete(driveTrain,"bounce1"), 
       new DriveRamsete(driveTrain, "bounce3")
     ); 
+
     //Start Position: 7.635, 1.786 - Facing bottom team ball, bumpers against the tarmac edge
+    //Unfortunately, we will not have Rohits jumper
     final SequentialCommandGroup fourBallAutonomousAndRohitsJumper = new SequentialCommandGroup(
       new WaitCommand(0.3),
       new ParallelRaceGroup(new DriveRamsete(driveTrain, "4BallPart1").robotRelative(), new ManualIndexer(shooter, indexer, acquisition)),
