@@ -6,7 +6,6 @@ package org.team639;
 
 import org.team639.lib.Constants;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Compressor;
@@ -14,12 +13,6 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
-//TODO: I MADE A TON OF CHANGES SO BE SURE TO TEST THE FOLLOWING:
-//ACQUISITION PISTONS
-//ALL DRIVEMODES
-//SHOOTING BOTH OPEN AND CLOSED LOOP
-//ROLLBACK IF THINGS GO WRONG
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to

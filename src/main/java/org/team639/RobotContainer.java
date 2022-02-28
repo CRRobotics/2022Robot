@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -45,11 +44,22 @@ public class RobotContainer {
 
   // Command Declaration
   AutonomousRoutines auton = new AutonomousRoutines();
+  //Drive
   private final JoystickDrive joystickDrive = new JoystickDrive(driveTrain);
+  private final ToggleGears shiftGears = new ToggleGears(driveTrain);
+  private final ReverseHeading swap = new ReverseHeading(driveTrain);
+  private final RotateToTarget autoAim = new RotateToTarget(driveTrain);
+
+  //Acquisition
   private final ToggleAcquisition toggleAcquisition = new ToggleAcquisition(acquisition);
+
+  //Indexer
   private final SpitCargo eject = new SpitCargo(shooter, indexer, acquisition);
   private final ManualIndexer index = new ManualIndexer(shooter, indexer, acquisition);
-  private final ManualShooterAim manualAim = new ManualShooterAim(shooter);
+
+  //Shooter
+  private final ShootClosedLoop fenderShot = new ShootClosedLoop(indexer, shooter, acquisition, Constants.ShooterConstants.fenderRPM, Constants.ShooterConstants.fenderAngle);
+  private final AutoShootAtDistance autoShoot = new AutoShootAtDistance(indexer, shooter, acquisition);
   
   public static SendableChooser<DriveLayout> driveMode = new SendableChooser<>();
   public static SendableChooser<AutonMode> autoMode = new SendableChooser<>();
@@ -135,18 +145,21 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //Driver
-    ControllerWrapper.DriverRightBumper.whenPressed(new ToggleGears(driveTrain));
-    ControllerWrapper.DriverLeftBumper.whenPressed(new ReverseHeading(driveTrain));
+    ControllerWrapper.DriverRightBumper.whenPressed(shiftGears);
+    ControllerWrapper.DriverLeftBumper.whenPressed(swap);
+    ControllerWrapper.DriverButtonX.whenPressed(autoAim);
 
     //Controller
     ControllerWrapper.ControlRightBumper.whenHeld(index);
     ControllerWrapper.ControlLeftBumper.whenHeld(eject);
-    ControllerWrapper.ControlButtonB.whenPressed(toggleAcquisition);
 
-    ControllerWrapper.ControlButtonY.whenHeld(new SpitShooter(shooter, indexer, acquisition, 0));
-    ControllerWrapper.ControlButtonX.whenPressed(new TurnToAngle(driveTrain, -90));
-    ControllerWrapper.ControlDPadUp.whenPressed(new AutoShootAtDistance(indexer, shooter, acquisition));
-    ControllerWrapper.ControlDPadDown.whenPressed(new ToggleActuator(shooter));
+    ControllerWrapper.ControlButtonY.whenHeld(fenderShot); 
+    ControllerWrapper.ControlButtonB.whenPressed(toggleAcquisition);
+    ControllerWrapper.ControlButtonX.whenPressed(autoShoot);
+
+    //RESET BUTTONS
+    ControllerWrapper.ControlDPadUp.whenPressed(new ToggleActuator(shooter));
+    ControllerWrapper.ControlDPadDown.whenPressed(new Autorotate(driveTrain, 90, true));
   }
 
   /**
@@ -168,7 +181,7 @@ public class RobotContainer {
       //   auto = shootOpen;
       //   break;
       case TwoBall:
-        auto = auton.TwoBallAutonomous;
+        auto = auton.twoBallAutonomous;
         break;
       case FourBall:
         auto = auton.fourBallAutonomousAndRohitsJumper;
@@ -188,6 +201,11 @@ public class RobotContainer {
  // CommandScheduler.getInstance().setDefaultCommand(shooter, manualAim);
   }
 
+  class TeleopRoutines
+  {
+    final SequentialCommandGroup aimbotshot = new SequentialCommandGroup(new RotateToTarget(driveTrain), new AutoShootAtDistance(indexer, shooter, acquisition));
+    
+  }
   
   class AutonomousRoutines
   {
@@ -201,8 +219,6 @@ public class RobotContainer {
       new DriveRamsete(driveTrain,"bounce1"), 
       new DriveRamsete(driveTrain, "bounce3")
     ); 
-
-
     //Start Position: 7.635, 1.786 - Facing bottom team ball, bumpers against the tarmac edge
     final SequentialCommandGroup fourBallAutonomousAndRohitsJumper = new SequentialCommandGroup(
       new WaitCommand(0.3),
@@ -216,7 +232,7 @@ public class RobotContainer {
 
 
     //Start Position: Anywhere on the field - Bumpers pushed against tarmac, facing team ball
-    final SequentialCommandGroup TwoBallAutonomous = new SequentialCommandGroup(
+    final SequentialCommandGroup twoBallAutonomous = new SequentialCommandGroup(
       new WaitCommand(0.3),
       new ParallelRaceGroup(new DriveRamsete(driveTrain, "2BallAutonomous").robotRelative(), new ManualIndexer(shooter, indexer, acquisition)),
       new ParallelRaceGroup(new DriveRamsete(driveTrain, "2BallAutonomousPart2").robotRelative(), new ManualIndexer(shooter, indexer, acquisition)),
@@ -224,12 +240,8 @@ public class RobotContainer {
       new DriveRamsete(driveTrain, "2BallAutonomousPart3")
 
     );
-    final SequentialCommandGroup Shoot = new SequentialCommandGroup(
-      //ShootVisions
-    );
-
-
-
   }
+
+   
 
 }

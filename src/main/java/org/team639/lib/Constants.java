@@ -147,8 +147,8 @@ public interface Constants
 
         public static final double pureShootingTime = spinUpTime + reverseIndexWhenShootingTime + 1700;
 
-        public static final int shootHighRPM = 500;//5000;
-        public static final double shootHighSpeed = 0.1;//1;
+        public static final int fenderRPM = 3000;
+        public static final double fenderAngle = 0.9;
 
         public static final double shooterP = 0.0002;
         public static final double shooterI = 0.0;

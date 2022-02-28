@@ -48,8 +48,6 @@ public class Shooter extends SubsystemBase {
   //private PIDController shooterPID = new PIDController(0.0001, 0.001, 0);
 
   private SparkMaxPIDController maxController;
-  private BangBangController bang = new BangBangController();
-  private SimpleMotorFeedforward feeder = new SimpleMotorFeedforward(.523, 1.4);
 
   private Servo mainLinearActuator = new Servo(Constants.Ports.Shooter.mainActuatorID);
   private Servo followLinearActuator = new Servo(Constants.Ports.Shooter.followActuatorID);
@@ -113,8 +111,6 @@ public class Shooter extends SubsystemBase {
   {
     return shooterSpeedPercent.getDouble(0);
   }
-
-
 
   /**
    * Sets shooter to certain rpm

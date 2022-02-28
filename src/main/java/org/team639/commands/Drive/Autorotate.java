@@ -7,8 +7,6 @@ package org.team639.commands.Drive;
 import org.team639.lib.Constants;
 import org.team639.lib.states.GearMode;
 import org.team639.subsystems.DriveTrain;
-
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 
 public class Autorotate extends PIDCommand {

@@ -16,8 +16,6 @@ public class AutoDriveForward extends CommandBase {
   private PIDController leftController = new PIDController(Constants.AutoConstants.autoForwardP, Constants.AutoConstants.autoForwardI, Constants.AutoConstants.autoForwardD);
   private PIDController rightController = new PIDController(Constants.AutoConstants.autoForwardP, Constants.AutoConstants.autoForwardI, Constants.AutoConstants.autoForwardD);
 
-
-
   private double startLeft;
   private double startRight;
   private double targetLeft;

@@ -5,64 +5,44 @@
 package org.team639.commands.Drive;
 
 import org.team639.Robot;
+import org.team639.lib.Constants;
+import org.team639.lib.states.GearMode;
 import org.team639.subsystems.DriveTrain;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-
-public class RotateToTarget extends CommandBase {
+public class RotateToTarget extends PIDCommand {
   private DriveTrain driveTrain;
-  private double setpoint;
-  private boolean clockwise;
-  private double angle = Robot.getAngleToTarget();
+  private GearMode lastGear;
 
-  /** Creates a new TurnToAngle. */
+  /** Creates a new Autorotate. */
   public RotateToTarget(DriveTrain driveTrain) {
-    // Use addRequirements() here to declare subsystem dependencies.
+    super(driveTrain.turnController,
+          driveTrain::getHeading,
+          (driveTrain.getHeading() + Robot.getAngleToTarget()) % 360,
+          output -> driveTrain.turnCommand(output),
+          driveTrain
+    );
+    getController().enableContinuousInput(-180, 180);
+    getController()
+        .setTolerance(Constants.AutoConstants.autoRotateThreshHold, Constants.AutoConstants.autoRotateThreshHoldVelo);
     this.driveTrain = driveTrain;
-    addRequirements(driveTrain);
-    angle %= 360;
-
-    this.clockwise = Math.signum(angle) > 0 ? true : false;
-    setpoint = Math.abs(angle) + driveTrain.getHeading();
-
-    driveTrain.turnController.setTolerance(2);
-    driveTrain.turnController.setTolerance(setpoint, .003);
+    lastGear = driveTrain.getGearMode();
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    driveTrain.setSpeedsPercent(0, 0);
-    System.out.println("Auto rotate initializing");
+    driveTrain.toggleGearLow();
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    double currMultiplier = driveTrain.turnController.calculate(driveTrain.getHeading(), setpoint);
-    if(clockwise)
-    {
-      driveTrain.setSpeedsPercent(1 * currMultiplier, -1 * currMultiplier);
-    }
-    else
-    {
-      driveTrain.setSpeedsPercent(-currMultiplier, 1 * currMultiplier);
-    }
-  }
-
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    driveTrain.setSpeedsPercent(0, 0);
+    if(lastGear.equals(GearMode.high))
+      driveTrain.toggleGearHigh();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(driveTrain.turnController.atSetpoint())
-      return true;
-    return false;
+    return getController().atSetpoint();
   }
 }
