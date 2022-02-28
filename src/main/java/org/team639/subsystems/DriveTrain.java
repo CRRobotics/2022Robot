@@ -57,13 +57,13 @@ public class DriveTrain extends SubsystemBase {
 
     /** Creates a new DriveTrain. */
     public DriveTrain(){
-
         reversedHeading = true;
         resetEncoders();
         resetOdometry(startPosition);
         motorConfig();
         SmartDashboard.putData(leftPIDController);
         SmartDashboard.putData(rightPIDController);
+
         SmartDashboard.putData("TurnControl",turnController);
         SmartDashboard.putData("Field", simField);
         toggleGearLow();
@@ -129,6 +129,16 @@ public class DriveTrain extends SubsystemBase {
         rightMain.set(ControlMode.PercentOutput, rightSpeed);
     }
 
+    /**
+     * Command to turn the robot a certain magnitude
+     * @param turnValue Magnitude from -1.0 to 1.0
+     */
+    public void turnCommand(double turnValue) {
+        double left = turnValue;
+        double right = -turnValue;
+        setSpeedsPercent(left * Constants.DriveConstants.driveMultiplier, right * Constants.DriveConstants.driveMultiplier);
+      }
+
 
     /**
      * Sets the voltages of the left and right motors.
@@ -141,6 +151,9 @@ public class DriveTrain extends SubsystemBase {
         rightMain.setVoltage(rightVoltage); 
     }
 
+    /**
+     * Sets the motors to certain closed loop velocities
+     */
     public void setVelocities(double leftVelocity, double rightVelocity) {
         leftMain.set(ControlMode.Velocity, leftVelocity);
         rightMain.set(ControlMode.Velocity, leftVelocity);
@@ -158,6 +171,9 @@ public class DriveTrain extends SubsystemBase {
 
     }
 
+    /**
+     * Resets both motor encoders
+     */
     public void resetEncoders()
     {
         rightMain.setSelectedSensorPosition(0);
@@ -258,25 +274,37 @@ public class DriveTrain extends SubsystemBase {
         shifter.set(false);
     }
 
+    /**
+     * Returns the current gearmode of the robot
+     */
     public GearMode getGearMode()
     {
         return shifter.get() ? GearMode.high : GearMode.low;
     }
 
+    /**
+     * Returns current gear ratio
+     * @return The double value of the gear ratio
+     */
     public double getRatio()
     {
         return getGearMode().equals(GearMode.high) ? Constants.DriveConstants.highGearRatio : Constants.DriveConstants.lowGearRatio;
     }
 
-    public boolean isReversedHeading()
-    {
-        return reversedHeading;
-    }
-
+    /**
+     * Sets the current heading of the robot
+     * @param reversed Heading to set
+     */
     public void setHeading(boolean reversed)
     {
         reversedHeading = reversed;
     }
 
-    
+    /**
+     * Returns whether the heading of the robot is reversed
+     */
+    public boolean isReversedHeading()
+    {
+        return reversedHeading;
+    }
 }

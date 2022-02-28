@@ -15,8 +15,8 @@ public class Acquisition extends SubsystemBase {
 
     CANSparkMax acquisitionMotorMain = new CANSparkMax(Constants.Ports.Acquisition.acquisitionPortMain, CANSparkMaxLowLevel.MotorType.kBrushless);
     CANSparkMax acquisitionMotorFollow = new CANSparkMax(Constants.Ports.Acquisition.acquisitionPortFollow, CANSparkMaxLowLevel.MotorType.kBrushless);
-    Solenoid extend = new Solenoid(PneumaticsModuleType.REVPH,Constants.Ports.Acquisition.acquisitionExtend); //don't know what kind of piston this is
-    Solenoid retract = new Solenoid(PneumaticsModuleType.REVPH,Constants.Ports.Acquisition.acquisitionRetract); //idk if there are 2 pistons or not
+    Solenoid extend = new Solenoid(PneumaticsModuleType.REVPH,Constants.Ports.Acquisition.acquisitionExtend);
+    Solenoid retract = new Solenoid(PneumaticsModuleType.REVPH,Constants.Ports.Acquisition.acquisitionRetract);
 
     AcquisitionPosition acqPos = AcquisitionPosition.up;
 
@@ -36,7 +36,7 @@ public class Acquisition extends SubsystemBase {
     }
 
     /**
-     * Puts acquisition down
+     * Puts acquisition in neutral
      */
     public void acquisitionNeutral() {
         if(!(acqPos().equals(AcquisitionPosition.neutral)))
@@ -48,7 +48,7 @@ public class Acquisition extends SubsystemBase {
     }
 
     /**
-     * Puts acquisition up
+     * Puts acquisition down
      */
     public void acquisitionDown() {
         if(!(acqPos().equals(AcquisitionPosition.down)))
@@ -61,6 +61,9 @@ public class Acquisition extends SubsystemBase {
         
     }
 
+    /**
+     * Puts acquisition up
+     */
     public void acquisitionUp()
     {
         if(!(acqPos().equals(AcquisitionPosition.up)))
@@ -72,13 +75,11 @@ public class Acquisition extends SubsystemBase {
 
     }
 
+    /**
+     * Return the current acquisition position
+     */
     public AcquisitionPosition acqPos()
     {
-        // if(extend.get() == false && retract.get() == true)
-        //     return AcquisitionPosition.down;
-        // else if(extend.get() == true && retract.get() == false)
-        //     return AcquisitionPosition.up;
-        // return AcquisitionPosition.neutral;
         return acqPos;
     }
 

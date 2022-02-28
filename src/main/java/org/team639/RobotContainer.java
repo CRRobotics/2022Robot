@@ -214,12 +214,6 @@ public class RobotContainer {
       new ShootAtDistance(indexer, shooter, acquisition, 5)
     );
 
-    final SequentialCommandGroup fourTest = new SequentialCommandGroup(
-      new DriveRamsete(driveTrain, "4BallPart1"),
-      new DriveRamsete(driveTrain, "4BallPart2"),
-      new DriveRamsete(driveTrain, "4BallPart3"),
-      new DriveRamsete(driveTrain, "4BallPart4")
-    );
 
     //Start Position: Anywhere on the field - Bumpers pushed against tarmac, facing team ball
     final SequentialCommandGroup TwoBallAutonomous = new SequentialCommandGroup(
