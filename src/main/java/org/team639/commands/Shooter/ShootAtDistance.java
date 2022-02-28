@@ -5,7 +5,6 @@
 package org.team639.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import org.team639.Robot;
 import org.team639.lib.Constants;
 import org.team639.lib.math.AngleSpeed;
 import org.team639.lib.math.ValueFromDistance;

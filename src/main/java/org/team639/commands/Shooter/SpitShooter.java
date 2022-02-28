@@ -15,14 +15,12 @@ public class SpitShooter extends CommandBase {
   private Shooter shooter;
   private Indexer index;
   private Acquisition acquisition;
-  private double speed;
 
   /** Creates a new SpitShooter. */
-  public SpitShooter(Shooter shooter, Indexer index, Acquisition acquisition, double speed) {
+  public SpitShooter(Shooter shooter, Indexer index, Acquisition acquisition) {
     this.shooter = shooter;
     this.index = index;
     this.acquisition = acquisition;
-    this.speed = speed;
     addRequirements(shooter, index, acquisition);
   }
 

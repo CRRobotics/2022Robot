@@ -4,10 +4,6 @@
 
 package org.team639.lib;
 
-import java.util.TreeMap;
-
-import org.team639.lib.math.AngleSpeed;
-
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
@@ -61,6 +57,11 @@ public interface Constants
             public static final int phCompressorID = 1;
         }
 
+        public interface CANdle
+        {
+            public static final int candleID = 14;
+        }
+
     }
 
     public interface AutoConstants
@@ -94,9 +95,9 @@ public interface Constants
         // public static final double autoRotateP = .035;
         // public static final double autoRotateI = 0.0;
         // public static final double autoRotateD = 0.055;
-        public static final double autoRotateP = .010783;
+        public static final double autoRotateP = 0.013783;
         public static final double autoRotateI = 0.0;
-        public static final double autoRotateD = 0.00026;
+        public static final double autoRotateD = 0.0;
 
         public static final double autoForwardP = 0.00015;
         public static final double autoForwardI = 0.0;
@@ -155,7 +156,6 @@ public interface Constants
         public static final double shooterD = 0.0002;
         public static final double shooterFF = 0.00018;
 
-        public static final TreeMap<Double, AngleSpeed> shootMap = new TreeMap<>();
 
 
     }
