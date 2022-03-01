@@ -10,8 +10,8 @@ public class ValueFromDistance {
             double ceilingDistance = RobotContainer.shootMap.ceilingKey(distance);
             double remainder = distance % floorDistance;
 
-            double speed = RobotContainer.shootMap.get(floorDistance).getSpeed() + (remainder * Math.abs(RobotContainer.shootMap.get(ceilingDistance).getSpeed() - RobotContainer.shootMap.get(floorDistance).getSpeed()));
-            double angle = RobotContainer.shootMap.get(floorDistance).getAngle() + (remainder * Math.abs(RobotContainer.shootMap.get(ceilingDistance).getAngle() - RobotContainer.shootMap.get(floorDistance).getAngle()));
+            double speed = RobotContainer.shootMap.get(floorDistance).getSpeed() + remainder * (Math.abs(RobotContainer.shootMap.get(ceilingDistance).getSpeed() - RobotContainer.shootMap.get(floorDistance).getSpeed()));
+            double angle = RobotContainer.shootMap.get(floorDistance).getAngle() + remainder * (Math.abs(RobotContainer.shootMap.get(ceilingDistance).getAngle() - RobotContainer.shootMap.get(floorDistance).getAngle()));
             System.out.println("WORKING!");
             return new AngleSpeed(angle, speed);
         }
