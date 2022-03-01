@@ -120,8 +120,14 @@ public class Robot extends TimedRobot {
    */
   public static double getAngleToTarget()
   {
+    try{
     runningHorizontalAngle = llpython.getDoubleArray(defaultVals)[0];
     return runningHorizontalAngle;
+    }
+    catch(Exception e)
+    {
+      return 361.0;
+    }
     // runningHorizontalAngle = llpython.getDoubleArray(defaultVals)[0];
     // lastHorizontalAngle = runningHorizontalAngle == -1.0 ? lastHorizontalAngle : runningHorizontalAngle;
     // return Units.inchesToMeters(lastHorizontalAngle);

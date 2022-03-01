@@ -34,6 +34,8 @@ public class Shooter extends SubsystemBase {
   private NetworkTableEntry I = tab.add("I",0).getEntry();
   private NetworkTableEntry D = tab.add("D",0).getEntry();
 
+
+
   //Motor Controllers
   private CANSparkMax mainMotor = new CANSparkMax(Constants.Ports.Shooter.mainID, CANSparkMax.MotorType.kBrushless);
   private CANSparkMax followMotor = new CANSparkMax(Constants.Ports.Shooter.followID, CANSparkMax.MotorType.kBrushless);
@@ -68,12 +70,6 @@ public class Shooter extends SubsystemBase {
     maxController.setI(Constants.ShooterConstants.shooterI);
     maxController.setD(Constants.ShooterConstants.shooterD);
     maxController.setFF(Constants.ShooterConstants.shooterFF);
-    // maxController.setP(0.0002);
-    // maxController.setI(0.0);
-    // maxController.setD(0);
-    // maxController.setFF(0.00017);
-
-
 
     mainLinearActuator.setBounds(1.8,1.8,1.5,1.2,1.0);
     mainLinearActuator.setSpeed(1);
@@ -89,10 +85,10 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Shooter RPM", getVelocity());
 
-    maxController.setP(P.getDouble(Constants.ShooterConstants.shooterP));
-    maxController.setFF(FF.getDouble(Constants.ShooterConstants.shooterFF));
-    maxController.setI(I.getDouble(Constants.ShooterConstants.shooterI));
-    maxController.setD(D.getDouble(Constants.ShooterConstants.shooterD));
+    // maxController.setP(P.getDouble(Constants.ShooterConstants.shooterP));
+    // maxController.setFF(FF.getDouble(Constants.ShooterConstants.shooterFF));
+    // maxController.setI(I.getDouble(Constants.ShooterConstants.shooterI));
+    // maxController.setD(D.getDouble(Constants.ShooterConstants.shooterD));
 
   }
 /**
@@ -117,6 +113,8 @@ public class Shooter extends SubsystemBase {
   {
     return shooterSpeedPercent.getDouble(0);
   }
+
+
 
   /**
    * Sets shooter to certain rpm
@@ -159,16 +157,6 @@ public class Shooter extends SubsystemBase {
   {
         mainMotor.set(0);
         followMotor.set(0);
-  }
-
-  /**
-   * Bang bang control at a certain rpm. Make sure motors are on kCoast
-   * @param rpm RPM Setpoint to be set
-   */
-  public void BangBangControl(double rpm)
-  {
-    //0.9 is to shrink the feedforward, avoiding an overshoot
-    mainMotor.set(bang.calculate(getVelocity(), rpm) + 0.9 * feeder.calculate(rpm));
   }
 
   public void setBrake()

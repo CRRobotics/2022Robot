@@ -4,10 +4,10 @@
       "open": true
     },
     "LiveWindow": {
-      "Shooter": {
-        "open": true
-      },
       "Ungrouped": {
+        "PIDController[3]": {
+          "open": true
+        },
         "navX-Sensor[4]": {
           "open": true
         },
@@ -22,6 +22,9 @@
       "open": true
     },
     "SmartDashboard": {
+      "Gyro": {
+        "open": true
+      },
       "open": true
     },
     "types": {
@@ -35,9 +38,12 @@
       "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
       "/SmartDashboard/Auto Mode": "String Chooser",
       "/SmartDashboard/Drive Layout": "String Chooser",
+      "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Gyro": "Gyro",
       "/SmartDashboard/PIDController[1]": "PIDController",
-      "/SmartDashboard/PIDController[2]": "PIDController"
+      "/SmartDashboard/PIDController[2]": "PIDController",
+      "/SmartDashboard/PIDController[3]": "PIDController",
+      "/SmartDashboard/TurnControl": "PIDController"
     }
   },
   "NetworkTables Settings": {
@@ -49,12 +55,7 @@
       "plots": [
         {
           "antialiased": true,
-          "axis": [
-            {
-              "autoFit": true
-            }
-          ],
-          "height": 823,
+          "height": 903,
           "name": "Shooter RPM",
           "series": [
             {
@@ -74,6 +75,24 @@
                 1.0
               ],
               "id": "NT:/SmartDashboard/Shooter RPM"
+            },
+            {
+              "color": [
+                0.3333333432674408,
+                0.658823549747467,
+                0.4078431725502014,
+                1.0
+              ],
+              "id": "NT:/LiveWindow/Ungrouped/PIDController[3]/setpoint"
+            },
+            {
+              "color": [
+                0.7686275243759155,
+                0.30588236451148987,
+                0.32156863808631897,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/Gyro/Value"
             }
           ]
         }

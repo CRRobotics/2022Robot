@@ -44,7 +44,7 @@ public class ShootClosedLoop extends CommandBase {
      if(System.currentTimeMillis() >= startTime + Constants.ShooterConstants.reverseIndexWhenShootingTime + Constants.ShooterConstants.spinUpTime)
       {
         shooter.setSpeedRPM(shooter.getSelectedRPM());
-        indexer.setIndexMotor(Constants.IndexerConstants.indexMotorSpeed);
+        indexer.setIndexMotor(Constants.IndexerConstants.indexFeedSpeed);
         acquisition.spinAcquisition(acquisition.getAcquisitionSpeed());
       }   
   }

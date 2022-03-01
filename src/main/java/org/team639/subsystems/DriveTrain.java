@@ -28,11 +28,11 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveTrain extends SubsystemBase {
     private final Field2d simField = new Field2d();
+
 
     // Gyroscope and initial pose
     AHRS gyro = new AHRS(SPI.Port.kMXP);
@@ -44,8 +44,7 @@ public class DriveTrain extends SubsystemBase {
     // Independent left and right PID controllers
     public PIDController leftPIDController = new PIDController(0.00012078, 0, 0);
     public PIDController rightPIDController = new PIDController(0.00012078, 0, 0);
-    public PIDController turnController = new PIDController(.004783, 0.0,
-    0.0);
+    public PIDController turnController = new PIDController(.004783, 0.0,0.0);  
 
     // Talon motor controllers
     public WPI_TalonFX leftMain = new WPI_TalonFX(Constants.Ports.Drive.leftMainID);
@@ -54,12 +53,10 @@ public class DriveTrain extends SubsystemBase {
     public WPI_TalonFX rightFollower = new WPI_TalonFX(Constants.Ports.Drive.rightFollowerID);
 
     public Solenoid shifter = new Solenoid(PneumaticsModuleType.REVPH, Constants.Ports.Drive.shifterID);
-    
     public boolean reversedHeading;
 
     /** Creates a new DriveTrain. */
     public DriveTrain(){
-        turnController.setTolerance(Constants.AutoConstants.autoRotateThreshHold);
 
         reversedHeading = true;
         resetEncoders();
@@ -67,7 +64,7 @@ public class DriveTrain extends SubsystemBase {
         motorConfig();
         SmartDashboard.putData(leftPIDController);
         SmartDashboard.putData(rightPIDController);
-        SmartDashboard.putData(turnController);
+        SmartDashboard.putData("TurnControl",turnController);
         SmartDashboard.putData("Field", simField);
         toggleGearLow();
     }
@@ -238,10 +235,6 @@ public class DriveTrain extends SubsystemBase {
         return rightPIDController;
     }
 
-    public PIDController getTurnController(){
-        return turnController;
-    }
-
     /**
      * Returns SimpleMotorFeedforward.
      * 
@@ -284,5 +277,6 @@ public class DriveTrain extends SubsystemBase {
     {
         reversedHeading = reversed;
     }
+
     
 }

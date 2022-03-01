@@ -7,22 +7,62 @@ package org.team639.commands.Drive;
 import org.team639.Robot;
 import org.team639.subsystems.DriveTrain;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class RotateToTarget extends SequentialCommandGroup {
-  /** Creates a new RotateToTarget. */
+public class RotateToTarget extends CommandBase {
+  private DriveTrain driveTrain;
+  private double setpoint;
+  private boolean clockwise;
+  private double angle = Robot.getAngleToTarget();
+
+  /** Creates a new TurnToAngle. */
   public RotateToTarget(DriveTrain driveTrain) {
-    // Add your commands in the addCommands() call, e.g.
-    addCommands(new Autorotate(driveTrain, Robot.getAngleToTarget()));
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.driveTrain = driveTrain;
+    addRequirements(driveTrain);
+    angle %= 360;
+
+    this.clockwise = Math.signum(angle) > 0 ? true : false;
+    setpoint = Math.abs(angle) + driveTrain.getHeading();
+
+    driveTrain.turnController.setTolerance(2);
+    driveTrain.turnController.setTolerance(setpoint, .003);
   }
 
-  public void initialize()
-  {
-    System.out.println("RotateToTarget initializing");
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+    driveTrain.setSpeedsPercent(0, 0);
+    System.out.println("Auto rotate initializing");
   }
 
-  public void end(boolean interrupted)
-  {
-    System.out.println("RotateToTarget dippin'");
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    double currMultiplier = driveTrain.turnController.calculate(driveTrain.getHeading(), setpoint);
+    if(clockwise)
+    {
+      driveTrain.setSpeedsPercent(1 * currMultiplier, -1 * currMultiplier);
+    }
+    else
+    {
+      driveTrain.setSpeedsPercent(-currMultiplier, 1 * currMultiplier);
+    }
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    driveTrain.setSpeedsPercent(0, 0);
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    if(driveTrain.turnController.atSetpoint())
+      return true;
+    return false;
   }
 }
