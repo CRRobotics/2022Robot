@@ -19,7 +19,7 @@ public class AutoShootAtDistance extends CommandBase {
     private Acquisition acquisition;
 
     private long startTime;
-    private AngleSpeed shootAngleSpeed = ValueFromDistance.getAngleSpeed(Robot.getDistanceToTarget());
+    private AngleSpeed shootAngleSpeed = ValueFromDistance.getAngleSpeedLinearized(Robot.getDistanceToTarget());
 
     public AutoShootAtDistance(Indexer indexer, Shooter shooter, Acquisition acquisition) {
         this.indexer = indexer;
