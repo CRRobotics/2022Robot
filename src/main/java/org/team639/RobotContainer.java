@@ -47,6 +47,8 @@ public class RobotContainer {
 
   // Command Declaration
   AutonomousRoutines auton = new AutonomousRoutines();
+  TeleopRoutines tele = new TeleopRoutines();
+
   //Drive
   private final JoystickDrive joystickDrive = new JoystickDrive(driveTrain);
   private final ToggleGears shiftGears = new ToggleGears(driveTrain);
@@ -189,6 +191,7 @@ public class RobotContainer {
     ControllerWrapper.DriverLeftBumper.whenPressed(swap);
     ControllerWrapper.DriverButtonX.whenPressed(autoAim);
     ControllerWrapper.DriverButtonA.whenHeld(new DJRobot(driveTrain, 10));
+    ControllerWrapper.DriverButtonY.whenPressed(tele.aimbotshot);
 
     //Controller
     ControllerWrapper.ControlRightBumper.whenHeld(index);
@@ -241,7 +244,7 @@ public class RobotContainer {
 
   class TeleopRoutines
   {
-    final SequentialCommandGroup aimbotshot = new SequentialCommandGroup(new RotateToTarget(driveTrain), new AutoShootAtDistance(indexer, shooter, acquisition));
+    final ParallelRaceGroup aimbotshot = new ParallelRaceGroup(new RotateToTarget(driveTrain), new AutoShootAtDistance(indexer, shooter, acquisition));
     
   }
   
