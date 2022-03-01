@@ -68,6 +68,7 @@ public class RobotContainer {
   public static SendableChooser<AutonMode> autoMode = new SendableChooser<>();
   public static SendableChooser<String> songChooser = new SendableChooser<>();
   public static SendableChooser<AllianceColor> allianceChooser = new SendableChooser<>();
+  public static SendableChooser<LEDMode> ledChooser = new SendableChooser<>();
 
   public static final TrajectoryFactory factory = new TrajectoryFactory("paths");
 
@@ -103,6 +104,8 @@ public class RobotContainer {
   static {
     songChooser.setDefaultOption("Old Town Road", Constants.DJConstants.old_town_road);
     songChooser.addOption("Industry Baby", Constants.DJConstants.industry_baby);
+    SmartDashboard.putData("SongChooser", songChooser);
+
   }
 
   static
@@ -110,6 +113,14 @@ public class RobotContainer {
     allianceChooser.setDefaultOption("RED", AllianceColor.red);
     allianceChooser.addOption("BLUE", AllianceColor.blue);
     SmartDashboard.putData("Alliance", allianceChooser);
+  }
+
+  static
+  {
+    ledChooser.setDefaultOption("LEDSwapCade", LEDMode.swapcade);
+    ledChooser.addOption("Fire", LEDMode.fire);
+    ledChooser.addOption("GamerMode", LEDMode.gamerMode);
+    SmartDashboard.putData(ledChooser);
   }
 
   /**
@@ -136,6 +147,23 @@ public class RobotContainer {
   public static String songChooser()
   {
     return songChooser.getSelected();
+  }
+
+  /**
+   * Returns the chosen alliance color
+   */
+  public static AllianceColor getAllianceColor()
+  {
+    return allianceChooser.getSelected();
+  }
+
+  /**
+   * Returns the chosen LEDMode
+   * @return chosen LED configuration
+   */
+  public static LEDMode getLedMode()
+  {
+    return ledChooser.getSelected();
   }
 
   /**

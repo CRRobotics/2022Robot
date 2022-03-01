@@ -29,9 +29,12 @@ public class Robot extends TimedRobot {
   public static double runningHorizontalAngle;
   public static double runningHorizontalDistance;
 
-  public static double lastHorizontalAngle = 0;
-  public static double lastHorizontalDistance = 1;
+  public static boolean ANGLE_LOCKED = false;
 
+  // public static double lastHorizontalAngle = 0;
+  // public static double lastHorizontalDistance = 1;
+
+  //Default values for ilpython array
   private static double[] defaultVals = {361.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
   
   /**
@@ -52,10 +55,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
-    // commands, running already-scheduled commands, removing finished or interrupted commands,
-    // and running subsystem periodic() methods.  This must be called from the robot's periodic
-    // block in order for anything in the Command-based framework to work.
     llpython = NetworkTableInstance.getDefault().getTable("limelight").getEntry("llpython");
 
     SmartDashboard.putNumber("Angle to target", getAngleToTarget());
@@ -108,17 +107,19 @@ public class Robot extends TimedRobot {
 
 
   /**
-   * Returns the last horizontal angle. This makes sure that the running value is not undefined
-   * @return lastHorizontalAngle of horizontal angle
+   * Returns the running horizontal angle
+   * @return runningHorizontalAngle of horizontal angle
    */
   public static double getAngleToTarget()
   {
     try{
-        // runningHorizontalAngle = llpython.getDoubleArray(defaultVals)[0];
-        // return runningHorizontalAngle;
         runningHorizontalAngle = llpython.getDoubleArray(defaultVals)[0];
-        lastHorizontalAngle = runningHorizontalAngle == 361.0 ? lastHorizontalAngle : runningHorizontalAngle;
-        return lastHorizontalAngle;
+        ANGLE_LOCKED = runningHorizontalAngle != 361.0 ? true : false;
+
+        return runningHorizontalAngle;
+        // runningHorizontalAngle = llpython.getDoubleArray(defaultVals)[0];
+        // lastHorizontalAngle = runningHorizontalAngle == 361.0 ? lastHorizontalAngle : runningHorizontalAngle;
+        // return lastHorizontalAngle;
     }
     catch(Exception e)
     {
@@ -130,21 +131,32 @@ public class Robot extends TimedRobot {
   }
 
   /**
-   * Returns the last horizontal distance. This makes sure that the running value is not undefined
-   * @return lastHorizontalDistance of horizontal distance
+   * Returns the running horizontal distance
+   * @return runningHorizontalDistance of horizontal distance
    */
   public static double getDistanceToTarget()
   {
     try{
-      // runningHorizontalDistance = llpython.getDoubleArray(defaultVals)[1];
-      // return runningHorizontalDistance / 39.37;
       runningHorizontalDistance = llpython.getDoubleArray(defaultVals)[1];
-      lastHorizontalDistance = runningHorizontalDistance == -1.0 ? lastHorizontalDistance : runningHorizontalDistance;
-      return lastHorizontalDistance / 39.37;
+
+      return runningHorizontalDistance / 39.37;
+      // runningHorizontalDistance = llpython.getDoubleArray(defaultVals)[1];
+      // lastHorizontalDistance = runningHorizontalDistance == -1.0 ? lastHorizontalDistance : runningHorizontalDistance;
+      // return lastHorizontalDistance / 39.37;
     }
     catch(Exception e)
     {
       return -1;
     }
   }
+
+  /**
+   * Returns if the current visions values are locked on
+   * @return Whether angle and distance are locked
+   */
+  public static boolean lockedOn()
+  {
+    return ANGLE_LOCKED;
+  }
+
 }

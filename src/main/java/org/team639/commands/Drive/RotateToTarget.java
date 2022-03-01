@@ -14,11 +14,13 @@ public class RotateToTarget extends PIDCommand {
   private DriveTrain driveTrain;
   private GearMode lastGear;
 
+  private static double targetAngle = Robot.getAngleToTarget();
+
   /** Creates a new Autorotate. */
   public RotateToTarget(DriveTrain driveTrain) {
     super(driveTrain.turnController,
           driveTrain::getHeading,
-          (driveTrain.getHeading() + Robot.getAngleToTarget()) % 360,
+          (driveTrain.getHeading() + targetAngle) % 360,
           output -> driveTrain.turnCommand(output),
           driveTrain
     );
@@ -27,10 +29,13 @@ public class RotateToTarget extends PIDCommand {
         .setTolerance(Constants.AutoConstants.autoRotateThreshHold, Constants.AutoConstants.autoRotateThreshHoldVelo);
     this.driveTrain = driveTrain;
     lastGear = driveTrain.getGearMode();
+    if(!Robot.lockedOn())
+      end(true);
   }
 
   @Override
   public void initialize() {
+
     driveTrain.toggleGearLow();
   }
 

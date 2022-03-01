@@ -4,33 +4,69 @@
 
 package org.team639.subsystems;
 
+import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.CANdle;
+import com.ctre.phoenix.led.FireAnimation;
+import com.ctre.phoenix.led.LarsonAnimation;
+import com.ctre.phoenix.led.RgbFadeAnimation;
 
 import org.team639.Robot;
+import org.team639.RobotContainer;
 import org.team639.lib.Constants;
+import org.team639.lib.states.LEDMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LED extends SubsystemBase {
   private final CANdle m_candle = new CANdle(Constants.Ports.CANdle.candleID);
+  private LEDMode curr_led = RobotContainer.getLedMode();
+  private int LedCount = 8;
+
+  private final FireAnimation fire = new FireAnimation(0.5, 0.7, LedCount, 0.7, 0.5);
+  private final RgbFadeAnimation gamer_mode = new RgbFadeAnimation(0.7, 0.4, LedCount);
 
   /**
    * Sets the CANdle LED based upon current orientation of the robot
    */
   @Override
   public void periodic() {
+
+
+
+  }
+
+  public void updateLED()
+  {
+     curr_led = RobotContainer.getLedMode();
+     switch(curr_led)
+     {
+        case swapcade:
+          swapcadeMode();
+          break;
+        case fire:
+          fireAnim();
+          break;
+        case gamerMode:
+          rgbFade();
+     }
+  }
+
+  public void swapcadeMode()
+  {
     if(SmartDashboard.getBoolean("Swapcade Mode", true))
       m_candle.setLEDs(0,255,0);
     else
       m_candle.setLEDs(255,0,0);
+  }
 
+  public void fireAnim()
+  {
+    m_candle.animate(fire);
+  }
 
-    // if(Math.abs(Robot.getAngleToTarget()) < 25)
-    //   m_candle.setLEDs(0,255,0);
-    // else
-    //   m_candle.setLEDs(255,0,0);
-
-
+  public void rgbFade()
+  {
+    m_candle.animate(gamer_mode);
   }
 }
