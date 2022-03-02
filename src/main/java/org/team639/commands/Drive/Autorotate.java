@@ -7,22 +7,25 @@ package org.team639.commands.Drive;
 import org.team639.lib.Constants;
 import org.team639.lib.states.GearMode;
 import org.team639.subsystems.DriveTrain;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 
 public class Autorotate extends PIDCommand {
   private DriveTrain driveTrain;
   private GearMode lastGear;
 
+
   /** Creates a new Autorotate. */
   public Autorotate(DriveTrain driveTrain, double targetAngle, boolean robotRelative) {
-    super(driveTrain.turnController,
+    super(new PIDController(Constants.AutoConstants.autoRotateP, Constants.AutoConstants.autoRotateI,Constants.AutoConstants.autoRotateD),
           driveTrain::getHeading,
           robotRelative ? (driveTrain.getHeading() + targetAngle) % 360 : targetAngle,
           output -> driveTrain.turnCommand(output),
           driveTrain
     );
     getController().enableContinuousInput(-180, 180);
-    getController()
+   getController()
         .setTolerance(Constants.AutoConstants.autoRotateThreshHold, Constants.AutoConstants.autoRotateThreshHoldVelo);
     this.driveTrain = driveTrain;
     lastGear = driveTrain.getGearMode();
@@ -38,7 +41,7 @@ public class Autorotate extends PIDCommand {
   public void end(boolean interrupted) {
     if(lastGear.equals(GearMode.high))
       driveTrain.toggleGearHigh();
-  }
+    }
 
   // Returns true when the command should end.
   @Override

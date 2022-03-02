@@ -5,6 +5,7 @@
 package org.team639;
 
 import org.team639.lib.Constants;
+import org.team639.subsystems.JeVoisInterface;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -30,6 +31,8 @@ public class Robot extends TimedRobot {
   public static double runningHorizontalDistance;
 
   public static boolean ANGLE_LOCKED = false;
+  JeVoisInterface testCam;
+
 
   // public static double lastHorizontalAngle = 0;
   // public static double lastHorizontalDistance = 1;
@@ -44,6 +47,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
+    testCam = new JeVoisInterface(false);
   }
 
   /**

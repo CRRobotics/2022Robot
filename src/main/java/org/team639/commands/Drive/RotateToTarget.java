@@ -8,19 +8,20 @@ import org.team639.Robot;
 import org.team639.lib.Constants;
 import org.team639.lib.states.GearMode;
 import org.team639.subsystems.DriveTrain;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 
 public class RotateToTarget extends PIDCommand {
   private DriveTrain driveTrain;
   private GearMode lastGear;
 
-  private static double targetAngle = Robot.getAngleToTarget();
 
-  /** Creates a new Autorotate. */
+  /** Creates a new RotateToTarget. */
   public RotateToTarget(DriveTrain driveTrain) {
-    super(driveTrain.turnController,
+    super(new PIDController(Constants.AutoConstants.autoRotateP, Constants.AutoConstants.autoRotateI,Constants.AutoConstants.autoRotateD),
           driveTrain::getHeading,
-          (driveTrain.getHeading() + targetAngle) % 360,
+          (driveTrain.getHeading() + Robot.getAngleToTarget()) % 360,
           output -> driveTrain.turnCommand(output),
           driveTrain
     );

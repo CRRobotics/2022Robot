@@ -44,7 +44,7 @@ public class DriveTrain extends SubsystemBase {
     // Independent left and right PID controllers
     public PIDController leftPIDController = new PIDController(0.00012078, 0, 0);
     public PIDController rightPIDController = new PIDController(0.00012078, 0, 0);
-    public PIDController turnController = new PIDController(Constants.AutoConstants.autoRotateP, Constants.AutoConstants.autoRotateI,Constants.AutoConstants.autoRotateD);  
+    // public PIDController turnController = new PIDController(Constants.AutoConstants.autoRotateP, Constants.AutoConstants.autoRotateI,Constants.AutoConstants.autoRotateD);  
 
     // Talon motor controllers
     public WPI_TalonFX leftMain = new WPI_TalonFX(Constants.Ports.Drive.leftMainID);
@@ -64,7 +64,7 @@ public class DriveTrain extends SubsystemBase {
         
         SmartDashboard.putData(leftPIDController);
         SmartDashboard.putData(rightPIDController);
-        SmartDashboard.putData("TurnControl",turnController);
+        // SmartDashboard.putData("TurnControl",turnController);
 
         SmartDashboard.putData("Field", simField);
         toggleGearLow();
