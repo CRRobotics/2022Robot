@@ -118,7 +118,8 @@ public class RobotContainer {
 
   static
   {
-    ledChooser.setDefaultOption("LEDSwapCade", LEDMode.swapcade);
+    ledChooser.setDefaultOption("Aimbot", LEDMode.aimbot);
+    ledChooser.addOption("LEDSwapCade", LEDMode.swapcade);
     ledChooser.addOption("Fire", LEDMode.fire);
     ledChooser.addOption("GamerMode", LEDMode.gamerMode);
     SmartDashboard.putData(ledChooser);
@@ -188,21 +189,20 @@ public class RobotContainer {
     //Driver
     ControllerWrapper.DriverRightBumper.whenPressed(shiftGears);
     ControllerWrapper.DriverLeftBumper.whenPressed(swap);
-    ControllerWrapper.DriverButtonX.whenPressed(new RotateToTarget(driveTrain).withTimeout(1.5));
     ControllerWrapper.DriverButtonA.whenHeld(new DJRobot(driveTrain, 10));
-    //ControllerWrapper.DriverButtonY.whenPressed(tele.aimbotshot);
+    ControllerWrapper.DriverButtonX.whenPressed(new TurnToAngleRelative(driveTrain).withTimeout(1));
+    ControllerWrapper.DriverButtonY.whenPressed(tele.aimbotshot);
 
     //Controller
     ControllerWrapper.ControlRightBumper.whenHeld(index);
     ControllerWrapper.ControlLeftBumper.whenHeld(eject);
 
-    ControllerWrapper.ControlButtonY.whenHeld(fenderShot); 
+    ControllerWrapper.ControlButtonY.whenPressed(fenderShot); 
     ControllerWrapper.ControlButtonB.whenPressed(toggleAcquisition);
     ControllerWrapper.ControlButtonX.whenPressed(autoShoot);
 
     //RESET BUTTONS
     ControllerWrapper.ControlDPadUp.whenPressed(new ToggleActuator(shooter));
-   // ControllerWrapper.DriverDPadDown.whenPressed(new Autorotate(driveTrain, 90, true));
   }
 
   /**
@@ -243,7 +243,7 @@ public class RobotContainer {
 
   class TeleopRoutines
   {
-    //final ParallelRaceGroup aimbotshot = new ParallelRaceGroup(new RotateToTarget(driveTrain), new AutoShootAtDistance(indexer, shooter, acquisition));
+    final ParallelRaceGroup aimbotshot = new ParallelRaceGroup(new TurnToAngleRelative(driveTrain), new AutoShootAtDistance(indexer, shooter, acquisition));
     
   }
   

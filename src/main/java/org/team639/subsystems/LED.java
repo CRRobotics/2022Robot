@@ -24,7 +24,7 @@ public class LED extends SubsystemBase {
   private int LedCount = 8;
 
   private final FireAnimation fire = new FireAnimation(0.5, 0.7, LedCount, 0.7, 0.5);
-  private final RgbFadeAnimation gamer_mode = new RgbFadeAnimation(0.7, 0.4, LedCount);
+  private final RgbFadeAnimation gamer_mode = new RgbFadeAnimation(0.7, 1, LedCount);
 
   /**
    * Sets the CANdle LED based upon current orientation of the robot
@@ -41,6 +41,9 @@ public class LED extends SubsystemBase {
      curr_led = RobotContainer.getLedMode();
      switch(curr_led)
      {
+        case aimbot:
+          aimLockmode();
+          break;
         case swapcade:
           swapcadeMode();
           break;
@@ -49,12 +52,21 @@ public class LED extends SubsystemBase {
           break;
         case gamerMode:
           rgbFade();
+          break;
      }
   }
 
   public void swapcadeMode()
   {
     if(SmartDashboard.getBoolean("Swapcade Mode", true))
+      m_candle.setLEDs(0,255,0);
+    else
+      m_candle.setLEDs(255,0,0);
+  }
+
+  public void aimLockmode()
+  {
+    if(Robot.lockedOn())
       m_candle.setLEDs(0,255,0);
     else
       m_candle.setLEDs(255,0,0);
