@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -272,6 +273,25 @@ public class RobotContainer {
       new ShootAtDistance(indexer, shooter, acquisition, 5)
     );
 
+    //Start Position: 6.44, 2.62 - Side of bumpers lined up against the tarmac, with the front edge facing touching the front tarmac
+    final SequentialCommandGroup fourBall_v2 = new SequentialCommandGroup(
+      new WaitCommand(0.2),
+      new ParallelCommandGroup(new DriveRamsete(driveTrain, "4Ball_v2Part1"), new ShootAtDistanceTimed(indexer, shooter, acquisition, 3.5, Constants.ShooterConstants.pureShootingTime)),
+      new ParallelRaceGroup(new DriveRamsete(driveTrain, "4Ball_v2Part2"), new ManualIndexer(shooter, indexer, acquisition)),
+      new ManualIndexer(shooter, indexer, acquisition).withTimeout(1),
+      new ParallelCommandGroup(new DriveRamsete(driveTrain, "4Ball_v2Part3"), new ManualIndexer(shooter, indexer, acquisition).withTimeout(.2)),
+      new ShootAtDistance(indexer, shooter, acquisition, 3.5)
+    );
+
+    final SequentialCommandGroup fiveBall = new SequentialCommandGroup(
+      new WaitCommand(0.2),
+      new ParallelCommandGroup(new DriveRamsete(driveTrain, "4Ball_v2Part1"), new ShootAtDistanceTimed(indexer, shooter, acquisition, 3.5, Constants.ShooterConstants.pureShootingTime)),
+      new ParallelRaceGroup(new DriveRamsete(driveTrain, "4Ball_v2Part2"), new ManualIndexer(shooter, indexer, acquisition)),
+      new ManualIndexer(shooter, indexer, acquisition).withTimeout(1),
+      new ParallelCommandGroup(new DriveRamsete(driveTrain, "5BallPart3"), new ManualIndexer(shooter, indexer, acquisition)),
+      new ParallelCommandGroup(new ShootAtDistanceTimed(indexer, shooter, acquisition, 3.5, 3), new SequentialCommandGroup(new WaitCommand(1.6), new DriveRamsete(driveTrain, "5BallPart4")))
+    );
+
 
     //Start Position: Anywhere on the field - Bumpers pushed against tarmac, facing team ball
     final SequentialCommandGroup twoBallAutonomous = new SequentialCommandGroup(
@@ -280,7 +300,6 @@ public class RobotContainer {
       new ParallelRaceGroup(new DriveRamsete(driveTrain, "2BallAutonomousPart2").robotRelative(), new ManualIndexer(shooter, indexer, acquisition)),
       new ShootAtDistance(indexer, shooter, acquisition, 2),
       new DriveRamsete(driveTrain, "2BallAutonomousPart3")
-
     );
   }
 
