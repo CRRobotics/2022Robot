@@ -169,7 +169,7 @@ public interface Constants
 
     public interface AcquisitionConstants
     {
-        public static final double acquisitionSpeed = 0.9;
+        public static final double acquisitionSpeed = 1;
         public static final double acquisitionSpeedSlow = 0.2;
     }
 

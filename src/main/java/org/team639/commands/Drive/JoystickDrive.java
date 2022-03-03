@@ -91,9 +91,9 @@ public class JoystickDrive extends CommandBase {
    * @param turnValue Magnitude of turning
    */
   public void arcadeDrive(double speed, double turnValue) {
-    //speed = Math.copySign(speed * speed, speed);
-    //turning = Math.copySign(turning * turning, turning);
-    //speed *= Constants.DriveConstants.driveMultiplier;
+    // speed = Math.copySign(speed * speed, speed);
+    //turnValue = Math.copySign(turnValue * turnValue, turnValue);
+    speed *= Constants.DriveConstants.driveMultiplier;
 
     double turnMultiplier = 1 - speed;
     if (turnMultiplier < 1d / 3d)
@@ -104,8 +104,9 @@ public class JoystickDrive extends CommandBase {
 
     double left = speed + turnValue;
     double right = speed - turnValue;
+    driveTrain.setSpeedsPercent(left, right);
 
-    driveTrain.setSpeedsPercent(left * Constants.DriveConstants.driveMultiplier, right * Constants.DriveConstants.driveMultiplier);
+   // driveTrain.setSpeedsPercent(left * Constants.DriveConstants.driveMultiplier, right * Constants.DriveConstants.driveMultiplier);
   }
 
   public void tankDrive(double leftSpeed, double rightSpeed) {
