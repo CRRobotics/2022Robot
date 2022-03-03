@@ -15,32 +15,57 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class TurnToAngleRelative extends CommandBase {
   private DriveTrain driveTrain;
   private double setpoint;
+
+  private double angle;
   private boolean clockwise;
 
   private GearMode lastGear;
-  private PIDController turnController = new PIDController(Constants.AutoConstants.autoRotateP, Constants.AutoConstants.autoRotateI, Constants.AutoConstants.autoRotateD);
+  private PIDController controller = new PIDController(Constants.AutoConstants.autoRotateP,
+      Constants.AutoConstants.autoRotateI, Constants.AutoConstants.autoRotateD);
 
-  /** Creates a new TurnToAngleRelative. */
-  public TurnToAngleRelative(DriveTrain driveTrain, double angle, boolean useVisions) {
+  /**
+   * Creates relative turn to angle that uses vision tracking
+   * @param driveTrain DriveTrain to use
+   */
+  public TurnToAngleRelative(DriveTrain driveTrain) {
     this.driveTrain = driveTrain;
     addRequirements(driveTrain);
-    if(useVisions && !Robot.lockedOn()) { end(true); }
-    angle = useVisions ? Robot.getAngleToTarget() : angle % 360;
+    if (!Robot.lockedOn()) {
+      end(true);
+    }
+    this.angle = Robot.getAngleToTarget();
 
     this.clockwise = Math.signum(angle) > 0 ? true : false;
-    setpoint = Math.abs(angle) + driveTrain.getHeading();
+    // setpoint = Math.abs(angle) + driveTrain.getHeading();
 
-    turnController.setTolerance(Constants.AutoConstants.autoRotateThreshHold, Constants.AutoConstants.autoRotateThreshHoldVelo);
-    turnController.setSetpoint(setpoint); 
+    // controller.setTolerance(Constants.AutoConstants.autoRotateThreshHold,
+    //     Constants.AutoConstants.autoRotateThreshHoldVelo);
+    // controller.setSetpoint(setpoint);
+  }
 
-    lastGear = driveTrain.getGearMode();
+  /**
+   * Creates new turn to angle without visions
+   */
+  public TurnToAngleRelative(DriveTrain driveTrain, double angle) {
+    this.driveTrain = driveTrain;
+    addRequirements(driveTrain);
+
+    this.angle = angle;
+    this.clockwise = Math.signum(angle) > 0 ? true : false;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    setpoint = Math.abs(angle) + driveTrain.getHeading();
+
+    controller.setTolerance(Constants.AutoConstants.autoRotateThreshHold,
+        Constants.AutoConstants.autoRotateThreshHoldVelo);
+    controller.setSetpoint(setpoint);
+
+    lastGear = driveTrain.getGearMode();
     driveTrain.setSpeedsPercent(0, 0);
-    if(lastGear.equals(GearMode.high))
+    if (lastGear.equals(GearMode.high))
       driveTrain.toggleGearLow();
     System.out.println("Auto rotate initializing");
   }
@@ -48,24 +73,24 @@ public class TurnToAngleRelative extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(clockwise)
-      driveTrain.turnCommand(turnController.calculate(driveTrain.getHeading(), setpoint));
+    if (clockwise)
+      driveTrain.turnCommand(controller.calculate(driveTrain.getHeading(), setpoint));
     else
-      driveTrain.turnCommand(-turnController.calculate(driveTrain.getHeading(), setpoint));
+      driveTrain.turnCommand(-controller.calculate(driveTrain.getHeading(), setpoint));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     driveTrain.setSpeedsPercent(0, 0);
-    if(lastGear.equals(GearMode.high))
+    if (lastGear.equals(GearMode.high))
       driveTrain.toggleGearHigh();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(turnController.atSetpoint())
+    if (controller.atSetpoint())
       return true;
     return false;
   }

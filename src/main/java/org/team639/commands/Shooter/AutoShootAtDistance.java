@@ -31,9 +31,7 @@ public class AutoShootAtDistance extends CommandBase {
     }
 
     @Override
-    public void initialize() {
-
-        
+    public void initialize() {        
         shooter.setCoast();
         startTime = System.currentTimeMillis();
         shooter.setActuator(shootAngleSpeed.getAngle());
