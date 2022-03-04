@@ -33,6 +33,10 @@ public class Robot extends TimedRobot {
   public static boolean ANGLE_LOCKED = false;
   JeVoisInterface testCam;
 
+  public static double blueBallAngle;
+  public static double redBallAngle;
+
+
 
   // public static double lastHorizontalAngle = 0;
   // public static double lastHorizontalDistance = 1;
@@ -60,6 +64,11 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     llpython = NetworkTableInstance.getDefault().getTable("limelight").getEntry("llpython");
+
+    // blueBallAngle = NetworkTableInstance.getDefault().getTable("visions").getEntry("blueAngle");
+    // redBallAngle = NetworkTableInstance.getDefault().getTable("visions").getEntry("blueAngle");
+
+
 
     SmartDashboard.putNumber("Angle to target", getAngleToTarget());
     SmartDashboard.putNumber("Distance to target", getDistanceToTarget());
@@ -153,6 +162,12 @@ public class Robot extends TimedRobot {
       return -1;
     }
   }
+
+  // public static double getAngleToBall()
+  // {
+  //   return NetW
+  // }
+
 
   /**
    * Returns if the current visions values are locked on

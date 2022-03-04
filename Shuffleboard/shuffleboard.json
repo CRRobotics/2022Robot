@@ -150,6 +150,17 @@
               "Visuals/Num tick marks": 5,
               "Visuals/Show text": true
             }
+          },
+          "6,2": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "ComboBox Chooser",
+              "_source0": "network_table:///SmartDashboard/SongChooser",
+              "_title": "/SmartDashboard/SongChooser"
+            }
           }
         }
       }
@@ -305,6 +316,16 @@
                   "_title": "LiveWindow/Ungrouped/BangBangController[1]/atSetpoint",
                   "Colors/Color when true": "#7CFC00FF",
                   "Colors/Color when false": "#8B0000FF"
+                },
+                {
+                  "_type": "PID Controller",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[4]",
+                  "_title": "/LiveWindow/Ungrouped/PIDController[4]"
+                },
+                {
+                  "_type": "PID Controller",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[5]",
+                  "_title": "/LiveWindow/Ungrouped/PIDController[5]"
                 }
               ]
             }
