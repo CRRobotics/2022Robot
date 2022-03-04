@@ -264,7 +264,7 @@ public class RobotContainer {
     //Start Position: 7.635, 1.786 - Facing bottom team ball, bumpers against the tarmac edge
     //Unfortunately, we will not have Rohits jumper
     final SequentialCommandGroup fourBallAutonomousAndRohitsJumper = new SequentialCommandGroup(
-      new WaitCommand(0.3),
+      new WaitCommand(0.5),
       new ParallelRaceGroup(new DriveRamsete(driveTrain, "4BallPart1").robotRelative(), new ManualIndexer(shooter, indexer, acquisition)),
       new ShootAtDistance(indexer, shooter, acquisition, 2.432373),
       new DriveRamsete(driveTrain, "4BallPart2").robotRelative(),
@@ -276,27 +276,27 @@ public class RobotContainer {
     //Start Position: 6.44, 2.62 - Side of bumpers lined up against the tarmac, with the front edge facing touching the front tarmac
     final SequentialCommandGroup fourBall_v2 = new SequentialCommandGroup(
       new WaitCommand(0.5),
-      new ParallelCommandGroup(new DriveRamsete(driveTrain, "4Ball_v2Part1"), new ShootAtDistanceTimed(indexer, shooter, acquisition, 3.5, Constants.ShooterConstants.pureShootingTime)),
+      new ParallelCommandGroup(new DriveRamsete(driveTrain, "4Ball_v2Part1"), new ShootAtDistanceTimed(indexer, shooter, acquisition, 3.5, 2200)),
       new ParallelRaceGroup(new DriveRamsete(driveTrain, "4Ball_v2Part2"), new ManualIndexer(shooter, indexer, acquisition)),
-      new ManualIndexer(shooter, indexer, acquisition).withTimeout(0.5),
+      new ManualIndexer(shooter, indexer, acquisition).withTimeout(0.75),
       new ParallelCommandGroup(new DriveRamsete(driveTrain, "4Ball_v2Part3"), new ManualIndexer(shooter, indexer, acquisition).withTimeout(.2)),
       new ShootAtDistance(indexer, shooter, acquisition, 3.5)
     );
 
-    // //Coding gods, take the wheel
-    // final SequentialCommandGroup fiveBall = new SequentialCommandGroup(
-    //   new WaitCommand(0.3),
-    //   new ParallelCommandGroup(new DriveRamsete(driveTrain, "4Ball_v2Part1"), new ShootAtDistanceTimed(indexer, shooter, acquisition, 3.5, Constants.ShooterConstants.pureShootingTime)),
-    //   new ParallelRaceGroup(new DriveRamsete(driveTrain, "4Ball_ v2Part2"), new ManualIndexer(shooter, indexer, acquisition)),
-    //   new ManualIndexer(shooter, indexer, acquisition).withTimeout(0.75),
-    //   new ParallelCommandGroup(new DriveRamsete(driveTrain, "5BallPart3"), new ManualIndexer(shooter, indexer, acquisition)),
-    //   new ParallelCommandGroup(new ShootAtDistanceTimed(indexer, shooter, acquisition, 3.5, 5), new SequentialCommandGroup(new WaitCommand(1.6), new DriveRamsete(driveTrain, "5BallPart4")))
-    // );
+    //Coding gods, take the wheel
+    final SequentialCommandGroup fiveBall = new SequentialCommandGroup(
+      new WaitCommand(0.5),
+      new ParallelCommandGroup(new DriveRamsete(driveTrain, "4Ball_v2Part1"), new ShootAtDistanceTimed(indexer, shooter, acquisition, 3.5, 2200)),
+      new ParallelRaceGroup(new DriveRamsete(driveTrain, "4Ball_v2Part2"), new ManualIndexer(shooter, indexer, acquisition)),
+      new ManualIndexer(shooter, indexer, acquisition).withTimeout(0.75),
+      new ParallelCommandGroup(new DriveRamsete(driveTrain, "5BallPart3"), new ManualIndexer(shooter, indexer, acquisition)),
+      new ParallelCommandGroup(new ShootAtDistanceTimed(indexer, shooter, acquisition, 3.5, 5), new SequentialCommandGroup(new WaitCommand(1.6), new DriveRamsete(driveTrain, "5BallPart4")))
+    );
 
 
     //Start Position: Anywhere on the field - Bumpers pushed against tarmac, facing team ball
     final SequentialCommandGroup twoBallAutonomous = new SequentialCommandGroup(
-      new WaitCommand(0.3),
+      new WaitCommand(0.5),
       new ParallelRaceGroup(new DriveRamsete(driveTrain, "2BallAutonomous").robotRelative(), new ManualIndexer(shooter, indexer, acquisition)),
       new ParallelRaceGroup(new DriveRamsete(driveTrain, "2BallAutonomousPart2").robotRelative(), new ManualIndexer(shooter, indexer, acquisition)),
       new ShootAtDistance(indexer, shooter, acquisition, 2)

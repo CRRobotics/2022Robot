@@ -156,8 +156,6 @@ public interface Constants
         public static final double shooterD = 0.0002;
         public static final double shooterFF = 0.00018;
 
-
-
     }
 
     public interface IndexerConstants
