@@ -33,52 +33,45 @@ public class LED extends SubsystemBase {
   public void periodic() {
     updateLED();
 
-
   }
 
-  public void updateLED()
-  {
-     curr_led = RobotContainer.getLedMode();
-     switch(curr_led)
-     {
-        case aimbot:
-          aimLockmode();
-          break;
-        case swapcade:
-          swapcadeMode();
-          break;
-        case fire:
-          fireAnim();
-          break;
-        case gamerMode:
-          rgbFade();
-          break;
-     }
+  public void updateLED() {
+    curr_led = RobotContainer.getLedMode();
+    switch (curr_led) {
+      case aimbot:
+        aimLockmode();
+        break;
+      case swapcade:
+        swapcadeMode();
+        break;
+      case fire:
+        fireAnim();
+        break;
+      case gamerMode:
+        rgbFade();
+        break;
+    }
   }
 
-  public void swapcadeMode()
-  {
-    if(SmartDashboard.getBoolean("Swapcade Mode", true))
-      m_candle.setLEDs(0,255,0);
+  public void swapcadeMode() {
+    if (SmartDashboard.getBoolean("Swapcade Mode", true))
+      m_candle.setLEDs(0, 255, 0);
     else
-      m_candle.setLEDs(255,0,0);
+      m_candle.setLEDs(255, 0, 0);
   }
 
-  public void aimLockmode()
-  {
-    if(Robot.lockedOn())
-      m_candle.setLEDs(0,255,0);
+  public void aimLockmode() {
+    if (Robot.lockedOn())
+      m_candle.setLEDs(0, 255, 0);
     else
-      m_candle.setLEDs(255,0,0);
+      m_candle.setLEDs(255, 0, 0);
   }
 
-  public void fireAnim()
-  {
+  public void fireAnim() {
     m_candle.animate(fire);
   }
 
-  public void rgbFade()
-  {
+  public void rgbFade() {
     m_candle.animate(gamer_mode);
   }
 }

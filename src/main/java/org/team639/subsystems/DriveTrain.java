@@ -135,7 +135,8 @@ public class DriveTrain extends SubsystemBase {
         rightMain.set(ControlMode.PercentOutput, rightSpeed);
     }
 
-    //NOTE TO THOSE IN THE FUTURE: turnCommandR and turnCommandL ARE LAST MINUTE AND INSANELY SKETCHY
+    // NOTE TO THOSE IN THE FUTURE: turnCommandR and turnCommandL ARE LAST MINUTE
+    // AND INSANELY SKETCHY
 
     /**
      * Command to turn the robot a certain magnitude to the right

@@ -24,16 +24,15 @@ public class Shooter extends SubsystemBase {
 
   private NetworkTableEntry shooterSpeed = tab.add("RPM", 5000).getEntry();
   private NetworkTableEntry hoodPositioNetworkTableEntry = tab.add("HoodAngle", 0).getEntry();
-  private NetworkTableEntry shooterSpeedPercent = tab.add("ShootPercent", 0).withWidget(BuiltInWidgets.kNumberSlider).getEntry();
+  private NetworkTableEntry shooterSpeedPercent = tab.add("ShootPercent", 0).withWidget(BuiltInWidgets.kNumberSlider)
+      .getEntry();
 
-  private NetworkTableEntry FF = tab.add("FF",0).getEntry();
-  private NetworkTableEntry P = tab.add("P",0).getEntry();
-  private NetworkTableEntry I = tab.add("I",0).getEntry();
-  private NetworkTableEntry D = tab.add("D",0).getEntry();
+  private NetworkTableEntry FF = tab.add("FF", 0).getEntry();
+  private NetworkTableEntry P = tab.add("P", 0).getEntry();
+  private NetworkTableEntry I = tab.add("I", 0).getEntry();
+  private NetworkTableEntry D = tab.add("D", 0).getEntry();
 
-
-
-  //Motor Controllers
+  // Motor Controllers
   private CANSparkMax mainMotor = new CANSparkMax(Constants.Ports.Shooter.mainID, CANSparkMax.MotorType.kBrushless);
   private CANSparkMax followMotor = new CANSparkMax(Constants.Ports.Shooter.followID, CANSparkMax.MotorType.kBrushless);
 
@@ -42,7 +41,7 @@ public class Shooter extends SubsystemBase {
   public double mainRPM;
   public double secondaryRPM;
 
-  //private PIDController shooterPID = new PIDController(0.0001, 0.001, 0);
+  // private PIDController shooterPID = new PIDController(0.0001, 0.001, 0);
 
   private SparkMaxPIDController maxController;
 
@@ -66,10 +65,10 @@ public class Shooter extends SubsystemBase {
     maxController.setD(Constants.ShooterConstants.shooterD);
     maxController.setFF(Constants.ShooterConstants.shooterFF);
 
-    mainLinearActuator.setBounds(1.8,1.8,1.5,1.2,1.0);
+    mainLinearActuator.setBounds(1.8, 1.8, 1.5, 1.2, 1.0);
     mainLinearActuator.setSpeed(1);
 
-    followLinearActuator.setBounds(1.8,1.8,1.5,1.2,1.0);
+    followLinearActuator.setBounds(1.8, 1.8, 1.5, 1.2, 1.0);
     followLinearActuator.setSpeed(1);
 
     setActuator(0);
@@ -86,89 +85,80 @@ public class Shooter extends SubsystemBase {
     // maxController.setD(D.getDouble(Constants.ShooterConstants.shooterD));
 
   }
-/**
- * Sets shooter at certain speed
- * @param speed speed in percent from 1 to -1
- */  
-  public void setSpeed(double speed){
+
+  /**
+   * Sets shooter at certain speed
+   * 
+   * @param speed speed in percent from 1 to -1
+   */
+  public void setSpeed(double speed) {
     mainMotor.set(speed);
   }
 
-  public double getSelectedHood()
-  {
+  public double getSelectedHood() {
     return hoodPositioNetworkTableEntry.getDouble(0);
   }
 
-  public double getSelectedRPM()
-  {
+  public double getSelectedRPM() {
     return shooterSpeed.getDouble(5000);
   }
 
-  public double getSelectedSpeed()
-  {
+  public double getSelectedSpeed() {
     return shooterSpeedPercent.getDouble(0);
   }
 
   /**
    * Sets shooter to certain rpm
+   * 
    * @param setpoint RPM to set shooter
    */
-  public void setSpeedRPM(double setpoint){
+  public void setSpeedRPM(double setpoint) {
     maxController.setReference(setpoint, ControlType.kVelocity);
   }
 
   /**
    * Sets linear actuator to certain position
+   * 
    * @param pos Position to be set between 0 and 1
    */
-  public void setActuator(double pos){
+  public void setActuator(double pos) {
     mainLinearActuator.setPosition(pos);
     followLinearActuator.setPosition(pos);
   }
 
-  public double getVelocity()
-  {
+  public double getVelocity() {
     return mainEncoder.getVelocity();
   }
 
-  public double getActuatorPosition()
-  {
+  public double getActuatorPosition() {
     return mainLinearActuator.get();
   }
 
-  public boolean getExhaling()
-  {
+  public boolean getExhaling() {
     return mainMotor.get() > 0;
   }
 
-  public boolean getInhaling()
-  {
+  public boolean getInhaling() {
     return mainMotor.get() < 0;
   }
 
-  public void stop()
-  {
-        mainMotor.set(0);
-        followMotor.set(0);
+  public void stop() {
+    mainMotor.set(0);
+    followMotor.set(0);
   }
 
-  public void setBrake()
-  {
-    if(mainMotor.getIdleMode().equals(IdleMode.kCoast))
-    {
+  public void setBrake() {
+    if (mainMotor.getIdleMode().equals(IdleMode.kCoast)) {
       mainMotor.setIdleMode(IdleMode.kBrake);
       followMotor.setIdleMode(IdleMode.kBrake);
     }
   }
 
-  public void setCoast()
-  {
-    if(mainMotor.getIdleMode().equals(IdleMode.kBrake))
-    {
+  public void setCoast() {
+    if (mainMotor.getIdleMode().equals(IdleMode.kBrake)) {
       mainMotor.setIdleMode(IdleMode.kCoast);
       followMotor.setIdleMode(IdleMode.kCoast);
     }
   }
-
 
 }
