@@ -200,7 +200,8 @@ public class RobotContainer {
 
     ControllerWrapper.ControlButtonY.whenPressed(fenderShot); 
     ControllerWrapper.ControlButtonB.whenPressed(toggleAcquisition);
-    ControllerWrapper.ControlButtonX.whenPressed(autoShoot);
+    ControllerWrapper.ControlButtonX.whenPressed(new AutoShootAtDistance(indexer, shooter, acquisition));
+
 
     //RESET BUTTONS
     ControllerWrapper.ControlDPadUp.whenPressed(new ToggleActuator(shooter));
@@ -225,7 +226,7 @@ public class RobotContainer {
         auto = auton.twoBallAutonomous;
         break;
       case FourBall:
-        auto = auton.fourBallAutonomousAndRohitsJumper;
+        auto = auton.fourBall_v2;
         break;
       case BounceTest:
         auto = auton.bounceTest;
@@ -239,7 +240,6 @@ public class RobotContainer {
    */
   public void defaultCommands() {
    CommandScheduler.getInstance().setDefaultCommand(driveTrain, joystickDrive);
- // CommandScheduler.getInstance().setDefaultCommand(shooter, manualAim);
   }
 
   class TeleopRoutines
@@ -275,22 +275,23 @@ public class RobotContainer {
 
     //Start Position: 6.44, 2.62 - Side of bumpers lined up against the tarmac, with the front edge facing touching the front tarmac
     final SequentialCommandGroup fourBall_v2 = new SequentialCommandGroup(
-      new WaitCommand(0.2),
+      new WaitCommand(0.5),
       new ParallelCommandGroup(new DriveRamsete(driveTrain, "4Ball_v2Part1"), new ShootAtDistanceTimed(indexer, shooter, acquisition, 3.5, Constants.ShooterConstants.pureShootingTime)),
       new ParallelRaceGroup(new DriveRamsete(driveTrain, "4Ball_v2Part2"), new ManualIndexer(shooter, indexer, acquisition)),
-      new ManualIndexer(shooter, indexer, acquisition).withTimeout(1),
+      new ManualIndexer(shooter, indexer, acquisition).withTimeout(0.5),
       new ParallelCommandGroup(new DriveRamsete(driveTrain, "4Ball_v2Part3"), new ManualIndexer(shooter, indexer, acquisition).withTimeout(.2)),
       new ShootAtDistance(indexer, shooter, acquisition, 3.5)
     );
 
-    final SequentialCommandGroup fiveBall = new SequentialCommandGroup(
-      new WaitCommand(0.2),
-      new ParallelCommandGroup(new DriveRamsete(driveTrain, "4Ball_v2Part1"), new ShootAtDistanceTimed(indexer, shooter, acquisition, 3.5, Constants.ShooterConstants.pureShootingTime)),
-      new ParallelRaceGroup(new DriveRamsete(driveTrain, "4Ball_v2Part2"), new ManualIndexer(shooter, indexer, acquisition)),
-      new ManualIndexer(shooter, indexer, acquisition).withTimeout(1),
-      new ParallelCommandGroup(new DriveRamsete(driveTrain, "5BallPart3"), new ManualIndexer(shooter, indexer, acquisition)),
-      new ParallelCommandGroup(new ShootAtDistanceTimed(indexer, shooter, acquisition, 3.5, 3), new SequentialCommandGroup(new WaitCommand(1.6), new DriveRamsete(driveTrain, "5BallPart4")))
-    );
+    // //Coding gods, take the wheel
+    // final SequentialCommandGroup fiveBall = new SequentialCommandGroup(
+    //   new WaitCommand(0.3),
+    //   new ParallelCommandGroup(new DriveRamsete(driveTrain, "4Ball_v2Part1"), new ShootAtDistanceTimed(indexer, shooter, acquisition, 3.5, Constants.ShooterConstants.pureShootingTime)),
+    //   new ParallelRaceGroup(new DriveRamsete(driveTrain, "4Ball_ v2Part2"), new ManualIndexer(shooter, indexer, acquisition)),
+    //   new ManualIndexer(shooter, indexer, acquisition).withTimeout(0.75),
+    //   new ParallelCommandGroup(new DriveRamsete(driveTrain, "5BallPart3"), new ManualIndexer(shooter, indexer, acquisition)),
+    //   new ParallelCommandGroup(new ShootAtDistanceTimed(indexer, shooter, acquisition, 3.5, 5), new SequentialCommandGroup(new WaitCommand(1.6), new DriveRamsete(driveTrain, "5BallPart4")))
+    // );
 
 
     //Start Position: Anywhere on the field - Bumpers pushed against tarmac, facing team ball
@@ -298,8 +299,7 @@ public class RobotContainer {
       new WaitCommand(0.3),
       new ParallelRaceGroup(new DriveRamsete(driveTrain, "2BallAutonomous").robotRelative(), new ManualIndexer(shooter, indexer, acquisition)),
       new ParallelRaceGroup(new DriveRamsete(driveTrain, "2BallAutonomousPart2").robotRelative(), new ManualIndexer(shooter, indexer, acquisition)),
-      new ShootAtDistance(indexer, shooter, acquisition, 2),
-      new DriveRamsete(driveTrain, "2BallAutonomousPart3")
+      new ShootAtDistance(indexer, shooter, acquisition, 2)
     );
   }
 

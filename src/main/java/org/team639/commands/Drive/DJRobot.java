@@ -40,8 +40,8 @@ public class DJRobot extends CommandBase {
     instruments.add(driveTrain.rightFollower);
     instruments.add(driveTrain.leftMain);
     instruments.add(driveTrain.leftFollower);
+    
     orchestra = new Orchestra(instruments);
-
     orchestra.loadMusic(RobotContainer.songChooser());
     System.out.println("DJRobot Initializing");
   }

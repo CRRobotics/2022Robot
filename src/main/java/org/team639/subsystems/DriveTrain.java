@@ -131,14 +131,26 @@ public class DriveTrain extends SubsystemBase {
     }
 
     /**
-     * Command to turn the robot a certain magnitude
-     * @param turnValue Magnitude from -1.0 to 1.0
+     * Command to turn the robot a certain magnitude to the right
+     * @param turnValue Magnitude from 0 to 1.0
      */
-    public void turnCommand(double turnValue) {
+    public void turnCommandR(double turnValue) {
         double left = turnValue;
         double right = -turnValue;
         setSpeedsPercent(left * Constants.DriveConstants.driveMultiplier, right * Constants.DriveConstants.driveMultiplier);
-      }
+    }
+
+    /**
+     * Command to turn the robot a certain magnitude to the left
+     * @param turnValue magnitude from -1.0 to 0
+     */
+    public void turnCommandL(double turnValue)
+    {
+        double left = -turnValue;
+        double right = turnValue;
+        setSpeedsPercent(left * Constants.DriveConstants.driveMultiplier, right * Constants.DriveConstants.driveMultiplier);
+
+    }
 
 
     /**

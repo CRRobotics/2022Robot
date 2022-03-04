@@ -30,40 +30,21 @@ public class TurnToAngleRelative extends CommandBase {
   public TurnToAngleRelative(DriveTrain driveTrain) {
     this.driveTrain = driveTrain;
     addRequirements(driveTrain);
-    if (!Robot.lockedOn()) {
-      end(true);
-    }
-    this.angle = Robot.getAngleToTarget();
-
-    this.clockwise = Math.signum(angle) > 0 ? true : false;
-    // setpoint = Math.abs(angle) + driveTrain.getHeading();
-
-    // controller.setTolerance(Constants.AutoConstants.autoRotateThreshHold,
-    //     Constants.AutoConstants.autoRotateThreshHoldVelo);
-    // controller.setSetpoint(setpoint);
-  }
-
-  /**
-   * Creates new turn to angle without visions
-   */
-  public TurnToAngleRelative(DriveTrain driveTrain, double angle) {
-    this.driveTrain = driveTrain;
-    addRequirements(driveTrain);
-
-    this.angle = angle;
-    this.clockwise = Math.signum(angle) > 0 ? true : false;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    setpoint = Math.abs(angle) + driveTrain.getHeading();
+    lastGear = driveTrain.getGearMode();
+    angle = Robot.getAngleToTarget() % 360.0;
+    clockwise = Math.signum(angle) > 0 ? true : false;
+    //setpoint = clockwise ? Math.abs(angle) + driveTrain.getHeading() : driveTrain.getHeading() - Math.abs(angle);
+    setpoint = driveTrain.getHeading() + angle;
 
     controller.setTolerance(Constants.AutoConstants.autoRotateThreshHold,
         Constants.AutoConstants.autoRotateThreshHoldVelo);
     controller.setSetpoint(setpoint);
 
-    lastGear = driveTrain.getGearMode();
     driveTrain.setSpeedsPercent(0, 0);
     if (lastGear.equals(GearMode.high))
       driveTrain.toggleGearLow();
@@ -74,9 +55,9 @@ public class TurnToAngleRelative extends CommandBase {
   @Override
   public void execute() {
     if (clockwise)
-      driveTrain.turnCommand(controller.calculate(driveTrain.getHeading(), setpoint));
+      driveTrain.turnCommandR(controller.calculate(driveTrain.getHeading(), setpoint));
     else
-      driveTrain.turnCommand(-controller.calculate(driveTrain.getHeading(), setpoint));
+      driveTrain.turnCommandL(-controller.calculate(driveTrain.getHeading(), setpoint));
   }
 
   // Called once the command ends or is interrupted.

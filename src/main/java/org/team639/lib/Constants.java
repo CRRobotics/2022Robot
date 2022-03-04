@@ -74,7 +74,7 @@ public interface Constants
         public static final double kA = 0.3922;
 
         public static final double kMaxAccelerationMetersPerSecondSquared = 2;
-        public static final double kMaxSpeedMetersPerSecond = 1.5;
+        public static final double kMaxSpeedMetersPerSecond = 2;
 
         public static final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);
         public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.DriveConstants.chassisWidth);
