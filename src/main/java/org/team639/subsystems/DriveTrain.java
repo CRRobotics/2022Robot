@@ -33,7 +33,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class DriveTrain extends SubsystemBase {
     private final Field2d simField = new Field2d();
 
-
     // Gyroscope and initial pose
     AHRS gyro = new AHRS(SPI.Port.kMXP);
     private Pose2d startPosition = new Pose2d(new Translation2d(0, 0), gyro.getRotation2d());
@@ -44,7 +43,9 @@ public class DriveTrain extends SubsystemBase {
     // Independent left and right PID controllers
     public PIDController leftPIDController = new PIDController(0.00012078, 0, 0);
     public PIDController rightPIDController = new PIDController(0.00012078, 0, 0);
-    // public PIDController turnController = new PIDController(Constants.AutoConstants.autoRotateP, Constants.AutoConstants.autoRotateI,Constants.AutoConstants.autoRotateD);  
+    // public PIDController turnController = new
+    // PIDController(Constants.AutoConstants.autoRotateP,
+    // Constants.AutoConstants.autoRotateI,Constants.AutoConstants.autoRotateD);
 
     // Talon motor controllers
     public WPI_TalonFX leftMain = new WPI_TalonFX(Constants.Ports.Drive.leftMainID);
@@ -56,12 +57,12 @@ public class DriveTrain extends SubsystemBase {
     public boolean reversedHeading;
 
     /** Creates a new DriveTrain. */
-    public DriveTrain(){
+    public DriveTrain() {
         reversedHeading = true;
         resetEncoders();
         resetOdometry(startPosition);
         motorConfig();
-        
+
         SmartDashboard.putData(leftPIDController);
         SmartDashboard.putData(rightPIDController);
         // SmartDashboard.putData("TurnControl",turnController);
@@ -87,19 +88,23 @@ public class DriveTrain extends SubsystemBase {
         rightMain.setNeutralMode(NeutralMode.Brake);
         rightFollower.setNeutralMode(NeutralMode.Brake);
 
-        leftMain.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, Constants.DriveConstants.supplyCurrentLimiter,
-                Constants.DriveConstants.supplyCurrentThreshHold, 0.5));
-        rightMain.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, Constants.DriveConstants.supplyCurrentLimiter,
-                Constants.DriveConstants.supplyCurrentThreshHold, 0.5));
+        leftMain.configSupplyCurrentLimit(
+                new SupplyCurrentLimitConfiguration(true, Constants.DriveConstants.supplyCurrentLimiter,
+                        Constants.DriveConstants.supplyCurrentThreshHold, 0.5));
+        rightMain.configSupplyCurrentLimit(
+                new SupplyCurrentLimitConfiguration(true, Constants.DriveConstants.supplyCurrentLimiter,
+                        Constants.DriveConstants.supplyCurrentThreshHold, 0.5));
 
-        leftFollower.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, Constants.DriveConstants.supplyCurrentLimiter,
-                Constants.DriveConstants.supplyCurrentThreshHold, 0.5));
-        rightFollower.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, Constants.DriveConstants.supplyCurrentLimiter,
-                Constants.DriveConstants.supplyCurrentThreshHold, 0.5));
+        leftFollower.configSupplyCurrentLimit(
+                new SupplyCurrentLimitConfiguration(true, Constants.DriveConstants.supplyCurrentLimiter,
+                        Constants.DriveConstants.supplyCurrentThreshHold, 0.5));
+        rightFollower.configSupplyCurrentLimit(
+                new SupplyCurrentLimitConfiguration(true, Constants.DriveConstants.supplyCurrentLimiter,
+                        Constants.DriveConstants.supplyCurrentThreshHold, 0.5));
 
         leftMain.configOpenloopRamp(Constants.DriveConstants.kDriveRampSeconds);
         rightMain.configOpenloopRamp(Constants.DriveConstants.kDriveRampSeconds);
-        
+
         leftFollower.configOpenloopRamp(Constants.DriveConstants.kDriveRampSeconds);
         rightFollower.configOpenloopRamp(Constants.DriveConstants.kDriveRampSeconds);
 
@@ -130,28 +135,32 @@ public class DriveTrain extends SubsystemBase {
         rightMain.set(ControlMode.PercentOutput, rightSpeed);
     }
 
+    //NOTE TO THOSE IN THE FUTURE: turnCommandR and turnCommandL ARE LAST MINUTE AND INSANELY SKETCHY
+
     /**
      * Command to turn the robot a certain magnitude to the right
+     * 
      * @param turnValue Magnitude from 0 to 1.0
      */
     public void turnCommandR(double turnValue) {
         double left = turnValue;
         double right = -turnValue;
-        setSpeedsPercent(left * Constants.DriveConstants.driveMultiplier, right * Constants.DriveConstants.driveMultiplier);
+        setSpeedsPercent(left * Constants.DriveConstants.driveMultiplier,
+                right * Constants.DriveConstants.driveMultiplier);
     }
 
     /**
      * Command to turn the robot a certain magnitude to the left
+     * 
      * @param turnValue magnitude from -1.0 to 0
      */
-    public void turnCommandL(double turnValue)
-    {
+    public void turnCommandL(double turnValue) {
         double left = -turnValue;
         double right = turnValue;
-        setSpeedsPercent(left * Constants.DriveConstants.driveMultiplier, right * Constants.DriveConstants.driveMultiplier);
+        setSpeedsPercent(left * Constants.DriveConstants.driveMultiplier,
+                right * Constants.DriveConstants.driveMultiplier);
 
     }
-
 
     /**
      * Sets the voltages of the left and right motors.
@@ -161,7 +170,7 @@ public class DriveTrain extends SubsystemBase {
      */
     public void setVoltages(double leftVoltage, double rightVoltage) {
         leftMain.setVoltage(leftVoltage);
-        rightMain.setVoltage(rightVoltage); 
+        rightMain.setVoltage(rightVoltage);
     }
 
     /**
@@ -171,7 +180,7 @@ public class DriveTrain extends SubsystemBase {
         leftMain.set(ControlMode.Velocity, leftVelocity);
         rightMain.set(ControlMode.Velocity, leftVelocity);
     }
- 
+
     /**
      * Resets odometry of robot to initial position
      * 
@@ -187,8 +196,7 @@ public class DriveTrain extends SubsystemBase {
     /**
      * Resets both motor encoders
      */
-    public void resetEncoders()
-    {
+    public void resetEncoders() {
         rightMain.setSelectedSensorPosition(0);
         leftMain.setSelectedSensorPosition(0);
     }
@@ -215,7 +223,8 @@ public class DriveTrain extends SubsystemBase {
      * @return The current wheel speeds.
      */
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-        return new DifferentialDriveWheelSpeeds(ConversionMath.ticksToMeters(leftMain.getSelectedSensorVelocity(), getRatio()),
+        return new DifferentialDriveWheelSpeeds(
+                ConversionMath.ticksToMeters(leftMain.getSelectedSensorVelocity(), getRatio()),
                 ConversionMath.ticksToMeters(rightMain.getSelectedSensorVelocity(), getRatio()));
     }
 
@@ -253,7 +262,7 @@ public class DriveTrain extends SubsystemBase {
      */
     public PIDController getLeftPIDController() {
         return leftPIDController;
-    }  
+    }
 
     /**
      * Gets PID controller for right side of the robot.
@@ -290,34 +299,33 @@ public class DriveTrain extends SubsystemBase {
     /**
      * Returns the current gearmode of the robot
      */
-    public GearMode getGearMode()
-    {
+    public GearMode getGearMode() {
         return shifter.get() ? GearMode.high : GearMode.low;
     }
 
     /**
      * Returns current gear ratio
+     * 
      * @return The double value of the gear ratio
      */
-    public double getRatio()
-    {
-        return getGearMode().equals(GearMode.high) ? Constants.DriveConstants.highGearRatio : Constants.DriveConstants.lowGearRatio;
+    public double getRatio() {
+        return getGearMode().equals(GearMode.high) ? Constants.DriveConstants.highGearRatio
+                : Constants.DriveConstants.lowGearRatio;
     }
 
     /**
      * Sets the current heading of the robot
+     * 
      * @param reversed Heading to set
      */
-    public void setHeading(boolean reversed)
-    {
+    public void setHeading(boolean reversed) {
         reversedHeading = reversed;
     }
 
     /**
      * Returns whether the heading of the robot is reversed
      */
-    public boolean isReversedHeading()
-    {
+    public boolean isReversedHeading() {
         return reversedHeading;
     }
 }
