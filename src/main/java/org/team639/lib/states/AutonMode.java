@@ -8,6 +8,7 @@ public enum AutonMode {
     FourBall,
     TwoBall,
     Shoot,
+    TwoBallMidZone,
     ForwardTest,
     BounceTest
 }

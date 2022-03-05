@@ -96,10 +96,11 @@ public class RobotContainer {
   }
 
   static {
-    autoMode.setDefaultOption("AutoCross Line", AutonMode.ForwardTest);
+    autoMode.setDefaultOption("ShootAndMove", AutonMode.Shoot);
+    autoMode.addOption("AutoCross Line", AutonMode.ForwardTest);
     autoMode.addOption("2BallAuto", AutonMode.TwoBall);
+    autoMode.addOption("2BallAutoMidBall", AutonMode.TwoBallMidZone);
     autoMode.addOption("4BallAuto", AutonMode.FourBall);
-    autoMode.addOption("Shoot", AutonMode.Shoot);
     autoMode.addOption("BounceTest", AutonMode.BounceTest);
     SmartDashboard.putData("Auto Mode", autoMode);
   }
@@ -214,13 +215,19 @@ public class RobotContainer {
     Command auto;
     switch (getAutonomousMode()) {
       default:
-        auto = auton.forwardTest;
+        auto = auton.ShootMove;
         break;
       case ForwardTest:
         auto = auton.forwardTest;
         break;
       case TwoBall:
         auto = auton.twoBallAutonomous;
+        break;
+      case TwoBallMidZone:
+        auto = auton.twoBallAutonomousZone2;
+        break;
+      case Shoot:
+        auto = auton.ShootMove;
         break;
       case FourBall:
         auto = auton.fourBall_v2;
@@ -246,12 +253,17 @@ public class RobotContainer {
   class AutonomousRoutines {
     // Testing commands
     final SequentialCommandGroup forwardTest = new SequentialCommandGroup(
-        new DriveRamsete(driveTrain, "TestPath"));
+        new DriveRamsete(driveTrain, "2BallAutonomousPart3"));
     final SequentialCommandGroup bounceTest = new SequentialCommandGroup(
         new DriveRamsete(driveTrain, "bounce1"),
         new DriveRamsete(driveTrain, "bounce2"),
         new DriveRamsete(driveTrain, "bounce1"),
         new DriveRamsete(driveTrain, "bounce3"));
+    
+    final SequentialCommandGroup ShootMove = new SequentialCommandGroup(
+      new ShootAtDistance(indexer, shooter, acquisition, 2),
+      new DriveRamsete(driveTrain, "2BallAutonomousPart3")
+      );
 
     // Start Position: 7.635, 1.786 - Facing bottom team ball, bumpers against the
     // tarmac edge
@@ -313,6 +325,18 @@ public class RobotContainer {
         new ParallelRaceGroup(new DriveRamsete(driveTrain, "2BallAutonomousPart2").robotRelative(),
             new ManualIndexer(shooter, indexer, acquisition)),
         new ShootAtDistance(indexer, shooter, acquisition, 2));
+
+    // Start Position: Middle ball of 2 ball autonomous - Bumpers pushed against tarmac, facing
+    // team ball
+    final SequentialCommandGroup twoBallAutonomousZone2 = new SequentialCommandGroup(
+        new WaitCommand(0.5),
+        new ParallelRaceGroup(new DriveRamsete(driveTrain, "2BallAutonomous").robotRelative(),
+            new ManualIndexer(shooter, indexer, acquisition)),
+        new ParallelRaceGroup(new DriveRamsete(driveTrain, "2BallAutonomousPart2").robotRelative(),
+            new ManualIndexer(shooter, indexer, acquisition)),
+        new ShootAtDistance(indexer, shooter, acquisition, 2),
+        new DriveRamsete(driveTrain, "2BallAutonomousPart3"));
+
   }
 
 }
