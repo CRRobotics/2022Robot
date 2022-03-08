@@ -54,11 +54,10 @@ public class JoystickDrive extends CommandBase {
         break;
       case ArcadeInverseK:
         if (!driveTrain.isReversedHeading())
-          arcadeInverseK(yValue, xValue, false);
+          arcadeInverseK(yValue, xValue);
         else
           arcadeInverseKRev(
-              yValue,
-              xValue, false);
+              yValue, xValue);
         break;
       case CurvatureDrive:
         if (!driveTrain.isReversedHeading())
@@ -122,14 +121,9 @@ public class JoystickDrive extends CommandBase {
    * @param turning      Magnitude of turning
    * @param squareInputs Determines whether to square controller input
    */
-  public void arcadeInverseK(double speed, double turning, boolean squareInputs) {
+  public void arcadeInverseK(double speed, double turning) {
     // speed = MathUtil.clamp(speed, -1.0, 1.0);
     // turning = MathUtil.clamp(turning, -1.0, 1.0);
-
-    if (squareInputs) {
-      speed = Math.copySign(speed * speed, speed);
-      turning = Math.copySign(turning * turning, turning);
-    }
 
     double leftSpeed;
     double rightSpeed;
@@ -171,14 +165,9 @@ public class JoystickDrive extends CommandBase {
    * @param turning      Magnitude of turning
    * @param squareInputs Determines whether to square controller input
    */
-  public void arcadeInverseKRev(double speed, double turning, boolean squareInputs) {
+  public void arcadeInverseKRev(double speed, double turning) {
     // speed = MathUtil.clamp(speed, -1.0, 1.0);
     // turning = MathUtil.clamp(turning, -1.0, 1.0);
-
-    if (squareInputs) {
-      speed = Math.copySign(speed * speed, speed);
-      turning = Math.copySign(turning * turning, turning);
-    }
 
     double leftSpeed;
     double rightSpeed;
