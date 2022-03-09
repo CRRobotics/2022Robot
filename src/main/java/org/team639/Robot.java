@@ -5,6 +5,7 @@
 package org.team639;
 
 import org.team639.lib.Constants;
+import org.team639.lib.states.AllianceColor;
 import org.team639.subsystems.JeVoisInterface;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -25,6 +26,7 @@ public class Robot extends TimedRobot {
   Compressor phCompressor = new Compressor(Constants.Ports.PneumaticsModuleType.phCompressorID, PneumaticsModuleType.REVPH);
 
   private RobotContainer m_robotContainer;
+
   public static NetworkTableEntry llpython;
 
   public static double runningHorizontalAngle;
@@ -65,13 +67,15 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     llpython = NetworkTableInstance.getDefault().getTable("limelight").getEntry("llpython");
 
-    // blueBallAngle = NetworkTableInstance.getDefault().getTable("visions").getEntry("blueAngle");
-    // redBallAngle = NetworkTableInstance.getDefault().getTable("visions").getEntry("blueAngle");
-
+    blueBallAngle = NetworkTableInstance.getDefault().getTable("visions").getEntry("blueAngle").getDouble(361.0);
+    redBallAngle = NetworkTableInstance.getDefault().getTable("visions").getEntry("redAngle").getDouble(361.0);
 
 
     SmartDashboard.putNumber("Angle to target", getAngleToTarget());
     SmartDashboard.putNumber("Distance to target", getDistanceToTarget());
+
+    SmartDashboard.putNumber("Angle to Closest Ball B", getAngleToBallBlue());
+    SmartDashboard.putNumber("Angle to Closest Ball R", getAngleToBallRed());
 
     NetworkTableInstance.getDefault().flush();
     CommandScheduler.getInstance().run();
@@ -163,10 +167,15 @@ public class Robot extends TimedRobot {
     }
   }
 
-  // public static double getAngleToBall()
-  // {
-  //   return NetW
-  // }
+  public static double getAngleToBallBlue()
+  {
+    return blueBallAngle;
+  }
+
+  public static double getAngleToBallRed()
+  {
+    return redBallAngle;
+  }
 
 
   /**
