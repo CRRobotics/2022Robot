@@ -52,6 +52,11 @@ public interface Constants
             public static final int acquisitionExtend = 1;
         }
 
+        public interface Climber
+        {
+            public static final int climbID = 3;
+        }
+
         public interface PneumaticsModuleType
         {
             public static final int phCompressorID = 1;

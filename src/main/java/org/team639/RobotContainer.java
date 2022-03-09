@@ -8,6 +8,7 @@ import java.util.TreeMap;
 
 import org.team639.auto.*;
 import org.team639.commands.Acquisition.*;
+import org.team639.commands.Climber.ToggleClimber;
 import org.team639.commands.Drive.*;
 import org.team639.commands.Indexer.*;
 import org.team639.commands.Shooter.*;
@@ -44,6 +45,7 @@ public class RobotContainer {
   private final Shooter shooter = new Shooter();
   private final Indexer indexer = new Indexer();
   private final Acquisition acquisition = new Acquisition();
+  private final Climber climb = new Climber();
   private final LED candle = new LED();
 
   // Command Declaration
@@ -55,6 +57,7 @@ public class RobotContainer {
   private final ToggleGears shiftGears = new ToggleGears(driveTrain);
   private final ReverseHeading swap = new ReverseHeading(driveTrain);
   private final TurnToAngleRelative aimbot = new TurnToAngleRelative(driveTrain);
+  public final TurnToBall turnToBall = new TurnToBall(driveTrain);
 
   // Acquisition
   private final ToggleAcquisition toggleAcquisition = new ToggleAcquisition(acquisition);
@@ -68,6 +71,9 @@ public class RobotContainer {
       Constants.ShooterConstants.fenderRPM, Constants.ShooterConstants.fenderAngle);
   private final AutoShootAtDistance autoShoot = new AutoShootAtDistance(indexer, shooter, acquisition);
   private final ToggleActuator resetHood = new ToggleActuator(shooter);
+
+  //Climber
+  private final ToggleClimber toggleClimb = new ToggleClimber(climb);
 
   public static SendableChooser<DriveLayout> driveMode = new SendableChooser<>();
   public static SendableChooser<AutonMode> autoMode = new SendableChooser<>();
@@ -193,6 +199,7 @@ public class RobotContainer {
     ControllerWrapper.DriverButtonA.whenHeld(new DJRobot(driveTrain, 10));
     ControllerWrapper.DriverButtonX.whenPressed(aimbot.withTimeout(1));
     ControllerWrapper.DriverButtonY.whenPressed(tele.aimbotshot);
+    ControllerWrapper.DriverButtonB.whenPressed(turnToBall);
 
     // Controller
     ControllerWrapper.ControlRightBumper.whenHeld(index);
@@ -201,6 +208,7 @@ public class RobotContainer {
     ControllerWrapper.ControlButtonY.whenPressed(fenderShot);
     ControllerWrapper.ControlButtonB.whenPressed(toggleAcquisition);
     ControllerWrapper.ControlButtonX.whenPressed(autoShoot);
+    ControllerWrapper.ControlButtonA.whenPressed(toggleClimb);
 
     // RESET BUTTONS
     ControllerWrapper.ControlDPadUp.whenPressed(resetHood);
