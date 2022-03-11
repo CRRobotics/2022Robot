@@ -28,7 +28,8 @@ public class SpitCargo extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    acquisition.acquisitionNeutral();
+    //acquisition.acquisitionNeutral();
+    acquisition.acquisitionDown();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

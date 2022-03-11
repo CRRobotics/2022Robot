@@ -5,6 +5,7 @@
 package org.team639.controlboard;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.simulation.JoystickSim;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /** 
@@ -28,6 +29,9 @@ public class ControllerWrapper {
     public static JoystickButton DriverRightBumper = new JoystickButton(DriverController, XboxController.Button.kRightBumper.value);
     public static JoystickButton DriverLeftBumper = new JoystickButton(DriverController, XboxController.Button.kLeftBumper.value);
 
+    public static TriggerButton DriverRightTrigger = new TriggerButton(DriverController, 1);
+    public static TriggerButton DriverLeftTrigger = new TriggerButton(DriverController, 0);
+
     //Controller XBOX Controller
     public static DPadButton ControlDPadUp = new DPadButton(ControlController, 0);
     public static DPadButton ControlDPadRight = new DPadButton(ControlController, 90);
@@ -41,5 +45,8 @@ public class ControllerWrapper {
 
     public static JoystickButton ControlRightBumper = new JoystickButton(ControlController, XboxController.Button.kRightBumper.value);
     public static JoystickButton ControlLeftBumper = new JoystickButton(ControlController, XboxController.Button.kLeftBumper.value);
+
+    public static TriggerButton ControllerRightTrigger = new TriggerButton(ControlController, 1);
+    public static TriggerButton ControllerLeftTrigger = new TriggerButton(ControlController, 0);
     
 }

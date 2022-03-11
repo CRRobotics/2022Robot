@@ -6,26 +6,30 @@ package org.team639.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import org.team639.Robot;
+import org.team639.controlboard.ControllerWrapper;
 import org.team639.lib.Constants;
 import org.team639.lib.math.AngleSpeed;
 import org.team639.lib.math.ValueFromDistance;
 import org.team639.subsystems.Acquisition;
 import org.team639.subsystems.Indexer;
+import org.team639.subsystems.LED;
 import org.team639.subsystems.Shooter;
 
 public class AutoShootAtDistance extends CommandBase {
     private Indexer indexer;
     private Shooter shooter;
     private Acquisition acquisition;
+    private LED led;
 
     private long startTime;
     private AngleSpeed shootAngleSpeed;
 
-    public AutoShootAtDistance(Indexer indexer, Shooter shooter, Acquisition acquisition) {
+    public AutoShootAtDistance(Indexer indexer, Shooter shooter, Acquisition acquisition, LED led) {
         this.indexer = indexer;
         this.shooter = shooter;
         this.acquisition = acquisition;
-        addRequirements(indexer, shooter, acquisition);
+        this.led = led;
+        addRequirements(indexer, shooter, acquisition, led);
 
     }
 
@@ -41,7 +45,9 @@ public class AutoShootAtDistance extends CommandBase {
         shooter.setSpeed(Constants.ShooterConstants.reverseIndexSpeed);
         indexer.setIndexMotor(-Constants.IndexerConstants.indexMotorSpeed);
 
-        acquisition.acquisitionNeutral();
+        //acquisition.acquisitionNeutral();
+        acquisition.acquisitionDown();
+        led.redFlare();
     }
 
     @Override
@@ -56,6 +62,11 @@ public class AutoShootAtDistance extends CommandBase {
             shooter.setSpeedRPM(shootAngleSpeed.getSpeed());
             indexer.setIndexMotor(Constants.IndexerConstants.indexMotorSpeed);
             acquisition.spinAcquisition(Constants.AcquisitionConstants.acquisitionSpeedSlow);
+        }
+
+        if(ControllerWrapper.DriverRightTrigger.get() || ControllerWrapper.ControllerRightTrigger.get())
+        {
+            end(true);
         }
     }
 

@@ -99,13 +99,16 @@ public class JoystickDrive extends CommandBase {
       turnMultiplier = 1d / 3d;
     if (turnMultiplier > 2d / 3d)
       turnMultiplier = 2d / 3d;
-    turnValue = turnValue * turnMultiplier;
+    turnValue = turnValue * turnMultiplier * Constants.DriveConstants.rawTurnMultiplier;
 
     double left = speed + turnValue;
     double right = speed - turnValue;
     //driveTrain.setSpeedsPercent(left, right);
 
-   driveTrain.setSpeedsPercent(left * Constants.DriveConstants.driveMultiplier, right * Constants.DriveConstants.driveMultiplier);
+    //Sets the robot to low speed mode is the left trigger is held
+    double true_multiplier = ControllerWrapper.DriverLeftTrigger.get() ? Constants.DriveConstants.driveLowSpeed : Constants.DriveConstants.driveMultiplier;
+
+   driveTrain.setSpeedsPercent(left * true_multiplier, right * true_multiplier);
   }
 
   public void tankDrive(double leftSpeed, double rightSpeed) {

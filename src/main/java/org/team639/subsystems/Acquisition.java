@@ -18,7 +18,7 @@ public class Acquisition extends SubsystemBase {
     CANSparkMax acquisitionMotorFollow = new CANSparkMax(Constants.Ports.Acquisition.acquisitionPortFollow,
             CANSparkMaxLowLevel.MotorType.kBrushless);
     Solenoid extend = new Solenoid(PneumaticsModuleType.REVPH, Constants.Ports.Acquisition.acquisitionExtend);
-    Solenoid retract = new Solenoid(PneumaticsModuleType.REVPH, Constants.Ports.Acquisition.acquisitionRetract);
+    //Solenoid retract = new Solenoid(PneumaticsModuleType.REVPH, Constants.Ports.Acquisition.acquisitionRetract);
 
     AcquisitionPosition acqPos = AcquisitionPosition.up;
 
@@ -28,7 +28,7 @@ public class Acquisition extends SubsystemBase {
         acquisitionMotorMain.setIdleMode(CANSparkMax.IdleMode.kBrake);
         acquisitionMotorFollow.setIdleMode(CANSparkMax.IdleMode.kBrake);
         acquisitionMotorFollow.follow(acquisitionMotorMain, true);
-        acquisitionNeutral();
+        acquisitionDown();
     }
 
     @Override
@@ -37,24 +37,25 @@ public class Acquisition extends SubsystemBase {
         SmartDashboard.putString("Acquisition Position", acqPos().toString());
     }
 
-    /**
-     * Puts acquisition in neutral
-     */
-    public void acquisitionNeutral() {
-        if (!(acqPos().equals(AcquisitionPosition.neutral))) {
-            extend.set(true);
-            retract.set(false);
-        }
-        acqPos = AcquisitionPosition.neutral;
-    }
+    // /**
+    //  * Puts acquisition in neutral
+    //  */
+    // public void acquisitionNeutral() {
+    //     if (!(acqPos().equals(AcquisitionPosition.neutral))) {
+    //         extend.set(true);
+    //         retract.set(false);
+    //     }
+    //     acqPos = AcquisitionPosition.neutral;
+    // }
 
     /**
      * Puts acquisition down
      */
     public void acquisitionDown() {
         if (!(acqPos().equals(AcquisitionPosition.down))) {
-            extend.set(false);
-            retract.set(true);
+            extend.set(true);
+            //extend.set(false);
+            //retract.set(true);
         }
         acqPos = AcquisitionPosition.down;
 
@@ -66,7 +67,7 @@ public class Acquisition extends SubsystemBase {
     public void acquisitionUp() {
         if (!(acqPos().equals(AcquisitionPosition.up))) {
             extend.set(false);
-            retract.set(false);
+            //retract.set(false);
         }
         acqPos = AcquisitionPosition.up;
 
@@ -85,12 +86,14 @@ public class Acquisition extends SubsystemBase {
      * @param speed from -1.0 to 1.0
      */
     public void spinAcquisition(double speed) {
-        acquisitionMotorMain.set(MathUtil.clamp(speed, -1.0, 1.0));
+        if(acqPos() != AcquisitionPosition.up)
+            acquisitionMotorMain.set(MathUtil.clamp(speed, -1.0, 1.0));
     }
 
     public void stopAcquisitionMotor() {
         acquisitionMotorMain.set(0);
     }
+
 
     public boolean getAcquisitionOut() {
         return acquisitionMotorMain.get() < 0;

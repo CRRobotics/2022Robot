@@ -46,7 +46,9 @@ public class ShootAtDistanceTimed extends CommandBase {
         shooter.setSpeed(Constants.ShooterConstants.reverseIndexSpeed);
         indexer.setIndexMotor(-Constants.IndexerConstants.indexMotorSpeed);
 
-        acquisition.acquisitionNeutral();
+        //acquisition.acquisitionNeutral();
+        acquisition.acquisitionDown();
+
         acquisition.spinAcquisition(0.9);
     }
 

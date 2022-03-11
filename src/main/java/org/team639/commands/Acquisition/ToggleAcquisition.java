@@ -22,7 +22,7 @@ public class ToggleAcquisition extends CommandBase {
   @Override
   public void initialize() {
     if(acquisition.acqPos().equals(AcquisitionPosition.up))
-      acquisition.acquisitionNeutral();
+      acquisition.acquisitionDown();
     else
       acquisition.acquisitionUp();
   }

@@ -36,7 +36,9 @@ public class ShootClosedLoop extends CommandBase {
       shooter.setSpeed(Constants.ShooterConstants.reverseIndexSpeed);
       indexer.setIndexMotor(-Constants.IndexerConstants.indexMotorSpeed);
 
-      acquisition.acquisitionNeutral();
+      //acquisition.acquisitionNeutral();
+      acquisition.acquisitionDown();
+
       shooter.setCoast();
   }
 

@@ -26,7 +26,7 @@ public class TurnToBall extends CommandBase {
       Constants.AutoConstants.autoRotateI, Constants.AutoConstants.autoRotateD);
 
   /**
-   * Creates relative turn to angle that uses vision tracking
+   * Creates relative turn to ball that uses vision tracking
    * @param driveTrain DriveTrain to use
    */
   public TurnToBall(DriveTrain driveTrain) {
@@ -38,7 +38,7 @@ public class TurnToBall extends CommandBase {
   @Override
   public void initialize() {
     lastGear = driveTrain.getGearMode();
-    angle = RobotContainer.getAllianceColor().equals(AllianceColor.blue) ? Robot.getAngleToBallBlue() % 360.0 : Robot.getAngleToBallRed();
+    angle = RobotContainer.getAllianceColor().equals(AllianceColor.blue) ? Robot.getAngleToBallBlue() % 360.0 : Robot.getAngleToBallRed() % 360.0;
     clockwise = Math.signum(angle) > 0 ? true : false;
     //setpoint = clockwise ? Math.abs(angle) + driveTrain.getHeading() : driveTrain.getHeading() - Math.abs(angle);
     setpoint = driveTrain.getHeading() + angle;

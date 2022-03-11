@@ -8,6 +8,7 @@ import org.team639.lib.Constants;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
@@ -18,6 +19,12 @@ public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
   public Climber() {
     climberRetract();
+  }
+
+  @Override
+  public void periodic()
+  {
+    SmartDashboard.putBoolean("Climb Extended", climbExtended);
   }
 
   public void climberExtend()

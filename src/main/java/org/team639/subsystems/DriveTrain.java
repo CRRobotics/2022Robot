@@ -140,7 +140,7 @@ public class DriveTrain extends SubsystemBase {
 
     /**
      * Command to turn the robot a certain magnitude to the right
-     * 
+     * THIS IS VERY DUMB
      * @param turnValue Magnitude from 0 to 1.0
      */
     public void turnCommandR(double turnValue) {
@@ -152,7 +152,7 @@ public class DriveTrain extends SubsystemBase {
 
     /**
      * Command to turn the robot a certain magnitude to the left
-     * 
+     * THIS IS ALSO VERY DUMB
      * @param turnValue magnitude from -1.0 to 0
      */
     public void turnCommandL(double turnValue) {
@@ -160,7 +160,18 @@ public class DriveTrain extends SubsystemBase {
         double right = turnValue;
         setSpeedsPercent(left * Constants.DriveConstants.driveMultiplier,
                 right * Constants.DriveConstants.driveMultiplier);
+    }
 
+    /**
+     * This  is an arcade drive method is to allow for linear motor input while following PID rotation
+     */
+    public void PIDLinearInput(double linear, double rotational)
+    {
+        double left = linear + rotational;
+        double right = linear - rotational;
+
+        setSpeedsPercent(left * Constants.DriveConstants.driveMultiplier,
+        right * Constants.DriveConstants.driveMultiplier);
     }
 
     /**

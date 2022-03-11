@@ -23,7 +23,9 @@ public class ShootOpenLoop extends CommandBase {
         this.acquisition = acquisition;
         addRequirements(indexer, shooter, acquisition);
 
-        acquisition.acquisitionNeutral();
+        //acquisition.acquisitionNeutral();
+        acquisition.acquisitionDown();
+
         shooter.setCoast();
     }
 

@@ -10,23 +10,26 @@ import org.team639.lib.math.AngleSpeed;
 import org.team639.lib.math.ValueFromDistance;
 import org.team639.subsystems.Acquisition;
 import org.team639.subsystems.Indexer;
+import org.team639.subsystems.LED;
 import org.team639.subsystems.Shooter;
 
 public class ShootAtDistance extends CommandBase {
     private Indexer indexer;
     private Shooter shooter;
     private Acquisition acquisition;
+    private LED led;
 
     private long startTime;
     private AngleSpeed shootAngleSpeed;
 
 
-    public ShootAtDistance(Indexer indexer, Shooter shooter, Acquisition acquisition, double distance) {
+    public ShootAtDistance(Indexer indexer, Shooter shooter, Acquisition acquisition, LED led, double distance) {
         this.indexer = indexer;
         this.shooter = shooter;
         this.acquisition = acquisition;
+        this.led = led;
         shootAngleSpeed = ValueFromDistance.getAngleSpeed(distance);
-        addRequirements(indexer, shooter, acquisition);
+        addRequirements(indexer, shooter, acquisition, led);
     }
 
     @Override
@@ -37,7 +40,9 @@ public class ShootAtDistance extends CommandBase {
         shooter.setSpeed(Constants.ShooterConstants.reverseIndexSpeed);
         indexer.setIndexMotor(-Constants.IndexerConstants.indexMotorSpeed);
 
-        acquisition.acquisitionNeutral();
+        //acquisition.acquisitionNeutral();
+        acquisition.acquisitionDown();
+        led.redFlare();
     }
 
     @Override
@@ -49,7 +54,7 @@ public class ShootAtDistance extends CommandBase {
         }
         if(System.currentTimeMillis() >= startTime + Constants.ShooterConstants.reverseIndexWhenShootingTime + Constants.ShooterConstants.spinUpTime)
         {
-            shooter.setSpeedRPM(shootAngleSpeed.getSpeed());
+             shooter.setSpeedRPM(shootAngleSpeed.getSpeed());
             indexer.setIndexMotor(Constants.IndexerConstants.indexMotorSpeed);
             acquisition.spinAcquisition(Constants.AcquisitionConstants.acquisitionSpeedSlow);
         }

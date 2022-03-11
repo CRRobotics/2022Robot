@@ -26,32 +26,37 @@ public class LED extends SubsystemBase {
   private final FireAnimation fire = new FireAnimation(0.5, 0.7, LedCount, 0.7, 0.5);
   private final RgbFadeAnimation gamer_mode = new RgbFadeAnimation(0.7, 1, LedCount);
 
+  private final LarsonAnimation redFlare = new LarsonAnimation(255, 0, 0);
+  private final LarsonAnimation yellowFlare = new LarsonAnimation(255, 255, 0);
+  private final LarsonAnimation blueFlare = new LarsonAnimation(0, 0, 255);
+
+
   /**
    * Sets the CANdle LED based upon current orientation of the robot
    */
   @Override
   public void periodic() {
-    updateLED();
+    //updateLED();
 
   }
 
-  public void updateLED() {
-    curr_led = RobotContainer.getLedMode();
-    switch (curr_led) {
-      case aimbot:
-        aimLockmode();
-        break;
-      case swapcade:
-        swapcadeMode();
-        break;
-      case fire:
-        fireAnim();
-        break;
-      case gamerMode:
-        rgbFade();
-        break;
-    }
-  }
+  // public void updateLED() {
+  //   curr_led = RobotContainer.getLedMode();
+  //   switch (curr_led) {
+  //     case aimbot:
+  //       aimLockmode();
+  //       break;
+  //     case swapcade:
+  //       swapcadeMode();
+  //       break;
+  //     case fire:
+  //       fireAnim();
+  //       break;
+  //     case gamerMode:
+  //       rgbFade();
+  //       break;
+  //   }
+  // }
 
   public void swapcadeMode() {
     if (SmartDashboard.getBoolean("Swapcade Mode", true))
@@ -61,14 +66,30 @@ public class LED extends SubsystemBase {
   }
 
   public void aimLockmode() {
-    if (Robot.lockedOn())
+    if (Robot.lockedOn() && Math.abs(Robot.getAngleToTarget()) < 3)
       m_candle.setLEDs(0, 255, 0);
+    else if(Robot.lockedOn() && Math.abs(Robot.getAngleToTarget()) < 15)
+      m_candle.setLEDs(0, 0, 255);
+    else if(Robot.lockedOn())
+      m_candle.setLEDs(255, 255, 0);
     else
       m_candle.setLEDs(255, 0, 0);
   }
 
   public void fireAnim() {
     m_candle.animate(fire);
+  }
+
+  public void redFlare() {
+    m_candle.animate(redFlare);
+  }
+
+  public void yellowFlare() {
+    m_candle.animate(yellowFlare);
+  }
+
+  public void blueFlare() {
+    m_candle.animate(blueFlare);
   }
 
   public void rgbFade() {

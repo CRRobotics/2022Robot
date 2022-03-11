@@ -23,7 +23,7 @@ public interface Constants
             public static final int rightMainID = 13;
             public static final int rightFollowerID = 12;
 
-            public static final int shifterID = 2;
+            public static final int shifterID = 5;
         }
 
         public interface Indexer
@@ -49,12 +49,12 @@ public interface Constants
             public static final int acquisitionPortFollow = 4;
 
             public static final int acquisitionRetract = 0;
-            public static final int acquisitionExtend = 1;
+            public static final int acquisitionExtend = 7;
         }
 
         public interface Climber
         {
-            public static final int climbID = 3;
+            public static final int climbID = 6;
         }
 
         public interface PneumaticsModuleType
@@ -100,7 +100,7 @@ public interface Constants
         // public static final double autoRotateP = .035;
         // public static final double autoRotateI = 0.0;
         // public static final double autoRotateD = 0.055;
-        public static final double autoRotateP = 0.013783;
+        public static final double autoRotateP = 0.016783;
         public static final double autoRotateI = 0.0;
         public static final double autoRotateD = 0.0;
 
@@ -127,8 +127,11 @@ public interface Constants
         public static final double wheelCircumference = wheelDiameter * Math.PI;
 
         public static final double driveMultiplier = 0.8; //tune this down a bit....maybe
+        public static final double driveLowSpeed = 0.25;
+        public static final double rawTurnMultiplier = 0.8;
 
         public static final double kDriveRampSeconds = 0.3;
+        public static final double kRelFric = 0.08;
 
         public static final double supplyCurrentLimiter = 30;
         public static final double supplyCurrentThreshHold = 35;
