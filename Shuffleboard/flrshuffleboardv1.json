@@ -159,7 +159,7 @@
             "content": {
               "_type": "ComboBox Chooser",
               "_source0": "network_table:///SmartDashboard/Alliance",
-              "_title": "SmartDashboard/Alliance"
+              "_title": "/SmartDashboard/Alliance"
             }
           },
           "8,4": {
@@ -170,7 +170,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Angle to Closest Ball R",
-              "_title": "SmartDashboard/Angle to Closest Ball R"
+              "_title": "/SmartDashboard/Angle to Closest Ball R"
             }
           },
           "6,4": {
@@ -181,7 +181,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Angle to Closest Ball B",
-              "_title": "SmartDashboard/Angle to Closest Ball B"
+              "_title": "/SmartDashboard/Angle to Closest Ball B"
             }
           },
           "8,2": {
@@ -192,7 +192,7 @@
             "content": {
               "_type": "Boolean Box",
               "_source0": "network_table:///SmartDashboard/Climb Extended",
-              "_title": "SmartDashboard/Climb Extended",
+              "_title": "/SmartDashboard/Climb Extended",
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
@@ -365,7 +365,14 @@
                 {
                   "_type": "PID Controller",
                   "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[6]",
-                  "_title": "LiveWindow/Ungrouped/PIDController[6]"
+                  "_title": "PIDController[6]"
+                },
+                {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Solenoid[1,7]/Value",
+                  "_title": "Solenoid[1,7]/Value",
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
                 }
               ]
             }
