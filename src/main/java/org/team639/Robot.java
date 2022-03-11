@@ -77,7 +77,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Angle to Closest Ball B", getAngleToBallBlue());
     SmartDashboard.putNumber("Angle to Closest Ball R", getAngleToBallRed());
 
-    NetworkTableInstance.getDefault().flush();
+    //NetworkTableInstance.getDefault().flush();
     CommandScheduler.getInstance().run();
   }
 
