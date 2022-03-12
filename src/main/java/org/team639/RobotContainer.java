@@ -89,6 +89,7 @@ public class RobotContainer {
   public static TreeMap<Double, AngleSpeed> shootMap = new TreeMap<>();
 
   static {
+    shootMap.put(1.0, new AngleSpeed(.9,2900));
     shootMap.put(1.92, new AngleSpeed(.7, 3200));
     shootMap.put(2.77, new AngleSpeed(.65, 3400));
     shootMap.put(4.27, new AngleSpeed(.5, 3800));
@@ -217,6 +218,7 @@ public class RobotContainer {
     ControllerWrapper.ControlButtonA.whenPressed(toggleClimb);
     ControllerWrapper.ControlDPadRight.whenPressed(lowShot);
     ControllerWrapper.ControlDPadLeft.whenPressed(new AutoShootAtDistance(indexer, shooter, acquisition, candle));
+    ControllerWrapper.ControlDPadDown.whenPressed(new ShootAtDistance(indexer, shooter, acquisition, candle, 2.5));
 
     // RESET BUTTONS
     ControllerWrapper.ControlDPadUp.whenPressed(resetHood);
@@ -278,7 +280,7 @@ public class RobotContainer {
         new DriveRamsete(driveTrain, "bounce3"));
     
     final SequentialCommandGroup ShootMove = new SequentialCommandGroup(
-      new ShootAtDistance(indexer, shooter, acquisition, candle, 2),
+      new ShootAtDistance(indexer, shooter, acquisition, candle, 1.65),
       new DriveRamsete(driveTrain, "2BallAutonomous")
       );
 
@@ -312,13 +314,14 @@ public class RobotContainer {
     final SequentialCommandGroup fourBall_v2_optimized = new SequentialCommandGroup(
         new WaitCommand(0.5),
         new ParallelCommandGroup(new DriveRamsete(driveTrain, "4BALLTRUE1"),
-            new ShootAtDistanceTimed(indexer, shooter, acquisition, 3.5, 1700)),
+            new ShootAtDistanceTimed(indexer, shooter, acquisition, 3.85, 1700)),
         new ParallelRaceGroup(new DriveRamsete(driveTrain, "4BALLTRUE2"),
             new ManualIndexer(shooter, indexer, acquisition)),
-        new ManualIndexer(shooter, indexer, acquisition).withTimeout(0.75),
+        new ManualIndexer(shooter, indexer, acquisition).withTimeout(1.2),
         new ParallelCommandGroup(new DriveRamsete(driveTrain, "4BALLTRUE3"),
             new ManualIndexer(shooter, indexer, acquisition).withTimeout(.5)),
-        new ParallelCommandGroup(new TurnToAngleRelative(driveTrain).withTimeout(1),new ShootAtDistance(indexer, shooter, acquisition, candle, 3.5)));
+        //new ParallelCommandGroup(new TurnToAngleRelative(driveTrain).withTimeout(1),new ShootAtDistance(indexer, shooter, acquisition, candle, 3.5)));
+        new ParallelCommandGroup(new TurnToAngleRelative(driveTrain).withTimeout(1), new AutoShootAtDistance(indexer, shooter, acquisition, candle)));
 
     // Coding gods, take the wheel
     final SequentialCommandGroup fiveBall = new SequentialCommandGroup(
@@ -341,9 +344,10 @@ public class RobotContainer {
             new ManualIndexer(shooter, indexer, acquisition)),
         new ParallelRaceGroup(new DriveRamsete(driveTrain, "2BallAutonomousPart2").robotRelative(),
             new ManualIndexer(shooter, indexer, acquisition)),
-        new ShootAtDistance(indexer, shooter, acquisition, candle, 1.5));
+        new TurnToAngleRelative(driveTrain).withTimeout(1),
+        new ShootAtDistance(indexer, shooter, acquisition, candle, 1.65));
 
-    // Start Position: Middle ball of 2 ball autonomous - Bumpers pushed against tarmac, facing
+    // Start Position: Middle ball of 2 ball 2wsZautonomous - Bumpers pushed against tarmac, facing
     // team ball
     final SequentialCommandGroup twoBallAutonomousZone2 = new SequentialCommandGroup(
         new WaitCommand(0.5),
@@ -351,7 +355,7 @@ public class RobotContainer {
             new ManualIndexer(shooter, indexer, acquisition)),
         new ParallelRaceGroup(new DriveRamsete(driveTrain, "2BallAutonomousPart2").robotRelative(),
             new ManualIndexer(shooter, indexer, acquisition)),
-        new ShootAtDistance(indexer, shooter, acquisition, candle, 1.5),
+        new ShootAtDistance(indexer, shooter, acquisition, candle, 1.65),
         new DriveRamsete(driveTrain, "2BallAutonomousPart3"));
 
   }

@@ -64,10 +64,7 @@ public class AutoShootAtDistance extends CommandBase {
             acquisition.spinAcquisition(Constants.AcquisitionConstants.acquisitionSpeedSlow);
         }
 
-        if(ControllerWrapper.DriverRightTrigger.get() || ControllerWrapper.ControllerRightTrigger.get())
-        {
-            end(true);
-        }
+
     }
 
     @Override
@@ -82,6 +79,12 @@ public class AutoShootAtDistance extends CommandBase {
     public boolean isFinished() {
         if(System.currentTimeMillis() > startTime + Constants.ShooterConstants.pureShootingTime)
             return true;
+        if(ControllerWrapper.DriverRightTrigger.get() || ControllerWrapper.ControllerRightTrigger.get())
+        {
+            return true;
+        }
         return false;
+
+
     }
 }

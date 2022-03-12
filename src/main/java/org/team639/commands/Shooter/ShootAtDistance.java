@@ -28,7 +28,8 @@ public class ShootAtDistance extends CommandBase {
         this.shooter = shooter;
         this.acquisition = acquisition;
         this.led = led;
-        shootAngleSpeed = ValueFromDistance.getAngleSpeed(distance);
+        shootAngleSpeed = ValueFromDistance.getAngleSpeedLinearized(distance);
+        // shootAngleSpeed = ValueFromDistance.getAngleSpeed(distance);
         addRequirements(indexer, shooter, acquisition, led);
     }
 
