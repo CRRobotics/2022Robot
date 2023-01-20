@@ -202,7 +202,7 @@ public class RobotContainer {
     ControllerWrapper.DriverRightBumper.whenPressed(shiftGears);
     ControllerWrapper.DriverLeftBumper.whenPressed(swap);
     ControllerWrapper.DriverButtonA.whenHeld(new DJRobot(driveTrain, 10));
-    ControllerWrapper.DriverButtonX.whenPressed(new TurnToAngleRelative(driveTrain).withTimeout(1));
+    ControllerWrapper.DriverButtonX.whenPressed(new AdjustHood(1.0, shooter));
     ControllerWrapper.DriverButtonY.whenPressed(tele.aimbotshot);
     //ControllerWrapper.DriverButtonB.whenPressed(turnToBall.withTimeout(1));
 
